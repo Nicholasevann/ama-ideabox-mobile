@@ -23,7 +23,9 @@ const CardContent = props => {
               source={require('./../assets/icon/profilepicture.png')}
               style={styles.imageProfile}
             />
-            <Text style={[styles.textProfile, style.h4]}>Karyawan Telkom</Text>
+            <Text style={[styles.textProfile, style.h4medium]}>
+              {props.name}
+            </Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={props.morePromote}>
@@ -119,6 +121,8 @@ const styles = StyleSheet.create({
   },
   textProfile: {
     marginLeft: windowHeight / 84.6,
+    color: 'black',
+    textTransform: 'capitalize',
   },
   contentContainer: {
     flexDirection: 'row',

@@ -17,13 +17,13 @@ const Latihan = () => {
     setFcmRegistered(true);
   };
   const onNotif = notif => {
-    Alert.alert(notif.title, notif.message);
+    Alert.alert('Ini Judul : ' + notif.title, notif.message);
   };
   const notif = new NotifService(onRegister, onNotif);
   const handlePerm = perms => {
     Alert.alert('Permissions', JSON.stringify(perms));
   };
-
+  console.log('ini adalah ' + notif.lastId);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
@@ -126,7 +126,7 @@ const Latihan = () => {
         onPress={() => {
           notif.popInitialNotification();
         }}>
-        <Text>popInitialNotification</Text>
+        <Text>popInitialNotification {notif.title}</Text>
       </TouchableOpacity>
 
       <View style={styles.spacer}></View>

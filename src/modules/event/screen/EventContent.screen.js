@@ -17,12 +17,15 @@ import {Cross} from '../../../assets/icon';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useScrollToTop} from '@react-navigation/native';
 import style from '../../../config/Style/style.cfg';
+import axios from 'axios';
+import {defaultCategoryEvent, defaultEvent} from '../../../config/Auth.cfg';
 
 const EventContent = ({navigation}) => {
   const dataCategory = require('../data/dataCategory.json');
   const dataEvent = require('../data/dataEvent.json');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalSubmitVisible, setModalSubmitVisible] = useState(false);
+
   const [selectedId, setSelectedId] = useState(1);
   const selectedData = dataEvent.filter(
     x => x.category === dataCategory[selectedId - 1].title,
@@ -39,16 +42,30 @@ const EventContent = ({navigation}) => {
     setHasil(dataSearch);
   };
 
+  // Json terbaru
+  // const dataCategory1 = require('../data/Event Services.postman_collection.json');
+  // const [stateDataCategory, setStateDataCategory] =
+  //   useState(defaultCategoryEvent);
+  // const [stateDataEvent, setStateDataEvent] = useState(defaultEvent);
   // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     //Your refresh code gets her
+  //   axios
+  //     .get(dataCategory1.item[0].item[4].request.url.raw)
+  //     .then(response => {
+  //       // setUpdate(response.data.data);
+  //       setStateDataCategory(response.data.data);
+  //     })
+  //     .catch(err => console.log(err));
 
-  //     console.log('ada');
-  //   });
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [navigation]);
+  //   axios
+  //     .get(dataCategory1.item[0].item[5].request.url.raw)
+  //     .then(response => {
+  //       // setUpdate(response.data.data);
+  //       console.log(response.data.data);
+  //       setStateDataEvent(response.data.data);
+  //     })
+  //     .catch(err => console.log(err));
+  // }, []);
+
   const ref = React.useRef(null);
   useScrollToTop(ref);
   return (
@@ -171,6 +188,29 @@ const EventContent = ({navigation}) => {
           }}
           extraData={selectedId}
         />
+        {/* Json terbaru */}
+        {/* <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, key) => item.id}
+          data={stateDataCategory}
+          renderItem={({item, key}) => {
+            const borderColor = item.id === selectedId ? '#085D7A' : 'grey';
+            const textColor = item.id === selectedId ? '#085D7A' : 'grey';
+            return (
+              <View key={key}>
+                <CardEventCategory
+                  title={item.name}
+                  image={item.image}
+                  getId={() => setSelectedId(item.id)}
+                  borderColor={borderColor}
+                  textColor={textColor}
+                />
+              </View>
+            );
+          }}
+          extraData={selectedId}
+        /> */}
         <Text style={styles.titleEvent}>Event</Text>
         {selectedId === 1
           ? dataEvent
@@ -221,6 +261,22 @@ const EventContent = ({navigation}) => {
                   />
                 );
               })}
+        {/* JSON terbaru */}
+        {/* {stateDataEvent.map((val, key) => {
+          return (
+            <View key={key}>
+              <CardEventContent
+                title={val.name}
+                desc={val.description}
+                image={val.image}
+                join={() => setModalVisible(true)}
+                detail={() =>
+                  navigation.navigate('DetailEventContent', {data: val})
+                }
+              />
+            </View>
+          );
+        })} */}
       </ScrollView>
     </SafeAreaView>
   );

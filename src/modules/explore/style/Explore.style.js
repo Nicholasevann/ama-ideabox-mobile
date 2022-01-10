@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   totalComment: {color: '#085D7A', fontSize: 18, fontWeight: '700'},
-  contentModal: {paddingHorizontal: 20},
+  contentModal: {padding: 20},
   boxInput: {
     height: 150,
     borderWidth: 1,
@@ -336,6 +336,36 @@ const styles = StyleSheet.create({
   gesture: {flex: 1},
   buttonWrap: {flexDirection: 'row', height: 50},
   lineSpace: {height: 3},
+  textInputContainer: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 7,
+    },
+    shadowOpacity: 0.43,
+    shadowRadius: 9.51,
+
+    elevation: 15,
+  },
+  textInputWrap: {width: '100%', padding: 10},
+  textInputRow: {
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#085D7A',
+    borderRadius: 5,
+  },
+  buttonSend: {
+    flex: 1,
+    position: 'absolute',
+    bottom: 15,
+    right: 10,
+  },
+  textSend: {fontWeight: 'bold', color: '#085D7A'},
 });
 
 export default styles;

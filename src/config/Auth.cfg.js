@@ -43,4 +43,67 @@ const defaulthAuthData = {
   teamStructure: '',
 };
 
-export { AuthConfig, defaultAuthState, defaultAuthStateLogin, defaulthAuthData };
+const defaultAuthDataUser = {
+  id: '',
+  name: '',
+  noTelp: '',
+  tglLahir: '',
+  email: '',
+  nik: '',
+  pictures: '',
+  background: '',
+  bio: '',
+  password: '',
+  createdBy: '',
+  createdDate: '',
+  updatedBy: '',
+  updatedDate: '',
+  activeFlag: '',
+  nikAtasan: '',
+  namaAtasan: '',
+  jenisKelamin: '',
+  loker: '',
+  jabatan: '',
+  longUnit: '',
+  anakPerusahaan: '',
+  direktorat: '',
+  regional: '',
+  divisi: '',
+  witel: '',
+  bandPosition: '',
+  teamStructure: '',
+  groupId: '',
+  providerName: '',
+  providerId: '',
+  providerData: '',
+};
+
+const defaultCategoryEvent = {
+  id: '',
+  name: '',
+};
+
+const defaultEvent = {
+  id: '',
+  kodeBatch: '',
+  name: '',
+  description: '',
+  image: '',
+  status: '',
+  startDate: '',
+  endDate: '',
+  createdBy: '',
+  createdDate: '',
+  updatedBy: '',
+  updatedDate: '',
+  activeFlag: '',
+};
+export {
+  AuthConfig,
+  defaultAuthState,
+  defaultAuthStateLogin,
+  defaulthAuthData,
+  defaultAuthDataUser,
+  defaultCategoryEvent,
+  defaultEvent,
+};

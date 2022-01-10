@@ -55,7 +55,7 @@ const DrawerContent = props => {
           </View>
           <View style={styles.line} />
           {/* Drawer section */}
-          {state.routes.map(route => {
+          {state.routes.map((route, key) => {
             const {drawerLabel, activeTintColor, groupName, drawerIcon} =
               descriptors[route.key].options;
             if (lastGroupName !== groupName) {
@@ -63,9 +63,9 @@ const DrawerContent = props => {
               lastGroupName = groupName;
             } else newGroup = false;
             return (
-              <>
+              <View key={key}>
                 {newGroup ? (
-                  <View style={styles.sectionContainer} key={'key'}>
+                  <View style={styles.sectionContainer} key={key}>
                     <Text
                       key={groupName}
                       style={{
@@ -111,7 +111,7 @@ const DrawerContent = props => {
                     icon={drawerIcon}
                   />
                 )}
-              </>
+              </View>
             );
           })}
         </View>

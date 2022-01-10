@@ -22,6 +22,8 @@ import {useScrollToTop} from '@react-navigation/native';
 import {MentionInput} from 'react-native-controlled-mentions';
 import style from '../../../config/Style/style.cfg';
 import {windowWidth} from '../../../components/WindowDimensions';
+import axios from 'axios';
+import {defaultAuthDataUser} from '../../../config/Auth.cfg';
 
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
@@ -32,6 +34,8 @@ const ExploreContent = ({navigation, route}) => {
   const [modalBottom, setModalBottom] = useState(false);
   const [hasil, setHasil] = useState('');
   const [value, setValue] = useState('');
+  const dataUser = require('../data/User Services.postman_collection.json');
+  const [dataUserState, setDataUserState] = useState(defaultAuthDataUser);
   const getData = dataSearch => {
     setHasil(dataSearch);
   };
@@ -49,6 +53,15 @@ const ExploreContent = ({navigation, route}) => {
     {id: '5', name: 'Grey'},
   ];
 
+  useEffect(() => {
+    axios
+      .get(dataUser.item[0].item[1].request.url.raw)
+      .then(response => {
+        // setUpdate(response.data.data);
+        setDataUserState(response.data.data);
+      })
+      .catch(err => console.log(err));
+  }, []);
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
       return null;
@@ -110,6 +123,7 @@ const ExploreContent = ({navigation, route}) => {
             return (
               <View key={key}>
                 <CardContent
+                  name={dataUserState.name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}
                   cover={val.desc[1].value}
@@ -120,7 +134,9 @@ const ExploreContent = ({navigation, route}) => {
                   join={() => setModalJoinVisible(true)}
                   promote={() => setModalPromoteVisible(true)}
                   morePromote={() => setModalBottom(true)}
-                  onProfile={() => navigation.navigate('ProfileUser')}
+                  onProfile={() =>
+                    navigation.navigate('ProfileUser', {data: dataUserState})
+                  }
                 />
               </View>
             );
@@ -143,45 +159,20 @@ const ExploreContent = ({navigation, route}) => {
                 <Cross />
               </TouchableOpacity>
             </View>
-            <View style={styles.contentModal}>
-              <View style={styles.buttonModal}>
-                <TouchableOpacity onPress={() => {}}>
-                  <Text style={styles.save}>Kirim</Text>
-                </TouchableOpacity>
-              </View>
-              <ScrollView>
-                <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-                <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-                <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-                <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              </ScrollView>
-            </View>
+            <ScrollView style={styles.contentModal}>
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+            </ScrollView>
           </View>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              backgroundColor: '#FFFFFF',
-              width: '100%',
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 7,
-              },
-              shadowOpacity: 0.43,
-              shadowRadius: 9.51,
-
-              elevation: 15,
-            }}>
-            <View style={{width: '100%', padding: 10}}>
-              <View
-                style={{
-                  borderWidth: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderColor: '#085D7A',
-                  borderRadius: 5,
-                }}>
+          <View style={styles.textInputContainer}>
+            <View style={styles.textInputWrap}>
+              <View style={styles.textInputRow}>
                 <View style={{flex: 7}}>
                   <MentionInput
                     value={value}
@@ -199,17 +190,8 @@ const ExploreContent = ({navigation, route}) => {
                   />
                 </View>
 
-                <TouchableOpacity
-                  onPress={() => {}}
-                  style={{
-                    flex: 1,
-                    position: 'absolute',
-                    bottom: 15,
-                    right: 10,
-                  }}>
-                  <Text style={{fontWeight: 'bold', color: '#085D7A'}}>
-                    Send
-                  </Text>
+                <TouchableOpacity onPress={() => {}} style={styles.buttonSend}>
+                  <Text style={styles.textSend}>Send</Text>
                 </TouchableOpacity>
               </View>
             </View>

@@ -30,20 +30,12 @@ const Tag = props => {
 };
 
 const ProfileUser = ({navigation, route}) => {
-  //   const dataProfile = route.params.data;
+  const dataProfile = route.params.data;
   const [data, setData] = useState(defaultAuthState);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getData().then(jsonValue => setData(jsonValue));
-      prefetchConfiguration({
-        warmAndPrefetchChrome: Platform.OS === 'android',
-        ...AuthConfig,
-      });
-    });
-    return unsubscribe;
-  }, [navigation]);
+
+  console.log(dataProfile);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -77,8 +69,8 @@ const ProfileUser = ({navigation, route}) => {
         {/*main content */}
         <View style={styles.mainContainer}>
           <View style={styles.mainContent}>
-            <Text style={styles.h1}>Rifki</Text>
-            <Text style={styles.h2}>Rifkimntapss@gmail.com</Text>
+            <Text style={styles.h1}>{dataProfile.name}</Text>
+            <Text style={styles.h2}>{dataProfile.email}</Text>
           </View>
         </View>
 
