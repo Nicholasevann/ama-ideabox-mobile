@@ -64,7 +64,6 @@ const ExploreContent = ({navigation, route}) => {
             borderColor: '#085D7A',
             top: -1,
             borderBottomWidth: 0.5,
-            borderTopWidth: 1,
           }}>
           {suggestions
             .filter(one =>
