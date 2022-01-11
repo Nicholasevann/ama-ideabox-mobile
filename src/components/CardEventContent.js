@@ -20,13 +20,9 @@ const CardEventContent = props => {
           </TouchableOpacity>
         </View>
       </View>
-      <View>
-        <TouchableOpacity onPress={props.join}>
-          <View style={styles.buttonJoin}>
-            <Text style={styles.textJoin}>Join Now</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={props.join} style={styles.buttonJoin}>
+        <Text style={styles.textJoin}>Join Now</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -37,7 +33,7 @@ const styles = StyleSheet.create({
   box: {
     flex: 1,
     height: 550,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
     borderRadius: 10,
     marginVertical: 15,
     marginHorizontal: 2,
@@ -94,7 +90,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
   },
   buttonJoin: {
-    marginTop: windowHeight / 110.14,
+    position: 'absolute',
+    bottom: 0,
     width: '100%',
     height: 60,
     alignItems: 'center',

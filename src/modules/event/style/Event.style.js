@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 15,
-    marginBottom: windowHeight / 9,
+    marginBottom: windowHeight / 10,
   },
   titleEvent: {
     color: '#085D7A',

@@ -61,7 +61,7 @@ const ExploreContent = ({navigation, route}) => {
         setDataUserState(response.data.data);
       })
       .catch(err => console.log(err));
-  }, []);
+  });
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
       return null;
@@ -96,7 +96,11 @@ const ExploreContent = ({navigation, route}) => {
       </View>
     );
   };
-  if (isLoading || data === undefined || data.length === 0) {
+  if (
+    isLoading ||
+    data === undefined ||
+    dataUserState === defaultAuthDataUser
+  ) {
     return <LoadingScreen />;
   }
 

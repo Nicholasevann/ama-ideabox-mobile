@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import LoadingScreen from '../../../components/LoadingScreen';
 import NotifService from '../../../config/Notification/NotifService';
 
 const Latihan = () => {
@@ -24,6 +25,7 @@ const Latihan = () => {
     Alert.alert('Permissions', JSON.stringify(perms));
   };
   console.log('ini adalah ' + notif.lastId);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>

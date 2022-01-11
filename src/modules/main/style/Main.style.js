@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
   },
   textcontent: {
     color: '#FFFFFF',
-    fontSize: 16,
     textAlign: 'justify',
+    lineHeight: 25,
   },
   button: {
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',
-    marginTop: windowHeight / 20,
+    marginVertical: windowHeight / 25,
     width: windowWidth / 3,
     height: windowHeight / 24,
     borderRadius: 5,
@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   mainimage: {
-    marginTop: windowHeight / 12.65,
     alignItems: 'center',
     width: windowWidth,
     height: windowHeight / 3,

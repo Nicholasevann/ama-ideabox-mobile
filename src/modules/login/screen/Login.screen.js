@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   NativeBaseProvider,
   Text,
@@ -7,14 +7,14 @@ import {
   FormControl,
   Button,
 } from 'native-base';
-import { authorize, prefetchConfiguration } from 'react-native-app-auth';
-import { View, Alert, Platform, TextInput } from 'react-native';
+import {authorize, prefetchConfiguration} from 'react-native-app-auth';
+import {View, Alert, Platform, TextInput} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
-import { IconEmail, IconPassword } from '../../../assets/icon/Icon';
-import { IconGit } from '../../../assets/icon';
-import { FontTampilan } from '../../../assets/font/Font';
+import {IconEmail, IconPassword} from '../../../assets/icon/Icon';
+import {IconGit} from '../../../assets/icon';
+import {FontTampilan} from '../../../assets/font/Font';
 import styles from '../style/Login.style';
 import {
   AuthConfig,
@@ -23,9 +23,10 @@ import {
 } from '../../../config/Auth.cfg';
 import getData from '../../../components/GetData';
 import CheckBox from '@react-native-community/checkbox';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import LoadingScreen from '../../../components/LoadingScreen';
 
-export default function App({ navigation }) {
+export default function App({navigation}) {
   const [authState, setAuthState] = useState(defaultAuthState);
   const [data, setData] = useState(defaultAuthState);
   const [ldap, setLdap] = useState(defaultAuthStateLogin);
@@ -64,7 +65,7 @@ export default function App({ navigation }) {
         },
         validateStatus: false,
       })
-        .then(function ({ status, data }) {
+        .then(function ({status, data}) {
           if (status === 200) {
             setAuthState({
               hasLoggedInOnce: true,
@@ -112,7 +113,7 @@ export default function App({ navigation }) {
               style={styles.inputText}
               placeholder="Email"
               placeholderTextColor="#FFFFFF"
-              onChangeText={value => setLdap({ ...ldap, email: value })}
+              onChangeText={value => setLdap({...ldap, email: value})}
               value={ldap.email}
             />
           </FormControl>
@@ -123,7 +124,7 @@ export default function App({ navigation }) {
               placeholder="Password"
               secureTextEntry={true}
               placeholderTextColor="#FFFFFF"
-              onChangeText={value => setLdap({ ...ldap, password: value })}
+              onChangeText={value => setLdap({...ldap, password: value})}
               value={ldap.password}
             />
           </FormControl>
@@ -131,15 +132,15 @@ export default function App({ navigation }) {
             <Button
               mt="20"
               style={styles.button}
-              _text={{ color: '#085D7A', fontWeight: '700' }}
-              onPress={() => { }}>
+              _text={{color: '#085D7A', fontWeight: '700'}}
+              onPress={() => {}}>
               Login
             </Button>
           ) : (
             <Button
               mt="20"
               style={styles.buttonNonActive}
-              _text={{ color: '#085D7A', fontWeight: '700' }}>
+              _text={{color: '#085D7A', fontWeight: '700'}}>
               Login
             </Button>
           )}
@@ -150,7 +151,7 @@ export default function App({ navigation }) {
           {toggleCheckBox === true ? (
             <Button
               style={styles.button}
-              _text={{ color: '#085D7A', fontWeight: '700' }}
+              _text={{color: '#085D7A', fontWeight: '700'}}
               onPress={() => handleAuthorize()}
               leftIcon={<IconGit />}>
               Login with GIT
@@ -158,7 +159,7 @@ export default function App({ navigation }) {
           ) : (
             <Button
               style={styles.buttonNonActive}
-              _text={{ color: '#085D7A', fontWeight: '700' }}
+              _text={{color: '#085D7A', fontWeight: '700'}}
               leftIcon={<IconGit />}>
               Login with GIT
             </Button>
@@ -174,21 +175,21 @@ export default function App({ navigation }) {
 
             <Text style={styles.term}>
               Please read the{' '}
-              <Text style={{ color: '#F9CC2C', textDecorationLine: 'underline' }}>
+              <Text style={{color: '#F9CC2C', textDecorationLine: 'underline'}}>
                 Terms of Conditions
               </Text>{' '}
               and{' '}
-
-              <Text onPress={() => { navigation.navigate('PrivacyPolicy') }} style={{ color: '#F9CC2C', textDecorationLine: 'underline' }}>
+              <Text
+                onPress={() => {
+                  navigation.navigate('PrivacyPolicy');
+                }}
+                style={{color: '#F9CC2C', textDecorationLine: 'underline'}}>
                 Privacy Policy.
               </Text>
-
             </Text>
-
           </View>
-
         </VStack>
-      </View >
-    </NativeBaseProvider >
+      </View>
+    </NativeBaseProvider>
   );
 }

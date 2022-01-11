@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, ScrollView, TouchableOpacity, Image} from 'react-native';
 import {Line, MainImage} from '../../../assets/icon';
 import styles from '../style/Main.style';
-
+import style from '../../../config/Style/style.cfg';
 const Main = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -17,7 +17,7 @@ const Main = ({navigation}) => {
             <Text style={styles.textwhitetitle}>BOX?</Text>
           </View>
           <View style={styles.content}>
-            <Text style={styles.textcontent}>
+            <Text style={[styles.textcontent, style.h4medium]}>
               <Text style={styles.redtitlecontent}>IDEA</Text>
               <Text style={styles.whitetitlecontent}>BOX</Text> Merupakan single
               platform yang digunakan sebagai media sosial inovasi bagi karyawan
