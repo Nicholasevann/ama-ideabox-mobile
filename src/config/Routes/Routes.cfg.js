@@ -10,11 +10,12 @@ import Notification from '../../modules/notification/screen/Notification.screen'
 import SearchScreen from '../../modules/search/screen/Search.screen';
 import Faq from '../../modules/faq/screen/Faq.screen';
 import privacyPolicy from '../../modules/privacyPolicy/screen/privacyPolicy.screen';
+import TermCondi from '../../modules/termcondi/screen/TermCondi.screen';
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
   return (
-    <Stack.Navigator initialRouteName="DrawerNavigation">
+    <Stack.Navigator initialRouteName="SplashScreen">
       <Stack.Screen
         name="TopIdea"
         component={TopIdea}
@@ -59,6 +60,11 @@ const Routes = () => {
       <Stack.Screen
         name="PrivacyPolicy"
         component={privacyPolicy}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="TermCondi"
+        component={TermCondi}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

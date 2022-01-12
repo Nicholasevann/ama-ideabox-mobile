@@ -23,22 +23,26 @@ import {
 } from '../../../config/Auth.cfg';
 import getData from '../../../components/GetData';
 import CheckBox from '@react-native-community/checkbox';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import LoadingScreen from '../../../components/LoadingScreen';
 
-export default function App({navigation}) {
+const Login = ({navigation, route}) => {
+  // route.params.data = null;
+  const checked = route.params.checked;
+  // useEffect(() => {
+  //   const checked = route.params.checked;
+  //   console.log(checked);
+  //   setToggleCheckBox(checked);
+  // }, []);
+
   const [authState, setAuthState] = useState(defaultAuthState);
   const [data, setData] = useState(defaultAuthState);
   const [ldap, setLdap] = useState(defaultAuthStateLogin);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [toggleCheckBox, setToggleCheckBox] = useState(checked);
   const expiredCheck = () => {
     if (data.expireAt > moment().unix()) {
       navigation.navigate('DrawerNavigation');
     }
     //expired
-    else {
-      navigation.navigate('Login');
-    }
   };
 
   const storeData = async () => {
@@ -99,6 +103,7 @@ export default function App({navigation}) {
   useEffect(() => {
     expiredCheck();
   }, [data]);
+
   return (
     <NativeBaseProvider theme={FontTampilan}>
       <View style={styles.container}>
@@ -175,7 +180,11 @@ export default function App({navigation}) {
 
             <Text style={styles.term}>
               Please read the{' '}
-              <Text style={{color: '#F9CC2C', textDecorationLine: 'underline'}}>
+              <Text
+                style={{color: '#F9CC2C', textDecorationLine: 'underline'}}
+                onPress={() => {
+                  navigation.navigate('TermCondi');
+                }}>
                 Terms of Conditions
               </Text>{' '}
               and{' '}
@@ -192,4 +201,5 @@ export default function App({navigation}) {
       </View>
     </NativeBaseProvider>
   );
-}
+};
+export default Login;

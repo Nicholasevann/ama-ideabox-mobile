@@ -17,7 +17,7 @@ const Main = ({navigation}) => {
             <Text style={styles.textwhitetitle}>BOX?</Text>
           </View>
           <View style={styles.content}>
-            <Text style={[styles.textcontent, style.h4medium]}>
+            <Text style={[style.h4medium, styles.textcontent]}>
               <Text style={styles.redtitlecontent}>IDEA</Text>
               <Text style={styles.whitetitlecontent}>BOX</Text> Merupakan single
               platform yang digunakan sebagai media sosial inovasi bagi karyawan
@@ -26,7 +26,7 @@ const Main = ({navigation}) => {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
+            onPress={() => navigation.navigate('Login', {checked: false})}
             style={styles.button}>
             <Text style={styles.getstarted}>GET STARTED</Text>
           </TouchableOpacity>
