@@ -8,7 +8,7 @@ const TermCondi = ({navigation}) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, {backgroundColor: '#FFFFFF'}]}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => navigation.navigate('Login', {checked: false})}>
           <Text style={[style.h4, {color: '#085D7A'}]}>Decline</Text>
         </TouchableOpacity>
         <TouchableOpacity

@@ -21,7 +21,7 @@ const DrawerContent = props => {
   };
   const LogoutHandle = () => {
     removeData('authState');
-    props.navigation.navigate('Login');
+    props.navigation.navigate('Login', {checked: false});
   };
   const {state, descriptors, navigation} = props;
   let lastGroupName = '';

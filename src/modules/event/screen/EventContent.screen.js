@@ -2,35 +2,43 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  ScrollView,
   SafeAreaView,
+  ScrollView,
   FlatList,
   Modal,
   Alert,
   TouchableOpacity,
 } from 'react-native';
 import CardEventCategory from '../../../components/CardEventCategory';
-import CardEventContent from '../../../components/CardEventContent';
-import styles from '../style/Event.style';
 import SearchHeader from '../../../components/SearchHeader';
-import {Cross} from '../../../assets/icon';
-import DropDownPicker from 'react-native-dropdown-picker';
-import {useScrollToTop} from '@react-navigation/native';
-import style from '../../../config/Style/style.cfg';
-
+import LoadingScreen from '../../../components/LoadingScreen';
+import CardEventContent from '../../../components/CardEventContent';
 import {defaultCategoryEvent, defaultEvent} from '../../../config/Auth.cfg';
 import {
   GetDataCategory,
   GetDataEvent,
 } from '../../../config/GetData/GetDataEvent';
+import styles from '../style/Event.style';
+import {Cross} from '../../../assets/icon';
+import style from '../../../config/Style/style.cfg';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const EventContent = ({navigation}) => {
-  const dataCategory = require('../data/dataCategory.json');
-  const dataEvent = require('../data/dataEvent.json');
+  const [hasil, setHasil] = useState('');
+  const [stateDataCategory, setStateDataCategory] =
+    useState(defaultCategoryEvent);
+  const [stateDataEvent, setStateDataEvent] = useState(defaultEvent);
+  useEffect(() => {
+    GetDataCategory().then(response => setStateDataCategory(response));
+    GetDataEvent().then(response => setStateDataEvent(response));
+  }, []);
+  const getData = dataSearch => {
+    setHasil(dataSearch);
+  };
+  const [selectedId, setSelectedId] = useState(17);
+  const [allCategory, setAllCategory] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalSubmitVisible, setModalSubmitVisible] = useState(false);
-
-  const [selectedId, setSelectedId] = useState(1);
 
   // dropdown
   const [open, setOpen] = useState(false);
@@ -39,26 +47,16 @@ const EventContent = ({navigation}) => {
     {label: 'Apple', value: 'apple'},
     {label: 'Banana', value: 'banana'},
   ]);
-  const [hasil, setHasil] = useState('');
-  const getData = dataSearch => {
-    setHasil(dataSearch);
-  };
-  const selectedData = dataEvent.filter(
-    x => x.category === dataCategory[selectedId - 1].title,
+  if (
+    stateDataEvent === defaultEvent ||
+    stateDataCategory === defaultCategoryEvent
+  ) {
+    return <LoadingScreen />;
+  }
+  const selectedData = stateDataEvent.filter(
+    x => x.category[0].id === stateDataCategory[selectedId - 17].id,
   );
-  // Json terbaru
-  const [stateDataCategory, setStateDataCategory] =
-    useState(defaultCategoryEvent);
-  const [stateDataEvent, setStateDataEvent] = useState(defaultEvent);
-  useEffect(() => {
-    GetDataCategory().then(response => setStateDataCategory(response));
-    GetDataEvent().then(response => setStateDataEvent(response));
-  }, []);
-  console.log(stateDataCategory);
-  console.log(stateDataEvent);
 
-  const ref = React.useRef(null);
-  useScrollToTop(ref);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -67,61 +65,70 @@ const EventContent = ({navigation}) => {
         getData={getData}
         placeholder={'Search an Event ... '}
       />
-      <ScrollView ref={ref} style={styles.contentContainer}>
+      <ScrollView style={styles.contentContainer}>
         <Text style={styles.titleCategory}>By Category</Text>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, key) => item.id}
-          data={dataCategory}
-          renderItem={({item, key}) => {
-            const borderColor = item.id === selectedId ? '#085D7A' : 'grey';
-            const textColor = item.id === selectedId ? '#085D7A' : 'grey';
-            return (
-              <View key={key}>
-                <CardEventCategory
-                  title={item.title}
-                  image={item.image}
-                  getId={() => setSelectedId(item.id)}
-                  borderColor={borderColor}
-                  textColor={textColor}
-                />
-              </View>
-            );
-          }}
-          extraData={selectedId}
-        />
-        {/* Json terbaru */}
-        {/* <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={(item, key) => item.id}
-          data={stateDataCategory}
-          renderItem={({item, key}) => {
-            const borderColor = item.id === selectedId ? '#085D7A' : 'grey';
-            const textColor = item.id === selectedId ? '#085D7A' : 'grey';
-            return (
-              <View key={key}>
-                <CardEventCategory
-                  title={item.name}
-                  image={item.image}
-                  getId={() => setSelectedId(item.id)}
-                  borderColor={borderColor}
-                  textColor={textColor}
-                />
-              </View>
-            );
-          }}
-          extraData={selectedId}
-        /> */}
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={{flexDirection: 'row'}}>
+            {allCategory === true ? (
+              <CardEventCategory
+                title={'All Category'}
+                getId={() => {
+                  setAllCategory(true);
+                }}
+                borderColor={'#085D7A'}
+                textColor={'#085D7A'}
+              />
+            ) : (
+              <CardEventCategory
+                title={'All Category'}
+                getId={() => {
+                  setAllCategory(true);
+                }}
+                borderColor={'grey'}
+                textColor={'grey'}
+              />
+            )}
+
+            <FlatList
+              horizontal
+              keyExtractor={(item, key) => item.id}
+              data={stateDataCategory}
+              renderItem={({item, key}) => {
+                const borderColor =
+                  item.id === selectedId && allCategory === false
+                    ? '#085D7A'
+                    : 'grey';
+                const textColor =
+                  item.id === selectedId && allCategory === false
+                    ? '#085D7A'
+                    : 'grey';
+                return (
+                  <View key={key}>
+                    <CardEventCategory
+                      title={item.name}
+                      image={item.image}
+                      getId={() => {
+                        setSelectedId(item.id);
+                        setAllCategory(false);
+                      }}
+                      borderColor={borderColor}
+                      textColor={textColor}
+                    />
+                  </View>
+                );
+              }}
+              extraData={selectedId}
+            />
+          </View>
+        </ScrollView>
         <Text style={styles.titleEvent}>Event</Text>
-        {selectedId === 1
-          ? dataEvent
+        {allCategory === true
+          ? stateDataEvent
               .filter(val => {
                 if (hasil === '') {
                   return val;
                 } else if (
-                  val.title.toLowerCase().includes(hasil.toLowerCase())
+                  val.name.toLowerCase().includes(hasil.toLowerCase())
                 ) {
                   return val;
                 }
@@ -130,8 +137,8 @@ const EventContent = ({navigation}) => {
                 return (
                   <View key={key}>
                     <CardEventContent
-                      title={val.title}
-                      desc={val.desc}
+                      title={val.name}
+                      desc={val.description}
                       image={val.image}
                       join={() => setModalVisible(true)}
                       detail={() =>
@@ -146,40 +153,26 @@ const EventContent = ({navigation}) => {
                 if (hasil === '') {
                   return val;
                 } else if (
-                  val.title.toLowerCase().includes(hasil.toLowerCase())
+                  val.name.toLowerCase().includes(hasil.toLowerCase())
                 ) {
                   return val;
                 }
               })
-              .map(val => {
+              .map((val, key) => {
                 return (
-                  <CardEventContent
-                    title={val.title}
-                    desc={val.desc}
-                    image={val.image}
-                    join={() => setModalVisible(true)}
-                    detail={() =>
-                      navigation.navigate('DetailEventContent', {data: val})
-                    }
-                  />
+                  <View key={key}>
+                    <CardEventContent
+                      title={val.name}
+                      desc={val.description}
+                      image={val.image}
+                      join={() => setModalVisible(true)}
+                      detail={() =>
+                        navigation.navigate('DetailEventContent', {data: val})
+                      }
+                    />
+                  </View>
                 );
               })}
-        {/* JSON terbaru */}
-        {/* {stateDataEvent.map((val, key) => {
-          return (
-            <View key={key}>
-              <CardEventContent
-                title={val.name}
-                desc={val.description}
-                image={val.image}
-                join={() => setModalVisible(true)}
-                detail={() =>
-                  navigation.navigate('DetailEventContent', {data: val})
-                }
-              />
-            </View>
-          );
-        })} */}
         {/* Awal Modal */}
         <Modal
           animationType="none"

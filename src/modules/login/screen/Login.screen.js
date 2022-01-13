@@ -190,7 +190,7 @@ const Login = ({navigation, route}) => {
               and{' '}
               <Text
                 onPress={() => {
-                  navigation.navigate('PrivacyPolicy');
+                  navigation.navigate('TermCondi');
                 }}
                 style={{color: '#F9CC2C', textDecorationLine: 'underline'}}>
                 Privacy Policy.

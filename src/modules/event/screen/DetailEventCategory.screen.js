@@ -132,13 +132,13 @@ const DetailEventCategory = ({navigation, route}) => {
           />
           <View style={styles.textWrap}>
             <View style={styles.titleWrap}>
-              <Text style={style.h4}>{data.title}</Text>
+              <Text style={style.h4}>{data.name}</Text>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <BackBlue />
               </TouchableOpacity>
             </View>
             <Text style={styles.date}>Tanggal Acara : {data.date}</Text>
-            <Text style={style.h5}>{data.desc}</Text>
+            <Text style={style.h5}>{data.description}</Text>
           </View>
         </ScrollView>
         <TouchableOpacity
