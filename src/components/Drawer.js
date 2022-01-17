@@ -13,6 +13,7 @@ import RoutesUserManagement from '../config/Routes/RoutesUserManagement';
 import RoutesCategoryManagement from '../config/Routes/RoutesCategoryManagement';
 import Faq from '../modules/faq/screen/Faq.screen';
 import Latihan from '../modules/latihan/screen/Latihan.screen';
+import Dashboard from '../modules/dashboard/screen/Dashboard.screen';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
@@ -112,6 +113,16 @@ const DrawerNavigation = () => {
           drawerLabel: 'FAQ',
           headerShown: false,
           drawerIcon: () => <IconFaq />,
+          activeTintColor: '#085D7A',
+        }}
+      />
+      <Drawer.Screen
+        name="Dashboard"
+        component={Dashboard}
+        options={{
+          drawerLabel: 'Dashboard',
+          headerShown: false,
+          drawerIcon: () => <Talent />,
           activeTintColor: '#085D7A',
         }}
       />

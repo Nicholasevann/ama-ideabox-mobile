@@ -63,7 +63,7 @@ const Login = ({navigation, route}) => {
       axios({
         crossDomain: true,
         method: 'post',
-        url: 'http://user.desasembung.com/authorize/sso/mobile',
+        url: 'https://dev-users.digitalamoeba.id/authorize/sso/mobile',
         data: {
           access_token: newAuthState.accessToken,
         },

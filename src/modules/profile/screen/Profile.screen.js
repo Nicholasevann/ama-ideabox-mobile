@@ -20,6 +20,8 @@ import CardTrackRecord from '../../../components/CardTrackRecord';
 import CardAchievement from '../../../components/CardAchievement';
 import CardContent from '../../../components/CardContent';
 import style from '../../../config/Style/style.cfg';
+import LoadingScreen from '../../../components/LoadingScreen';
+import GetDataTrackRecord from '../../../config/GetData/GetDataTrackRecord';
 
 const Tag = props => {
   return (
@@ -33,16 +35,20 @@ const Profile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
+  const [dataTrackRecord, setDataTrackRecord] = useState('');
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getData().then(jsonValue => setData(jsonValue));
-      prefetchConfiguration({
-        warmAndPrefetchChrome: Platform.OS === 'android',
-        ...AuthConfig,
-      });
+    getData().then(jsonValue => setData(jsonValue));
+    prefetchConfiguration({
+      warmAndPrefetchChrome: Platform.OS === 'android',
+      ...AuthConfig,
     });
-    return unsubscribe;
-  }, [navigation]);
+    GetDataTrackRecord().then(response => setDataTrackRecord(response));
+  }, []);
+
+  if (dataTrackRecord === '') {
+    return <LoadingScreen />;
+  }
+  console.log(dataTrackRecord);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -91,7 +97,7 @@ const Profile = ({navigation}) => {
           {/* Track Record */}
           <View style={styles.CardTrackRecord}>
             <CardTrackRecord
-              number={'205'}
+              number={'122'}
               text={'     Ideas'}
               image={require('../../../assets/image/dummy1.png')}
               color={'#FC9C10'}
