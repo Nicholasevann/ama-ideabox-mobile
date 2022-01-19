@@ -204,6 +204,7 @@ const EventContent = ({navigation}) => {
                     setValue={setValue}
                     setItems={setItems}
                     style={styles.input}
+                    placeholder="Pilih ide"
                   />
                   <TouchableOpacity
                     style={styles.button}

@@ -8,9 +8,10 @@ const styles = StyleSheet.create({
   content: {
     padding: 15,
   },
+  cardContainer: {flexDirection: 'row', marginHorizontal: 2},
   contentChart: {
-    padding: 10,
     marginVertical: 10,
+    marginHorizontal: 2,
     borderRadius: 5,
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -24,20 +25,37 @@ const styles = StyleSheet.create({
 
     elevation: 5,
   },
-  input: {
-    backgroundColor: '#EBEFF5',
-    width: '40%',
+  contentChart2: {
+    marginTop: 10,
+    marginBottom: 30,
+    marginHorizontal: 2,
+    borderRadius: 5,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
-  dropdown: {
-    color: 'red',
-    fontSize: 10,
-    height: 35,
-  },
+
   titleChart: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 10,
+  },
+  titleChart2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   headerWrap: {
     justifyContent: 'center',
@@ -79,6 +97,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#EBEFF5',
+  },
+  button: {
+    width: 300,
+    height: 50,
+    backgroundColor: '#085D7A',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginVertical: 25,
+  },
+  tableContent: {
+    width: '100%',
+    height: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  //dropdown
+  labelStyle: {
+    color: '#000',
+    fontSize: 10,
+  },
+  fontLabelStyle: {fontSize: 10},
+  listContainer: {
+    height: 45,
+  },
+  placeholder: {fontWeight: 'bold', fontSize: 13},
+  input: {
+    backgroundColor: '#EBEFF5',
+    width: 150,
+    height: 40,
   },
 });
 
