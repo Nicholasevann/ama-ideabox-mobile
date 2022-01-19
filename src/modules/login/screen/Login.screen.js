@@ -35,6 +35,7 @@ const Login = ({navigation, route}) => {
   // }, []);
 
   const [authState, setAuthState] = useState(defaultAuthState);
+  const [authStateLdap, setAuthStateLdap] = useState();
   const [data, setData] = useState(defaultAuthState);
   const [ldap, setLdap] = useState(defaultAuthStateLogin);
   const [toggleCheckBox, setToggleCheckBox] = useState(checked);
@@ -56,6 +57,17 @@ const Login = ({navigation, route}) => {
       console.log('failed to store data');
     }
   };
+  // const storeData = async () => {
+  //   try {
+  //     if (authState.name !== '') {
+  //       const jsonValue = JSON.stringify(authState);
+  //       await AsyncStorage.setItem('authState', jsonValue);
+  //       setData(authState);
+  //     }
+  //   } catch (e) {
+  //     console.log('failed to store data');
+  //   }
+  // };
 
   const handleAuthorize = useCallback(async () => {
     try {
@@ -86,6 +98,36 @@ const Login = ({navigation, route}) => {
     }
   }, [storeData()]);
 
+  const handleAuthorizeLdap = useCallback(async () => {
+    try {
+      axios({
+        crossDomain: true,
+        method: 'post',
+        url: 'https://dev-users.digitalamoeba.id/authorize/ldap',
+        data: {
+          ldap: {
+            username: ldap.username,
+            password: ldap.password,
+          },
+        },
+        validateStatus: false,
+      })
+        .then(function ({status, data}) {
+          if (status === 200) {
+            setAuthStateLdap({
+              hasLoggedInOnce: true,
+              ...data.data,
+            });
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          // need handling error
+        });
+    } catch (error) {
+      Alert.alert('Failed to log in', error.message);
+    }
+  }, [storeData()]);
   useEffect(() => {
     let isSubscribed = true;
     getData().then(jsonValue => {
@@ -103,7 +145,7 @@ const Login = ({navigation, route}) => {
   useEffect(() => {
     expiredCheck();
   }, [data]);
-
+  console.log(authStateLdap);
   return (
     <NativeBaseProvider theme={FontTampilan}>
       <View style={styles.container}>
@@ -116,10 +158,10 @@ const Login = ({navigation, route}) => {
             <IconEmail />
             <TextInput
               style={styles.inputText}
-              placeholder="Email"
+              placeholder="Username"
               placeholderTextColor="#FFFFFF"
-              onChangeText={value => setLdap({...ldap, email: value})}
-              value={ldap.email}
+              onChangeText={value => setLdap({...ldap, username: value})}
+              value={ldap.username}
             />
           </FormControl>
           <FormControl>
@@ -138,7 +180,7 @@ const Login = ({navigation, route}) => {
               mt="20"
               style={styles.button}
               _text={{color: '#085D7A', fontWeight: '700'}}
-              onPress={() => {}}>
+              onPress={() => handleAuthorizeLdap()}>
               Login
             </Button>
           ) : (
