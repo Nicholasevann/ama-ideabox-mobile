@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     height: 60,
     flexDirection: 'row',
     marginBottom: 10,
-    marginLeft: 5,
+    marginHorizontal: 5,
+    flexWrap: 'wrap',
   },
   pictureContainer: {
     flex: 0.5,
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
     flex: 2,
+    paddingHorizontal: 5,
   },
   title: {
     color: '#085D7A',

@@ -8,7 +8,7 @@ import {
   Button,
 } from 'native-base';
 import {authorize, prefetchConfiguration} from 'react-native-app-auth';
-import {View, Alert, Platform, TextInput} from 'react-native';
+import {View, Alert, Platform, TextInput, Modal} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
@@ -39,9 +39,10 @@ const Login = ({navigation, route}) => {
   const [data, setData] = useState(defaultAuthState);
   const [ldap, setLdap] = useState(defaultAuthStateLogin);
   const [toggleCheckBox, setToggleCheckBox] = useState(checked);
+  const [login, setLogin] = useState(true);
   const expiredCheck = () => {
     if (data.expireAt > moment().unix()) {
-      navigation.navigate('DrawerNavigation');
+      navigation.replace('DrawerNavigation');
     }
     //expired
   };
@@ -57,17 +58,17 @@ const Login = ({navigation, route}) => {
       console.log('failed to store data');
     }
   };
-  // const storeData = async () => {
-  //   try {
-  //     if (authState.name !== '') {
-  //       const jsonValue = JSON.stringify(authState);
-  //       await AsyncStorage.setItem('authState', jsonValue);
-  //       setData(authState);
-  //     }
-  //   } catch (e) {
-  //     console.log('failed to store data');
-  //   }
-  // };
+  const storeDataLdap = async () => {
+    try {
+      if (authStateLdap.name !== '') {
+        const jsonValue = JSON.stringify(authStateLdap);
+        await AsyncStorage.setItem('authState', jsonValue);
+        setData(authStateLdap);
+      }
+    } catch (e) {
+      console.log('failed to store data');
+    }
+  };
 
   const handleAuthorize = useCallback(async () => {
     try {
@@ -118,6 +119,9 @@ const Login = ({navigation, route}) => {
               hasLoggedInOnce: true,
               ...data.data,
             });
+          } else {
+            setLogin(false);
+            ß;
           }
         })
         .catch(function (error) {
@@ -127,7 +131,7 @@ const Login = ({navigation, route}) => {
     } catch (error) {
       Alert.alert('Failed to log in', error.message);
     }
-  }, [storeData()]);
+  }, [storeDataLdap()]);
   useEffect(() => {
     let isSubscribed = true;
     getData().then(jsonValue => {
@@ -174,6 +178,21 @@ const Login = ({navigation, route}) => {
               onChangeText={value => setLdap({...ldap, password: value})}
               value={ldap.password}
             />
+            {login === false ? (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: '#FF2E2E',
+                    marginTop: 10,
+                    fontWeight: 'bold',
+                  }}>
+                  *) Please check your username & password correctly!
+                </Text>
+              </View>
+            ) : (
+              <View style={{height: 52}} />
+            )}
           </FormControl>
           {toggleCheckBox === true ? (
             <Button
@@ -191,7 +210,6 @@ const Login = ({navigation, route}) => {
               Login
             </Button>
           )}
-
           <View style={styles.center}>
             <Text style={styles.or}>-OR-</Text>
           </View>

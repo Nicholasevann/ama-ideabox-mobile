@@ -5,9 +5,14 @@ import {windowHeight, windowWidth} from '../components/WindowDimensions';
 const CardTrackRecord = props => {
   return (
     <View style={styles.container}>
-      <Image source={props.image} style={styles.picture} />
-      <Text style={{...styles.number, color: props.color}}>{props.number}</Text>
-      <Text style={styles.text}>{props.text}</Text>
+      <Image source={props.image} style={{flex: 1}} />
+      <Text style={{...styles.number, color: props.color}}>
+        {props.number}
+        {'\n'}
+        <Text style={styles.text}>{props.text}</Text>
+      </Text>
+
+      {/* <Text style={{position: 'absolute',}}>122</Text> */}
     </View>
   );
 };
@@ -18,6 +23,8 @@ const styles = StyleSheet.create({
   container: {
     width: (65 / 350) * windowWidth,
     height: (105 / 500) * windowHeight,
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     marginHorizontal: 5,
   },
@@ -38,19 +45,11 @@ const styles = StyleSheet.create({
   number: {
     fontSize: 20,
     fontWeight: '700',
-    zIndex: 3,
     position: 'absolute',
-    left: 20,
-    top: 65,
+    textAlign: 'center',
   },
   text: {
     fontSize: 12,
     fontWeight: '700',
-    zIndex: 3,
-    position: 'absolute',
-    left: 9,
-    top: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

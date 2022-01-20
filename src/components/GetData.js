@@ -1,6 +1,5 @@
-import { defaultAuthState } from '../config/Auth.cfg';
+import {defaultAuthState} from '../config/Auth.cfg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 const getData = async () => {
   try {

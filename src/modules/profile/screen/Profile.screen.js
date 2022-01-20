@@ -36,6 +36,8 @@ const Profile = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
   const [dataTrackRecord, setDataTrackRecord] = useState('');
+  var indexSupport = 0;
+  var indexJoin = 0;
   useEffect(() => {
     getData().then(jsonValue => setData(jsonValue));
     prefetchConfiguration({
@@ -44,11 +46,11 @@ const Profile = ({navigation}) => {
     });
     GetDataTrackRecord().then(response => setDataTrackRecord(response));
   }, []);
-
+  console.log(indexSupport);
   if (dataTrackRecord === '') {
     return <LoadingScreen />;
   }
-  console.log(dataTrackRecord);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -97,26 +99,26 @@ const Profile = ({navigation}) => {
           {/* Track Record */}
           <View style={styles.CardTrackRecord}>
             <CardTrackRecord
-              number={'122'}
-              text={'     Ideas'}
+              number={dataTrackRecord.totalIdeas}
+              text={'Ideas'}
               image={require('../../../assets/image/dummy1.png')}
               color={'#FC9C10'}
             />
             <CardTrackRecord
-              number={'412'}
-              text={'     Likes'}
+              number={dataTrackRecord.totalLike}
+              text={'Likes'}
               image={require('../../../assets/image/dummy2.png')}
               color={'#ED1B5C'}
             />
             <CardTrackRecord
-              number={'105'}
+              number={dataTrackRecord.totalComment}
               text={'Comments'}
               image={require('../../../assets/image/dummy3.png')}
               color={'#177FC6'}
             />
             <CardTrackRecord
               number={'016'}
-              text={' Trendings'}
+              text={'Trendings'}
               image={require('../../../assets/image/dummy4.png')}
               color={'#3ACECA'}
             />
@@ -135,12 +137,7 @@ const Profile = ({navigation}) => {
             </View>
             {/* Textbox using const */}
             <View style={styles.textBox}>
-              <Text style={style.h5}>
-                Saya Maria Botoshmemiliki hobi bermain musik. Selain bermain
-                musik saya suka memasak dan membuat pantun, saya di telkom
-                sebagai digital marketing. jangan lupa follow instagram saya
-                @MariaBotosh
-              </Text>
+              <Text style={style.h5}>{dataTrackRecord.about}</Text>
             </View>
           </View>
 
@@ -151,10 +148,9 @@ const Profile = ({navigation}) => {
             </View>
             {/* Tag */}
             <View style={styles.tagContainer}>
-              <Tag title={'UI/UX Designer'} />
-              <Tag title={'Product Owner'} />
-              <Tag title={'Digital Marketing'} />
-              <Tag title={'Front-End Mobile Developer'} />
+              {dataTrackRecord.skillSet.map(val => (
+                <Tag title={val.name} />
+              ))}
             </View>
           </View>
 
@@ -178,13 +174,84 @@ const Profile = ({navigation}) => {
             {/* Tag */}
             <View style={styles.achievementContainer}>
               <CardAchievement
-                title={'Sistem keuangan berbasis web untuk KUKM'}
+                title={
+                  'Sistem keuangan berbasis web untuk KUKM Sistem keuangan berbasis web untuk KUKM'
+                }
                 desc={'Top 25 Ideahack'}
               />
               <CardAchievement
                 title={'Indonesia Menerapkan IoT'}
                 desc={'Juara Harapan 2'}
               />
+            </View>
+          </View>
+
+          {/* Inovation*/}
+          <View style={styles.cardContainer}>
+            <View style={styles.aboutTitleContainer}>
+              <Text style={styles.title}>Innovation</Text>
+            </View>
+            <View style={styles.textInnovation}>
+              {dataTrackRecord.ideas.map(val => (
+                <View>
+                  <View
+                    style={{
+                      width: '100%',
+                      height: 200,
+                      borderWidth: 1,
+                      borderRadius: 10,
+                    }}></View>
+                  <View>
+                    <Text style={[style.h4, {marginVertical: 10}]}>
+                      {val.desc.value}
+                    </Text>
+                    <Text style={[style.h5]}>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sed vel, accumsan praesent bibendum aenean morbi. Semper
+                      mauris tempor, neque convallis risus nam.
+                    </Text>
+                    <Text style={[style.h4, {marginVertical: 10}]}>Team:</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        flexWrap: 'wrap',
+                      }}>
+                      {val.approval.map(data => {
+                        if (data.request === 'join') {
+                          indexJoin = indexJoin + 1;
+                          return (
+                            <View style={{marginRight: 10}}>
+                              <Text style={[style.h5]}>
+                                {' '}
+                                {indexJoin}. {data.approvalTo.name}
+                              </Text>
+                            </View>
+                          );
+                        }
+                        return null;
+                      })}
+                    </View>
+                    <Text style={[style.h4, {marginVertical: 10}]}>
+                      Support:
+                    </Text>
+                    {val.approval.map(data => {
+                      if (data.request === 'support') {
+                        indexSupport = indexSupport + 1;
+                        return (
+                          <View style={{marginRight: 10}}>
+                            <Text style={[style.h5]}>
+                              {' '}
+                              {indexSupport}. {data.approvalTo.name}
+                            </Text>
+                          </View>
+                        );
+                      }
+                      return null;
+                    })}
+                  </View>
+                </View>
+              ))}
             </View>
           </View>
         </View>
