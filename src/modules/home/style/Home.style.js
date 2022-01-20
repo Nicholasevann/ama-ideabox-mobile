@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import style from '../../../config/Style/style.cfg';
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     fontFamily: 'Roboto-Medium',
-
   },
   containerCategory: {
     backgroundColor: '#2F2E41',
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   },
   titleInovator: {
     marginTop: 80,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   imageSplash: {
     flex: 1,
@@ -98,8 +97,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     width: '100%',
     position: 'absolute',
-    top: 800
-
+    top: 845,
   },
   cardContainer: {
     width: 100,
@@ -125,8 +123,8 @@ const styles = StyleSheet.create({
   imageCardContainer: {
     flex: 1,
     height: '100%',
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
 
 export default styles;

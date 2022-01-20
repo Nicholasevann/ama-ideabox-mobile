@@ -35,7 +35,7 @@ const CardContent = props => {
       <View style={styles.contentContainer}>
         <Image
           key={props.keyIndex + 'Image'}
-          source={{uri: props.cover}}
+          source={props.cover}
           style={styles.imageContent}
         />
       </View>

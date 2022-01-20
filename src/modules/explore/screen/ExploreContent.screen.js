@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import CardContent from '../../../components/CardContent';
 import SearchHeader from '../../../components/SearchHeader';
-import getDataIdea from '../../../components/GetDataIdeas';
 import LoadingScreen from '../../../components/LoadingScreen';
 import CardComment from '../../../components/CardComment';
 import {Cross, Join, Promote, TopLine} from '../../../assets/icon';
@@ -24,10 +23,11 @@ import style from '../../../config/Style/style.cfg';
 import {windowWidth} from '../../../components/WindowDimensions';
 import axios from 'axios';
 import {defaultAuthDataUser} from '../../../config/Auth.cfg';
-
+import GetDataIdea from '../../../config/GetData/GetDataIdea';
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
+  const [data2, setData2] = useState(null);
   const [modalComment, setModalComment] = useState(false);
   const [modalJoinVisible, setModalJoinVisible] = useState(false);
   const [modalPromoteVisible, setModalPromoteVisible] = useState(false);
@@ -40,7 +40,8 @@ const ExploreContent = ({navigation, route}) => {
     setHasil(dataSearch);
   };
   useEffect(() => {
-    setData(getDataIdea());
+    // setData(getDataIdea());
+    GetDataIdea().then(response => setData(response));
     setLoading(false);
   }, []);
   const ref = useRef(null);
@@ -96,14 +97,9 @@ const ExploreContent = ({navigation, route}) => {
       </View>
     );
   };
-  if (
-    isLoading ||
-    data === undefined ||
-    dataUserState === defaultAuthDataUser
-  ) {
+  if (isLoading || data === null || dataUserState === defaultAuthDataUser) {
     return <LoadingScreen />;
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader

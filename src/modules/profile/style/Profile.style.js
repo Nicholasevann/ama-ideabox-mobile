@@ -118,6 +118,14 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
   },
+  textInnovation: {
+    minHeight: 300,
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    padding: 10,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
   tagContainer: {
     backgroundColor: '#FFFFFF',
     width: '100%',

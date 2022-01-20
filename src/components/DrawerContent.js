@@ -9,11 +9,18 @@ import {
 import {LogoutDrawer} from '../assets/icon';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import getData from './GetData';
+import LoadingScreen from './LoadingScreen';
 
 const DrawerContent = props => {
+  const [data, setData] = useState('');
+  useEffect(() => {
+    getData().then(jsonValue => setData(jsonValue));
+  }, []);
   const removeData = async key => {
     try {
       await AsyncStorage.removeItem(key);
+      setData({name: ''});
       return true;
     } catch (exception) {
       return false;
@@ -21,12 +28,17 @@ const DrawerContent = props => {
   };
   const LogoutHandle = () => {
     removeData('authState');
-    props.navigation.navigate('Login', {checked: false});
+    // props.navigation.navigate('Login', {checked: false});
+    if (data.name === '') {
+      return <LoadingScreen />;
+    } else {
+      props.navigation.replace('Login', {checked: false});
+    }
   };
   const {state, descriptors, navigation} = props;
   let lastGroupName = '';
   let newGroup = true;
-
+  console.log('Data :', data);
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -39,10 +51,10 @@ const DrawerContent = props => {
                 size={50}
               />
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                <Title style={styles.title}>Nicholas Evan</Title>
-                <Caption style={styles.caption}>
-                  Karyawan Telkom Bandung
-                </Caption>
+                <Title style={styles.title} numberOfLines={1}>
+                  {data.name}
+                </Title>
+                <Caption style={styles.caption}>{data.email}</Caption>
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('RouteProfile')}>

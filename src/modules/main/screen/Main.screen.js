@@ -26,7 +26,7 @@ const Main = ({navigation}) => {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Login', {checked: false})}
+            onPress={() => navigation.replace('Login', {checked: false})}
             style={styles.button}>
             <Text style={styles.getstarted}>GET STARTED</Text>
           </TouchableOpacity>
