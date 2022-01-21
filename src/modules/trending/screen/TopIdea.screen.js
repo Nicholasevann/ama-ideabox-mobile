@@ -8,6 +8,11 @@ import {
 import SearchHeader from '../../../components/SearchHeader';
 import CardFilterTrending from '../../../components/CardFilterTrending';
 import {useScrollToTop} from '@react-navigation/native';
+import {
+  GetDataTopComment,
+  GetDataTopLike,
+} from '../../../config/GetData/GetDataTrending';
+import LoadingScreen from '../../../components/LoadingScreen';
 
 const TopIdea = ({navigation}) => {
   const dataTop = require('../data/Top.json');
@@ -19,7 +24,12 @@ const TopIdea = ({navigation}) => {
   const getData = dataSearch => {
     setHasil(dataSearch);
   };
-
+  const [dataTopComment, setDataTopComment] = useState();
+  const [dataTopLike, setDataTopLike] = useState();
+  useEffect(() => {
+    GetDataTopComment().then(response => setDataTopComment(response));
+    GetDataTopLike().then(response => setDataTopLike(response));
+  }, []);
   useEffect(() => {
     if (selectedId === 1) {
       setPlaceholder('Search an Idea ... ');
@@ -33,6 +43,10 @@ const TopIdea = ({navigation}) => {
   }, [selectedId]);
   const ref = useRef(null);
   useScrollToTop(ref);
+  if (dataTopComment === null || dataTopLike === null) {
+    return <LoadingScreen />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* header */}
@@ -114,13 +128,13 @@ const TopIdea = ({navigation}) => {
                 );
               })
           : selectedId === 3
-          ? dataTop.map((top, key) => {
+          ? dataTopLike.map((top, key) => {
               // console.log(top.title);
               return (
                 <View key={key}>
                   <CardTopTrending
-                    title={top.title}
-                    name={top.name}
+                    title={top.ideas.desc[2].value}
+                    name={top.ideas.desc[0].value}
                     image={top.image}
                   />
                 </View>

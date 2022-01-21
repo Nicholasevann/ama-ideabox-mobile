@@ -57,7 +57,11 @@ const DetailStoryBehind = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailStoryBehindDesc />
+          <DetailStoryBehindDesc
+            why={data.gc[0].value}
+            how={data.gc[1].value}
+            what={data.gc[2].value}
+          />
         </View>
       </View>
     </SafeAreaView>

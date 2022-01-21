@@ -46,7 +46,6 @@ const Profile = ({navigation}) => {
     });
     GetDataTrackRecord().then(response => setDataTrackRecord(response));
   }, []);
-  console.log(indexSupport);
   if (dataTrackRecord === '') {
     return <LoadingScreen />;
   }
@@ -155,7 +154,7 @@ const Profile = ({navigation}) => {
           </View>
 
           {/* Achievement */}
-          <View style={styles.cardContainer}>
+          {/* <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
               <Text style={styles.title}>Achievement</Text>
               <View style={{flexDirection: 'row'}}>
@@ -171,7 +170,6 @@ const Profile = ({navigation}) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* Tag */}
             <View style={styles.achievementContainer}>
               <CardAchievement
                 title={
@@ -184,7 +182,7 @@ const Profile = ({navigation}) => {
                 desc={'Juara Harapan 2'}
               />
             </View>
-          </View>
+          </View> */}
 
           {/* Inovation*/}
           <View style={styles.cardContainer}>

@@ -9,7 +9,9 @@ const CardTopTrending = props => {
         <Image source={{uri: props.image}} style={styles.imageProfile} />
         <View style={styles.content}>
           <Text style={[styles.textProfile, style.h4medium]}>{props.name}</Text>
-          <Text style={[styles.titleContent, style.h4]}>{props.title}</Text>
+          <Text style={[styles.titleContent, style.h4]} numberOfLines={2}>
+            {props.title}
+          </Text>
           <Text style={[styles.textLike, style.h5]}>
             Like by Pak Fraz and 100 peoples
           </Text>
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     flex: 1,
+    minHeight: 120,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -86,13 +89,14 @@ const styles = StyleSheet.create({
     marginLeft: windowHeight / 84.6,
   },
   content: {
+    flex: 1,
     flexDirection: 'column',
-    marginRight: windowWidth / 4.23,
     marginLeft: windowWidth / 42.3,
   },
   titleContent: {
     marginTop: windowWidth / 100,
     marginLeft: windowHeight / 84.6,
+    textAlign: 'justify',
   },
   textLike: {
     marginTop: windowWidth / 100,

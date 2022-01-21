@@ -57,7 +57,13 @@ const DetailLeanCanvas = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailLeanCanvasDesc />
+          <DetailLeanCanvasDesc
+            customer={data.lc[0].value}
+            problem={data.lc[1].value}
+            existing={data.lc[2].value}
+            unique={data.lc[3].value}
+            proposed={data.lc[4].value}
+          />
         </View>
       </View>
     </SafeAreaView>
