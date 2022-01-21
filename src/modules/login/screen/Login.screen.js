@@ -121,7 +121,6 @@ const Login = ({navigation, route}) => {
             });
           } else {
             setLogin(false);
-            ß;
           }
         })
         .catch(function (error) {

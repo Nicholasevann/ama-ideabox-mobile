@@ -2,77 +2,26 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
-const DetailStoryBehindDesc = () => {
+const DetailStoryBehindDesc = props => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Text style={styles.h2}>Why</Text>
         <View style={styles.box}>
           <ScrollView>
-            <Text style={styles.text}>
-              Sistem keuangan ini menjadi jantung dari korporasi tersebut,
-              sehingga apabila sistem keuangan ini tidak mampu dibangun dengan
-              basis integritas yang memadai, maka risiko korporasi tersebut
-              tidak hanya berkaitan dengan kejahatan pencucian dan kejahatan
-              asalnya saja, tetapi juga kerentanan alas segala bentuk
-              penyalahgunaan sistem keuangan (abuse of financial system) yang
-              dapat berujung pada kerugian dan kegagalan korporasi tersebut.
-              Penerapan strategi-strategi tersebut, tidak boleh diartikan hanya
-              sebatas beban kepatuhan (compliance rule), tetapi harus diletakkan
-              pada satu pemahaman bahwa penerapan strategi ini justru memberikan
-              perlindungan hukum dengan dampak ekonomis siginifikan bagi
-              korporasi itu sendiri. Sebab, dampak negatif yang ditimbulkan dari
-              penyalahgunaan sistem keuangan korporasi tidak hanya sebatas
-              kerugian korporasi itu saja, namun mengakibatkan stabilitas makro
-              ekonomi akan terganggu karena merupakan bagian dari ekosistem
-              keuangan yang ada.
-            </Text>
+            <Text style={styles.text}>{props.why}</Text>
           </ScrollView>
         </View>
         <Text style={styles.h2}>How</Text>
         <View style={styles.box}>
           <ScrollView>
-            <Text style={styles.text}>
-              Sistem keuangan ini menjadi jantung dari korporasi tersebut,
-              sehingga apabila sistem keuangan ini tidak mampu dibangun dengan
-              basis integritas yang memadai, maka risiko korporasi tersebut
-              tidak hanya berkaitan dengan kejahatan pencucian dan kejahatan
-              asalnya saja, tetapi juga kerentanan alas segala bentuk
-              penyalahgunaan sistem keuangan (abuse of financial system) yang
-              dapat berujung pada kerugian dan kegagalan korporasi tersebut.
-              Penerapan strategi-strategi tersebut, tidak boleh diartikan hanya
-              sebatas beban kepatuhan (compliance rule), tetapi harus diletakkan
-              pada satu pemahaman bahwa penerapan strategi ini justru memberikan
-              perlindungan hukum dengan dampak ekonomis siginifikan bagi
-              korporasi itu sendiri. Sebab, dampak negatif yang ditimbulkan dari
-              penyalahgunaan sistem keuangan korporasi tidak hanya sebatas
-              kerugian korporasi itu saja, namun mengakibatkan stabilitas makro
-              ekonomi akan terganggu karena merupakan bagian dari ekosistem
-              keuangan yang ada.
-            </Text>
+            <Text style={styles.text}>{props.how}</Text>
           </ScrollView>
         </View>
         <Text style={styles.h2}>What</Text>
         <View style={styles.box}>
           <ScrollView>
-            <Text style={styles.text}>
-              Sistem keuangan ini menjadi jantung dari korporasi tersebut,
-              sehingga apabila sistem keuangan ini tidak mampu dibangun dengan
-              basis integritas yang memadai, maka risiko korporasi tersebut
-              tidak hanya berkaitan dengan kejahatan pencucian dan kejahatan
-              asalnya saja, tetapi juga kerentanan alas segala bentuk
-              penyalahgunaan sistem keuangan (abuse of financial system) yang
-              dapat berujung pada kerugian dan kegagalan korporasi tersebut.
-              Penerapan strategi-strategi tersebut, tidak boleh diartikan hanya
-              sebatas beban kepatuhan (compliance rule), tetapi harus diletakkan
-              pada satu pemahaman bahwa penerapan strategi ini justru memberikan
-              perlindungan hukum dengan dampak ekonomis siginifikan bagi
-              korporasi itu sendiri. Sebab, dampak negatif yang ditimbulkan dari
-              penyalahgunaan sistem keuangan korporasi tidak hanya sebatas
-              kerugian korporasi itu saja, namun mengakibatkan stabilitas makro
-              ekonomi akan terganggu karena merupakan bagian dari ekosistem
-              keuangan yang ada.{' '}
-            </Text>
+            <Text style={styles.text}>{props.what}</Text>
           </ScrollView>
         </View>
       </View>

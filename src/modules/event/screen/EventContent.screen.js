@@ -77,6 +77,7 @@ const EventContent = ({navigation}) => {
                 }}
                 borderColor={'#085D7A'}
                 textColor={'#085D7A'}
+                image={require('../../../assets/image/categoryall.png')}
               />
             ) : (
               <CardEventCategory
@@ -86,6 +87,7 @@ const EventContent = ({navigation}) => {
                 }}
                 borderColor={'grey'}
                 textColor={'grey'}
+                image={require('../../../assets/image/categoryall.png')}
               />
             )}
 
@@ -102,11 +104,25 @@ const EventContent = ({navigation}) => {
                   item.id === selectedId && allCategory === false
                     ? '#085D7A'
                     : 'grey';
+                const image =
+                  item.name === 'Digital Platform'
+                    ? require('../../../assets/image/digitalplatform.png')
+                    : item.id === '18'
+                    ? require('../../../assets/image/digitalconnectivity.png')
+                    : item.id === '19'
+                    ? require('../../../assets/image/digitalservice.png')
+                    : item.id === '20'
+                    ? require('../../../assets/image/sport.png')
+                    : item.id === '21'
+                    ? require('../../../assets/image/holiday.png')
+                    : item.id === '22'
+                    ? require('../../../assets/image/workshop.png')
+                    : null;
                 return (
                   <View key={key}>
                     <CardEventCategory
                       title={item.name}
-                      image={item.image}
+                      image={image}
                       getId={() => {
                         setSelectedId(item.id);
                         setAllCategory(false);

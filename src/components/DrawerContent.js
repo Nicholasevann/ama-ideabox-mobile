@@ -50,8 +50,8 @@ const DrawerContent = props => {
                 source={require('../assets/image/profilepicture.jpg')}
                 size={50}
               />
-              <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                <Title style={styles.title} numberOfLines={1}>
+              <View style={{marginLeft: 15, flexDirection: 'column', flex: 1}}>
+                <Title style={styles.title} numberOfLines={2}>
                   {data.name}
                 </Title>
                 <Caption style={styles.caption}>{data.email}</Caption>
@@ -161,14 +161,13 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
-    fontSize: 16,
-    marginTop: 3,
+    fontSize: 14,
+    lineHeight: 20,
     fontWeight: 'bold',
   },
   caption: {
     color: 'black',
-    fontSize: 14,
-    lineHeight: 14,
+    fontSize: 12,
   },
   caption2: {
     marginTop: 10,

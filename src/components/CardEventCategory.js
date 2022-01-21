@@ -4,7 +4,7 @@ const CardEventCategory = props => {
   return (
     <TouchableOpacity onPress={props.getId}>
       <View style={[styles.box, {borderColor: props.borderColor}]}>
-        <Image source={{uri: props.image}} style={styles.image} />
+        <Image source={props.image} style={styles.image} />
         <View style={styles.text}>
           <Text style={{color: props.textColor}}>{props.title}</Text>
         </View>
