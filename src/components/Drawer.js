@@ -29,7 +29,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="TalentBooster"
         component={TalentBooster}
         options={{
@@ -38,7 +38,7 @@ const DrawerNavigation = () => {
           drawerIcon: () => <Talent />,
           activeTintColor: '#085D7A',
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="SubmittedIdea"
         component={MyIdea}
@@ -61,7 +61,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="UserManagement"
         component={RoutesUserManagement}
         options={{
@@ -71,7 +71,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
           groupName: 'Administrator',
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="CategoryManagement"
         component={RoutesCategoryManagement}
@@ -94,7 +94,7 @@ const DrawerNavigation = () => {
           groupName: 'Administrator',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="RoleManagement"
         component={RoleManagement}
         options={{
@@ -104,7 +104,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
           groupName: 'Administrator',
         }}
-      />
+      /> */}
 
       <Drawer.Screen
         name="Faq"
@@ -130,8 +130,9 @@ const DrawerNavigation = () => {
         name="Latihan"
         component={Latihan}
         options={{
-          drawerLabel: 'Latihan',
+          drawerLabel: 'Notification',
           headerShown: false,
+          drawerIcon: () => <HomeDrawer />,
         }}
       />
     </Drawer.Navigator>

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const GetDataTrackRecord = id => {
+const GetDataTalentApproval = id => {
   return axios({
     crossDomain: true,
     method: 'post',
-    url: 'https://dev-users.digitalamoeba.id/trackrecord',
+    url: 'https://dev-ideas.digitalamoeba.id/showapproval',
     data: {
       userId: id,
     },
@@ -21,4 +21,4 @@ const GetDataTrackRecord = id => {
     });
 };
 
-export default GetDataTrackRecord;
+export default GetDataTalentApproval;

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   titleInovator: {
-    marginTop: 80,
+    marginTop: 20,
     textAlign: 'center',
   },
   imageSplash: {
@@ -93,11 +93,9 @@ const styles = StyleSheet.create({
   horizontalCard: {
     justifyContent: 'space-around',
     flexDirection: 'row',
-
+    marginTop: -55,
     paddingHorizontal: 15,
     width: '100%',
-    position: 'absolute',
-    top: 845,
   },
   cardContainer: {
     width: 100,

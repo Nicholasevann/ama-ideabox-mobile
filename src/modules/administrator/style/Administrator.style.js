@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEFF5',
   },
   imageAdmin: {
-    width: 30,
-    height: 30,
     alignSelf: 'center',
+    width: 15,
+    height: 15,
   },
   contentContainer: {
     flex: 1,
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: '#085D7A',
     borderRadius: 5,
+    justifyContent: 'center',
   },
   content: {
     flex: 1,

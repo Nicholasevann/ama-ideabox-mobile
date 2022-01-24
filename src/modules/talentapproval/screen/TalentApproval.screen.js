@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -12,12 +12,30 @@ import {
 import {Cross} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import CardTalentApproval from '../../../components/CardTalentApproval';
+import getData from '../../../components/GetData';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {defaultAuthState} from '../../../config/Auth.cfg';
+import GetDataTalentApproval from '../../../config/GetData/GetDataTalentApproval';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/TalentApproval.style';
 const TalentApproval = ({navigation}) => {
   const dataSubmitted = require('../data/dataSubmitted.json');
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [dataTalentApproval, setDataTalentApproval] = useState(null);
+  const [data, setData] = useState(defaultAuthState);
+  useEffect(() => {
+    getData().then(jsonValue => setData(jsonValue));
+    if (data === defaultAuthState) {
+      return <LoadingScreen />;
+    }
+    GetDataTalentApproval(data.id).then(response =>
+      setDataTalentApproval(response),
+    );
+  }, [data]);
+  if (dataTalentApproval === null) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -68,7 +86,7 @@ const TalentApproval = ({navigation}) => {
           <ScrollView>
             <FlatList
               keyExtractor={(item, index) => index.toString()}
-              data={dataSubmitted}
+              data={dataTalentApproval}
               renderItem={({item, index}) => {
                 return (
                   <CardTalentApproval
@@ -76,9 +94,9 @@ const TalentApproval = ({navigation}) => {
                       navigation.navigate('DetailIdeaUser', {data: item})
                     }
                     delete={() => setModalDeleteVisible(true)}
-                    title={item.title}
-                    name={item.createdby}
-                    createdDate={item.createddate}
+                    title={item.ideas.desc.value}
+                    name={item.approvalTo.name}
+                    createdDate={item.createdDate}
                   />
                 );
               }}

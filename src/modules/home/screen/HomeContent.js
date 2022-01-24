@@ -23,7 +23,7 @@ const HomeContent = ({navigation}) => {
   useEffect(() => {
     getData().then(jsonValue => setData(jsonValue));
   }, []);
-
+  console.log(data.id);
   return (
     <SafeAreaView style={styles.container}>
       {/* header */}

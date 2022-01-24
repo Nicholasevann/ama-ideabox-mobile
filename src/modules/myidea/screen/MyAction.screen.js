@@ -36,7 +36,7 @@ const MyAction = ({navigation}) => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.wrap} onPress={() => {}}>
             <View style={styles.tabBarActive}>
-              <Text style={styles.textActive}>My Action</Text>
+              <Text style={styles.textActive}>Sharing Idea</Text>
             </View>
           </TouchableOpacity>
         </View>
