@@ -10,6 +10,8 @@ import {
   TextInput,
   Alert,
   Pressable,
+  Share,
+  Image,
 } from 'react-native';
 import CardContent from '../../../components/CardContent';
 import SearchHeader from '../../../components/SearchHeader';
@@ -23,7 +25,7 @@ import style from '../../../config/Style/style.cfg';
 import {windowWidth} from '../../../components/WindowDimensions';
 import axios from 'axios';
 import {defaultAuthDataUser} from '../../../config/Auth.cfg';
-import GetDataIdea from '../../../config/GetData/GetDataIdea';
+import {GetDataIdea} from '../../../config/GetData/GetDataIdea';
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -53,7 +55,25 @@ const ExploreContent = ({navigation, route}) => {
     {id: '4', name: 'Mike'},
     {id: '5', name: 'Grey'},
   ];
-
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'React Native | A framework for building native apps using React',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   useEffect(() => {
     axios
       .get(dataUser.item[0].item[1].request.url.raw)
@@ -67,6 +87,7 @@ const ExploreContent = ({navigation, route}) => {
     if (keyword == null) {
       return null;
     }
+
     return (
       <View style={{position: 'relative', flex: 1}}>
         <ScrollView
@@ -123,7 +144,7 @@ const ExploreContent = ({navigation, route}) => {
             return (
               <View key={key}>
                 <CardContent
-                  name={dataUserState.name}
+                  name={val.user[0].name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}
                   cover={val.desc[1].value}
@@ -131,6 +152,7 @@ const ExploreContent = ({navigation, route}) => {
                     navigation.navigate('DetailIdeaUser', {data: val})
                   }
                   comment={() => setModalComment(true)}
+                  share={() => onShare()}
                   join={() => setModalJoinVisible(true)}
                   promote={() => setModalPromoteVisible(true)}
                   morePromote={() => setModalBottom(true)}
@@ -342,39 +364,52 @@ const ExploreContent = ({navigation, route}) => {
           onRequestClose={() => {
             setModalBottom(false);
           }}>
-          <View style={styles.modalPromoteContainer}>
-            <View style={styles.topLine}>
-              <TouchableOpacity onPress={() => setModalBottom(false)}>
-                <TopLine />
-                <View style={styles.lineSpace} />
-                <TopLine />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.contentModal}>
-              <View style={styles.rowPromote}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalBottom(false);
-                    setModalPromoteVisible(true);
-                  }}>
-                  <View style={styles.wrapPromote}>
-                    <Promote />
-                    <Text style={styles.textPromote}>Promote</Text>
-                  </View>
+          <ScrollView>
+            <View style={styles.modalPromoteContainer}>
+              <View style={styles.topLine}>
+                <TouchableOpacity onPress={() => setModalBottom(false)}>
+                  <TopLine />
+                  <View style={styles.lineSpace} />
+                  <TopLine />
                 </TouchableOpacity>
+              </View>
+              <View style={styles.contentModal}>
+                <View style={styles.rowPromote}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalBottom(false);
+                      setModalPromoteVisible(true);
+                    }}>
+                    <View style={styles.wrapPromote}>
+                      <Promote />
+                      <Text style={styles.textPromote}>Promote</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalBottom(false);
+                      setModalJoinVisible(true);
+                    }}>
+                    <View style={styles.wrapPromote}>
+                      <Join />
+                      <Text style={styles.textPromote}>Join</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                   onPress={() => {
                     setModalBottom(false);
-                    setModalJoinVisible(true);
                   }}>
                   <View style={styles.wrapPromote}>
-                    <Join />
-                    <Text style={styles.textPromote}>Join</Text>
+                    <Image
+                      source={require('../../../assets/icon/backbluebig.png')}
+                    />
+                    <Text style={styles.textPromote}>Back</Text>
                   </View>
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </ScrollView>
         </Modal>
       </GestureRecognizer>
       {/* end Modal */}

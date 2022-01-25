@@ -20,13 +20,27 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {DatePicker} from 'react-native-woodpicker';
-
+import ImagePicker from 'react-native-image-crop-picker';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [update, setUpdate] = useState(defaulthAuthData);
-
   const [pickedDate, setPickedDate] = useState([]);
-
+  const [imageUri, setImageUri] = useState(
+    require('../../../assets/image/dummyPicture2.png'),
+  );
+  const [image, setImage] = useState(
+    'https://reactnative.dev/img/tiny_logo.png',
+  );
+  const takePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 640,
+      height: 360,
+      cropping: true,
+    }).then(image => {
+      console.log(image);
+      setImage(image.path);
+    });
+  };
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getData().then(jsonValue => setData(jsonValue));
@@ -37,7 +51,6 @@ const InputProfile = ({navigation}) => {
     });
     return unsubscribe;
   }, [navigation]);
-
   useEffect(() => {
     axios
       .get('http://10.0.2.2:8080/profile/?id=3')
@@ -75,7 +88,6 @@ const InputProfile = ({navigation}) => {
         // need handling error
       });
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -92,13 +104,12 @@ const InputProfile = ({navigation}) => {
         </View>
         <View style={styles.mainContainer}>
           <View style={styles.imageBackground}>
-            <Image
-              source={require('../../../assets/image/dummyPicture2.png')}
-              style={styles.backgroundImage}
-            />
-            <View style={styles.ButtonCamera}>
+            <Image source={{uri: image}} style={styles.backgroundImage} />
+            <TouchableOpacity
+              style={styles.ButtonCamera}
+              onPress={takePhotoFromLibrary}>
               <Camera />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.profilePicture}>
             <Image

@@ -114,7 +114,7 @@ const Profile = ({navigation}) => {
               color={'#177FC6'}
             />
             <CardTrackRecord
-              number={'016'}
+              number={dataTrackRecord.trending}
               text={'Trendings'}
               image={require('../../../assets/image/dummy4.png')}
               color={'#3ACECA'}
@@ -224,7 +224,7 @@ const Profile = ({navigation}) => {
                         width: '100%',
                         flexWrap: 'wrap',
                       }}>
-                      {/* {val.approval.map(data => {
+                      {val.approvalTeam.map(data => {
                         if (data.request === 'join') {
                           indexJoin = indexJoin + 1;
                           return (
@@ -237,12 +237,12 @@ const Profile = ({navigation}) => {
                           );
                         }
                         return null;
-                      })} */}
+                      })}
                     </View>
                     <Text style={[style.h4, {marginVertical: 10}]}>
                       Support:
                     </Text>
-                    {/* {val.approval.map(data => {
+                    {val.approvalTeam.map(data => {
                       if (data.request === 'support') {
                         indexSupport = indexSupport + 1;
                         return (
@@ -255,7 +255,7 @@ const Profile = ({navigation}) => {
                         );
                       }
                       return null;
-                    })} */}
+                    })}
                   </View>
                 </View>
               ))}

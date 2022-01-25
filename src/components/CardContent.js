@@ -64,12 +64,14 @@ const CardContent = props => {
               />
             </View>
           </TouchableOpacity>
-          <View style={styles.iconContent}>
-            <Image
-              source={require('../assets/icon/share.png')}
-              style={styles.icon}
-            />
-          </View>
+          <TouchableOpacity onPress={props.share}>
+            <View style={styles.iconContent}>
+              <Image
+                source={require('../assets/icon/share.png')}
+                style={styles.icon}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={props.more} style={{paddingRight: 10}}>
           <Text style={[style.h4, styles.moreDescContent]}>More Detail</Text>

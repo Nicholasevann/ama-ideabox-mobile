@@ -1,12 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {useState} from 'react/cjs/react.development';
 import CardProfile from '../../../components/CardProfile';
 import DetailLeanCanvasDesc from '../../../components/DetailLeanCanvasDesc';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 
 const DetailLeanCanvas = ({route, navigation}) => {
+  const [detailIdea, setDetailIdea] = useState(null);
   const data = route.params.data;
+  useEffect(() => {
+    if (data === null) {
+      return <LoadingScreen />;
+    }
+    GetDetailIdea().then(response => setDetailIdea(response));
+  }, [data]);
+  if (detailIdea === null) {
+    <LoadingScreen />;
+  }
+  console.log(detailIdea);
+  console.log(data.id);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -57,13 +72,13 @@ const DetailLeanCanvas = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailLeanCanvasDesc
-            customer={data.lc[0].value}
-            problem={data.lc[1].value}
-            existing={data.lc[2].value}
-            unique={data.lc[3].value}
-            proposed={data.lc[4].value}
-          />
+          {/* <DetailLeanCanvasDesc
+            customer={detailIdea.lc[0].value}
+            problem={detailIdea.lc[1].value}
+            existing={detailIdea.lc[2].value}
+            unique={detailIdea.lc[3].value}
+            proposed={detailIdea.lc[4].value}
+          /> */}
         </View>
       </View>
     </SafeAreaView>

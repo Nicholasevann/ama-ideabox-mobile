@@ -79,13 +79,13 @@ const ProfileUser = ({navigation, route}) => {
           <View style={styles.CardTrackRecord}>
             <CardTrackRecord
               number={'205'}
-              text={'     Ideas'}
+              text={'Ideas'}
               image={require('../../../assets/image/dummy1.png')}
               color={'#FC9C10'}
             />
             <CardTrackRecord
               number={'412'}
-              text={'     Likes'}
+              text={'Likes'}
               image={require('../../../assets/image/dummy2.png')}
               color={'#ED1B5C'}
             />
@@ -97,7 +97,7 @@ const ProfileUser = ({navigation, route}) => {
             />
             <CardTrackRecord
               number={'016'}
-              text={' Trendings'}
+              text={'Trendings'}
               image={require('../../../assets/image/dummy4.png')}
               color={'#3ACECA'}
             />

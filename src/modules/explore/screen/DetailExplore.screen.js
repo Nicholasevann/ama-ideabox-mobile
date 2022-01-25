@@ -12,6 +12,7 @@ import SearchHeader from '../../../components/SearchHeader';
 import styles from '../style/Explore.style';
 const DetailExplore = ({route, navigation}) => {
   const data = route.params.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
