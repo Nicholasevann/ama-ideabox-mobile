@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import LoadingScreen from '../../../components/LoadingScreen';
 import NotifService from '../../../config/Notification/NotifService';
-
+// import {Root, SPSheet} from 'react-native-popup-confirm-toast';
 const Latihan = () => {
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);
@@ -23,6 +23,10 @@ const Latihan = () => {
   const notif = new NotifService(onRegister, onNotif);
   const handlePerm = perms => {
     Alert.alert('Permissions', JSON.stringify(perms));
+  };
+  const component = props => {
+    //hook or class
+    return null;
   };
   console.log('ini adalah ' + notif.lastId);
 
@@ -130,6 +134,27 @@ const Latihan = () => {
         }}>
         <Text>popInitialNotification {notif.title}</Text>
       </TouchableOpacity>
+      {/* <Root>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              const spSheet = SPSheet;
+              spSheet.show({
+                component: () => component({...this.props, spSheet}),
+                dragFromTopOnly: true,
+                onCloseComplete: () => {
+                  alert('onCloseComplete');
+                },
+                onOpenComplete: () => {
+                  alert('onOpenComplete');
+                },
+                height: 260,
+              });
+            }}>
+            <Text>Open Popup Message</Text>
+          </TouchableOpacity>
+        </View>
+      </Root> */}
 
       <View style={styles.spacer}></View>
 

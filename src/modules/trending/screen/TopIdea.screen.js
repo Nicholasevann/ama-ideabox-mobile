@@ -11,6 +11,7 @@ import {useScrollToTop} from '@react-navigation/native';
 import {
   GetDataTopComment,
   GetDataTopLike,
+  GetDataTrending,
 } from '../../../config/GetData/GetDataTrending';
 import LoadingScreen from '../../../components/LoadingScreen';
 
@@ -24,11 +25,13 @@ const TopIdea = ({navigation}) => {
   const getData = dataSearch => {
     setHasil(dataSearch);
   };
-  const [dataTopComment, setDataTopComment] = useState();
-  const [dataTopLike, setDataTopLike] = useState();
+  const [dataTopComment, setDataTopComment] = useState(null);
+  const [dataTopLike, setDataTopLike] = useState(null);
+  const [dataTrending, setDataTrending] = useState(null);
   useEffect(() => {
     GetDataTopComment().then(response => setDataTopComment(response));
     GetDataTopLike().then(response => setDataTopLike(response));
+    GetDataTrending().then(response => setDataTrending(response));
   }, []);
   useEffect(() => {
     if (selectedId === 1) {
@@ -43,10 +46,14 @@ const TopIdea = ({navigation}) => {
   }, [selectedId]);
   const ref = useRef(null);
   useScrollToTop(ref);
-  if (dataTopComment === null || dataTopLike === null) {
+  if (
+    dataTopComment === null ||
+    dataTopLike === null ||
+    dataTrending === null
+  ) {
     return <LoadingScreen />;
   }
-
+  console.log(dataTrending);
   return (
     <SafeAreaView style={styles.container}>
       {/* header */}
@@ -83,7 +90,7 @@ const TopIdea = ({navigation}) => {
 
       <ScrollView ref={ref}>
         {selectedId === 1
-          ? dataTop
+          ? dataTrending
               .filter(top => {
                 if (hasil === '') {
                   return top;
@@ -98,43 +105,43 @@ const TopIdea = ({navigation}) => {
                 return (
                   <View key={key}>
                     <CardTopTrending
-                      title={top.title}
-                      name={top.name}
+                      title={top.ideas.desc[2].value}
+                      name={top.ideas.user.name}
                       image={top.image}
                     />
                   </View>
                 );
               })
-          : selectedId === 2
-          ? dataProductive
-              .filter(productive => {
-                if (hasil === '') {
-                  return productive;
-                } else if (
-                  productive.name.toLowerCase().includes(hasil.toLowerCase())
-                ) {
-                  return productive;
-                }
-              })
-              .map((productive, key) => {
-                return (
-                  <View key={key}>
-                    <CardProductiveTrending
-                      totalIdea={productive.totalidea}
-                      name={productive.name}
-                      image={productive.image}
-                    />
-                  </View>
-                );
-              })
-          : selectedId === 3
+          : // : selectedId === 2
+          // ? dataProductive
+          //     .filter(productive => {
+          //       if (hasil === '') {
+          //         return productive;
+          //       } else if (
+          //         productive.name.toLowerCase().includes(hasil.toLowerCase())
+          //       ) {
+          //         return productive;
+          //       }
+          //     })
+          //     .map((productive, key) => {
+          //       return (
+          //         <View key={key}>
+          //           <CardProductiveTrending
+          //             totalIdea={productive.totalidea}
+          //             name={productive.name}
+          //             image={productive.image}
+          //           />
+          //         </View>
+          //       );
+          //     })
+          selectedId === 3
           ? dataTopLike.map((top, key) => {
               // console.log(top.title);
               return (
                 <View key={key}>
                   <CardTopTrending
                     title={top.ideas.desc[2].value}
-                    name={top.ideas.desc[0].value}
+                    name={top.ideas.user.name}
                     image={top.image}
                   />
                 </View>

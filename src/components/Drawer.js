@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from './DrawerContent';
@@ -14,9 +14,14 @@ import RoutesCategoryManagement from '../config/Routes/RoutesCategoryManagement'
 import Faq from '../modules/faq/screen/Faq.screen';
 import Latihan from '../modules/latihan/screen/Latihan.screen';
 import Dashboard from '../modules/dashboard/screen/Dashboard.screen';
+import getData from './GetData';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
+  const [data, setData] = useState('');
+  useEffect(() => {
+    getData().then(jsonValue => setData(jsonValue));
+  }, []);
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen
@@ -72,6 +77,7 @@ const DrawerNavigation = () => {
           groupName: 'Administrator',
         }}
       /> */}
+
       <Drawer.Screen
         name="CategoryManagement"
         component={RoutesCategoryManagement}

@@ -20,6 +20,8 @@ import CardTrackRecord from '../../../components/CardTrackRecord';
 import CardAchievement from '../../../components/CardAchievement';
 import CardContent from '../../../components/CardContent';
 import style from '../../../config/Style/style.cfg';
+import LoadingScreen from '../../../components/LoadingScreen';
+import GetDataTrackRecord from '../../../config/GetData/GetDataTrackRecord';
 
 const Tag = props => {
   return (
@@ -34,8 +36,21 @@ const ProfileUser = ({navigation, route}) => {
   const [data, setData] = useState(defaultAuthState);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
-
-  console.log(dataProfile);
+  const [dataTrackRecord, setDataTrackRecord] = useState('');
+  var indexSupport = 0;
+  var indexJoin = 0;
+  useEffect(() => {
+    if (dataProfile === null) {
+      return <LoadingScreen />;
+    }
+    GetDataTrackRecord(dataProfile.user[0].userId).then(response =>
+      setDataTrackRecord(response),
+    );
+  }, [dataProfile]);
+  if (dataTrackRecord === '') {
+    return <LoadingScreen />;
+  }
+  console.log(dataTrackRecord);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -69,8 +84,8 @@ const ProfileUser = ({navigation, route}) => {
         {/*main content */}
         <View style={styles.mainContainer}>
           <View style={styles.mainContent}>
-            <Text style={styles.h1}>{dataProfile.name}</Text>
-            <Text style={styles.h2}>{dataProfile.email}</Text>
+            <Text style={styles.h1}>{dataTrackRecord.user.name}</Text>
+            <Text style={styles.h2}>{dataTrackRecord.user.regional}</Text>
           </View>
         </View>
 
@@ -78,25 +93,25 @@ const ProfileUser = ({navigation, route}) => {
           {/* Track Record */}
           <View style={styles.CardTrackRecord}>
             <CardTrackRecord
-              number={'205'}
+              number={dataTrackRecord.totalIdeas}
               text={'Ideas'}
               image={require('../../../assets/image/dummy1.png')}
               color={'#FC9C10'}
             />
             <CardTrackRecord
-              number={'412'}
+              number={dataTrackRecord.totalLike}
               text={'Likes'}
               image={require('../../../assets/image/dummy2.png')}
               color={'#ED1B5C'}
             />
             <CardTrackRecord
-              number={'105'}
+              number={dataTrackRecord.totalComment}
               text={'Comments'}
               image={require('../../../assets/image/dummy3.png')}
               color={'#177FC6'}
             />
             <CardTrackRecord
-              number={'016'}
+              number={dataTrackRecord.trending}
               text={'Trendings'}
               image={require('../../../assets/image/dummy4.png')}
               color={'#3ACECA'}
@@ -107,21 +122,10 @@ const ProfileUser = ({navigation, route}) => {
           <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
               <Text style={styles.title}>About</Text>
-              <TouchableOpacity onPress={() => setModalAboutVisible(true)}>
-                <Image
-                  source={require('../../../assets/icon/edit.png')}
-                  style={{width: 20, height: 20}}
-                />
-              </TouchableOpacity>
             </View>
             {/* Textbox using const */}
             <View style={styles.textBox}>
-              <Text style={style.h5}>
-                Saya Maria Botoshmemiliki hobi bermain musik. Selain bermain
-                musik saya suka memasak dan membuat pantun, saya di telkom
-                sebagai digital marketing. jangan lupa follow instagram saya
-                @MariaBotosh
-              </Text>
+              <Text style={style.h5}>{dataTrackRecord.user.bio}</Text>
             </View>
           </View>
 
@@ -132,15 +136,14 @@ const ProfileUser = ({navigation, route}) => {
             </View>
             {/* Tag */}
             <View style={styles.tagContainer}>
-              <Tag title={'UI/UX Designer'} />
-              <Tag title={'Product Owner'} />
-              <Tag title={'Digital Marketing'} />
-              <Tag title={'Front-End Mobile Developer'} />
+              {dataTrackRecord.skillSet.map(val => (
+                <Tag title={val.name} />
+              ))}
             </View>
           </View>
 
           {/* Achievement */}
-          <View style={styles.cardContainer}>
+          {/* <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
               <Text style={styles.title}>Achievement</Text>
               <View style={{flexDirection: 'row'}}>
@@ -156,7 +159,6 @@ const ProfileUser = ({navigation, route}) => {
                 </TouchableOpacity>
               </View>
             </View>
-            {/* Tag */}
             <View style={styles.achievementContainer}>
               <CardAchievement
                 title={'Sistem keuangan berbasis web untuk KUKM'}
@@ -167,91 +169,88 @@ const ProfileUser = ({navigation, route}) => {
                 desc={'Juara Harapan 2'}
               />
             </View>
+          </View> */}
+          {/* Inovation*/}
+          <View style={styles.cardContainer}>
+            <View style={styles.aboutTitleContainer}>
+              <Text style={styles.title}>Innovation</Text>
+            </View>
+            <View style={styles.textInnovation}>
+              {dataTrackRecord.ideas.map((val, index) => (
+                <View>
+                  {index === 0 ? null : (
+                    <View
+                      style={{
+                        height: 1,
+                        width: '100%',
+                        backgroundColor: 'grey',
+                        marginVertical: 15,
+                      }}
+                    />
+                  )}
+
+                  <View
+                    style={{
+                      width: '100%',
+                      height: 200,
+                      borderWidth: 1,
+                      borderRadius: 10,
+                    }}></View>
+                  <View>
+                    <Text style={[style.h4, {marginVertical: 10}]}>
+                      {val.desc.value}
+                    </Text>
+                    <Text style={[style.h5]}>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                      Sed vel, accumsan praesent bibendum aenean morbi. Semper
+                      mauris tempor, neque convallis risus nam.
+                    </Text>
+                    <Text style={[style.h4, {marginVertical: 10}]}>Team:</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        width: '100%',
+                        flexWrap: 'wrap',
+                      }}>
+                      {val.approvalTeam.map(data => {
+                        if (data.request === 'join') {
+                          indexJoin = indexJoin + 1;
+                          return (
+                            <View style={{marginRight: 10}}>
+                              <Text style={[style.h5]}>
+                                {' '}
+                                {indexJoin}. {data.approvalTo.name}
+                              </Text>
+                            </View>
+                          );
+                        }
+                        return null;
+                      })}
+                    </View>
+                    <Text style={[style.h4, {marginVertical: 10}]}>
+                      Support:
+                    </Text>
+                    {val.approvalTeam.map(data => {
+                      if (data.request === 'support') {
+                        indexSupport = indexSupport + 1;
+                        return (
+                          <View style={{marginRight: 10}}>
+                            <Text style={[style.h5]}>
+                              {' '}
+                              {indexSupport}. {data.approvalTo.name}
+                            </Text>
+                          </View>
+                        );
+                      }
+                      return null;
+                    })}
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         </View>
       </ScrollView>
-
-      {/* Popup Edit achievment */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>Achievement</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.h2}>Nama Inovasi :</Text>
-                <TextInput
-                  style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
-                />
-                <Text style={styles.h2}>Pencapaian :</Text>
-                <TextInput
-                  style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
-                />
-                <View style={styles.button}>
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
-                    <Text style={styles.save}>SAVE</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      {/* EndPopup */}
-
-      {/* Popup About*/}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalAboutVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalAboutVisible(!modalAboutVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>About</Text>
-                <TouchableOpacity onPress={() => setModalAboutVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <View style={styles.inputAbout}>
-                  <TextInput
-                    style={styles.textInputAbout}
-                    multiline={true}
-                    // value={''}
-                    // onChangeText={() => { }}
-                  />
-                </View>
-                <View style={styles.button}>
-                  <TouchableOpacity onPress={() => setModalAboutVisible(false)}>
-                    <Text style={styles.save}>SAVE</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      {/* EndPopup */}
     </SafeAreaView>
   );
 };

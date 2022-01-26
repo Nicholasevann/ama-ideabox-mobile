@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailStoryBehindDesc from '../../../components/DetailStoryBehind';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 
 const DetailStoryBehind = ({route, navigation}) => {
   const data = route.params.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader

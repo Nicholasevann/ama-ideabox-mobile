@@ -20,7 +20,7 @@ const DetailTeams = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -75,11 +75,20 @@ const DetailTeams = ({navigation, route}) => {
               <Text>NIP</Text>
             </View>
             <View style={styles.title}>
-              <Text>Perusahaan</Text>
+              <Text>CFU/FU</Text>
             </View>
           </View>
           <ScrollView>
-            <CardDetailTeamDesc />
+            {data.approval.map((val, index) => {
+              return (
+                <CardDetailTeamDesc
+                  number={index + 1}
+                  name={val.approvalTo.name}
+                  nip={val.approvalTo.id}
+                  cfu={val.approvalTo.cfufuName}
+                />
+              );
+            })}
           </ScrollView>
         </View>
       </View>

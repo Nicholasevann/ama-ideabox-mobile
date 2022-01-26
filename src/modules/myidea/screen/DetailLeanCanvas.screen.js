@@ -14,7 +14,7 @@ const DetailLeanCanvas = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -56,7 +56,13 @@ const DetailLeanCanvas = ({navigation, route}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailLeanCanvasDesc />
+          <DetailLeanCanvasDesc
+            customer={data.lc[0].value}
+            problem={data.lc[1].value}
+            existing={data.lc[2].value}
+            unique={data.lc[3].value}
+            proposed={data.lc[4].value}
+          />
         </View>
       </View>
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,11 +8,22 @@ import {
 } from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailIdeaDesc from '../../../components/DetailIdeaDesc';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 const DetailExplore = ({route, navigation}) => {
   const data = route.params.data;
-
+  const [detailIdea, setDetailIdea] = useState(null);
+  useEffect(() => {
+    if (data === null) {
+      return <LoadingScreen />;
+    }
+    GetDetailIdea(data.id).then(response => setDetailIdea(response));
+  }, [data]);
+  if (detailIdea === null) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -40,7 +51,7 @@ const DetailExplore = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: data})
+                navigation.navigate('DetailStoryBehind', {data: detailIdea})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -49,7 +60,7 @@ const DetailExplore = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: data})
+                navigation.navigate('DetailLeanCanvas', {data: detailIdea})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>
@@ -57,7 +68,9 @@ const DetailExplore = ({route, navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.wrap}
-              onPress={() => navigation.navigate('DetailTeams', {data: data})}>
+              onPress={() =>
+                navigation.navigate('DetailTeams', {data: detailIdea})
+              }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>
               </View>
@@ -69,9 +82,9 @@ const DetailExplore = ({route, navigation}) => {
         <ScrollView>
           <View style={styles.content}>
             <DetailIdeaDesc
-              title={data.desc[0].value}
-              perusahaan={'PT Telkom'}
-              desc={data.desc[2].value}
+              title={detailIdea.desc[0].value}
+              perusahaan={'telkom'}
+              desc={detailIdea.desc[2].value}
               image={data.desc[1].value}
             />
           </View>

@@ -115,16 +115,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   title: {
-    flex: 3,
-    padding: 5,
+    flex: 2,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 10,
   },
   email: {
     flex: 1,
-    padding: 5,
+    paddingLeft: 10,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   cardContent: {
     height: 100,

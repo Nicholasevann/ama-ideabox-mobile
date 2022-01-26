@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,12 +11,27 @@ import {
 } from 'react-native';
 import {Cross} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
+import getData from '../../../components/GetData';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {defaultAuthState} from '../../../config/Auth.cfg';
+import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/MyIdea.style';
 const SubmittedIdea = ({navigation}) => {
-  const dataSubmitted = require('../data/dataSubmitted.json');
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [data, setData] = useState(defaultAuthState);
+  const [submittedIdea, setSubmittedIdea] = useState(null);
+  useEffect(() => {
+    getData().then(jsonValue => setData(jsonValue));
+    if (data === defaultAuthState) {
+      return <LoadingScreen />;
+    }
+    GetDataSubmittedIdea(data.id).then(response => setSubmittedIdea(response));
+  }, [data]);
+  if (submittedIdea === null || data === defaultAuthState) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -50,48 +65,6 @@ const SubmittedIdea = ({navigation}) => {
           </View>
         </View> */}
 
-        {/* Popup delete  */}
-        <Modal
-          animationType="none"
-          transparent={true}
-          visible={modalDeleteVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalDeleteVisible(!modalDeleteVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.centeredcontainer}>
-              <View style={styles.modalView}>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.textEdit}>Delete User</Text>
-                  <TouchableOpacity
-                    onPress={() => setModalDeleteVisible(false)}>
-                    <Cross />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.inputContainer}>
-                  <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
-                  <View style={styles.rowDelete}>
-                    <View style={styles.buttondelete}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Hapus</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttoncancel}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Batal</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal>
-        {/* EndPopup */}
-
         {/* Content */}
         <View style={styles.content}>
           <View style={styles.titleContent}>
@@ -101,7 +74,7 @@ const SubmittedIdea = ({navigation}) => {
                 Idea Name
               </Text>
             </View>
-            <View style={styles.email}>
+            <View style={styles.title}>
               <Text
                 style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
                 Created By
@@ -117,7 +90,7 @@ const SubmittedIdea = ({navigation}) => {
 
           <FlatList
             keyExtractor={(item, index) => index.toString()}
-            data={dataSubmitted}
+            data={submittedIdea.ideas}
             renderItem={({item, index}) => {
               return (
                 <ScrollView>
@@ -126,9 +99,9 @@ const SubmittedIdea = ({navigation}) => {
                       navigation.navigate('DetailIdeaUser', {data: item})
                     }
                     delete={() => setModalDeleteVisible(true)}
-                    title={item.title}
-                    name={item.createdby}
-                    createdDate={item.createddate}
+                    title={item.desc[0].value}
+                    name={item.createdBy}
+                    createdDate={item.createdDate}
                   />
                 </ScrollView>
               );
@@ -136,6 +109,47 @@ const SubmittedIdea = ({navigation}) => {
           />
         </View>
       </View>
+
+      {/* Popup delete  */}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalDeleteVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalDeleteVisible(!modalDeleteVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.centeredcontainer}>
+            <View style={styles.modalView}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.textEdit}>Delete User</Text>
+                <TouchableOpacity onPress={() => setModalDeleteVisible(false)}>
+                  <Cross />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                <View style={styles.rowDelete}>
+                  <View style={styles.buttondelete}>
+                    <TouchableOpacity
+                      onPress={() => setModalDeleteVisible(false)}>
+                      <Text style={styles.save}>Hapus</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.buttoncancel}>
+                    <TouchableOpacity
+                      onPress={() => setModalDeleteVisible(false)}>
+                      <Text style={styles.save}>Batal</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      {/* EndPopup */}
     </SafeAreaView>
   );
 };

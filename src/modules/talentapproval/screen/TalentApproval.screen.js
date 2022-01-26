@@ -20,7 +20,6 @@ import GetDataTalentApproval from '../../../config/GetData/GetDataTalentApproval
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/TalentApproval.style';
 const TalentApproval = ({navigation}) => {
-  const dataSubmitted = require('../data/dataSubmitted.json');
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [dataTalentApproval, setDataTalentApproval] = useState(null);
   const [data, setData] = useState(defaultAuthState);

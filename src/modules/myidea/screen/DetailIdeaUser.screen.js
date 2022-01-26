@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailIdeaDesc from '../../../components/DetailIdeaDesc';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/MyIdea.style';
 const DetailIdeaUser = ({route, navigation}) => {
+  const [detailIdea, setDetailIdea] = useState(null);
   const data = route.params.data;
+  useEffect(() => {
+    if (data === null) {
+      return <LoadingScreen />;
+    }
+    GetDetailIdea(data.id).then(response => setDetailIdea(response));
+  }, [data]);
+  if (detailIdea === null) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -29,7 +41,7 @@ const DetailIdeaUser = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: data})
+                navigation.navigate('DetailStoryBehind', {data: detailIdea})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -38,7 +50,7 @@ const DetailIdeaUser = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: data})
+                navigation.navigate('DetailLeanCanvas', {data: detailIdea})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>
@@ -46,7 +58,9 @@ const DetailIdeaUser = ({route, navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.wrap}
-              onPress={() => navigation.navigate('DetailTeams', {data: data})}>
+              onPress={() =>
+                navigation.navigate('DetailTeams', {data: detailIdea})
+              }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>
               </View>
@@ -57,9 +71,9 @@ const DetailIdeaUser = ({route, navigation}) => {
         {/* Content */}
         <View style={styles.content}>
           <DetailIdeaDesc
-            title={data.title}
-            perusahaan={data.perusahaan}
-            desc={data.desc}
+            title={detailIdea.desc[0].value}
+            perusahaan={detailIdea.CFUFU[0].name}
+            desc={detailIdea.desc[2].value}
           />
         </View>
       </View>

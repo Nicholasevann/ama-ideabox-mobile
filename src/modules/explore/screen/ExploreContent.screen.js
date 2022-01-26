@@ -26,6 +26,7 @@ import {windowWidth} from '../../../components/WindowDimensions';
 import axios from 'axios';
 import {defaultAuthDataUser} from '../../../config/Auth.cfg';
 import {GetDataIdea} from '../../../config/GetData/GetDataIdea';
+
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -36,8 +37,6 @@ const ExploreContent = ({navigation, route}) => {
   const [modalBottom, setModalBottom] = useState(false);
   const [hasil, setHasil] = useState('');
   const [value, setValue] = useState('');
-  const dataUser = require('../data/User Services.postman_collection.json');
-  const [dataUserState, setDataUserState] = useState(defaultAuthDataUser);
   const getData = dataSearch => {
     setHasil(dataSearch);
   };
@@ -74,15 +73,7 @@ const ExploreContent = ({navigation, route}) => {
       alert(error.message);
     }
   };
-  useEffect(() => {
-    axios
-      .get(dataUser.item[0].item[1].request.url.raw)
-      .then(response => {
-        // setUpdate(response.data.data);
-        setDataUserState(response.data.data);
-      })
-      .catch(err => console.log(err));
-  });
+
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
       return null;
@@ -118,7 +109,7 @@ const ExploreContent = ({navigation, route}) => {
       </View>
     );
   };
-  if (isLoading || data === null || dataUserState === defaultAuthDataUser) {
+  if (isLoading || data === null) {
     return <LoadingScreen />;
   }
   return (
@@ -157,7 +148,7 @@ const ExploreContent = ({navigation, route}) => {
                   promote={() => setModalPromoteVisible(true)}
                   morePromote={() => setModalBottom(true)}
                   onProfile={() =>
-                    navigation.navigate('ProfileUser', {data: dataUserState})
+                    navigation.navigate('ProfileUser', {data: val})
                   }
                 />
               </View>

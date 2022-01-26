@@ -19,7 +19,7 @@ const CardSubmittedIdea = props => {
           <View style={styles.title}>
             <Text style={style.h5}>{props.title}</Text>
           </View>
-          <View style={styles.email}>
+          <View style={styles.title}>
             <Text style={style.h5}>{props.name}</Text>
           </View>
           <View style={styles.email}>
@@ -35,7 +35,7 @@ export default CardSubmittedIdea;
 
 const styles = StyleSheet.create({
   title: {
-    flex: 3,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'flex-start',
     padding: 5,

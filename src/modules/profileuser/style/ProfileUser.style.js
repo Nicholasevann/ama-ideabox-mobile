@@ -144,6 +144,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#085D7A',
   },
+  textInnovation: {
+    minHeight: 300,
+    backgroundColor: '#FFFFFF',
+    width: '100%',
+    padding: 10,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
   achievementContainer: {
     backgroundColor: '#FFFFFF',
     width: '100%',

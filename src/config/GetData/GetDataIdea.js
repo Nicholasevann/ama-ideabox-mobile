@@ -11,13 +11,13 @@ const GetDataIdea = () => {
     });
 };
 
-const GetDetailIdea = () => {
+const GetDetailIdea = id => {
   return axios({
     crossDomain: true,
     method: 'post',
     url: 'https://dev-ideas.digitalamoeba.id/showideas/getidea/',
     data: {
-      ideaId: '1',
+      ideaId: id,
     },
     validateStatus: false,
   })
