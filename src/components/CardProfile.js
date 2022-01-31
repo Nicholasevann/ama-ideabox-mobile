@@ -6,19 +6,24 @@ import {windowHeight, windowWidth} from './WindowDimensions';
 const CardProfile = props => {
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={styles.profile}>
-          <Image
-            source={require('../assets/image/profilepicture2.jpg')}
-            style={styles.imageProfileProductive}
-          />
-          <TouchableOpacity onPress={props.profile}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          width: '100%',
+        }}>
+        <TouchableOpacity onPress={props.profile} style={{width: '100%'}}>
+          <View style={styles.profile}>
+            <Image
+              source={require('../assets/image/profilepicture2.jpg')}
+              style={styles.imageProfileProductive}
+            />
             <View style={styles.content}>
-              <Text style={styles.textProfileProductive}>Karyawan Telkom</Text>
-              <Text style={styles.textLikeProductive}>516278 </Text>
+              <Text style={styles.textProfileProductive}>{props.name}</Text>
+              <Text style={styles.textLikeProductive}>{props.nik} </Text>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
         <View style={styles.iconBack}>
           <TouchableOpacity onPress={props.onPress}>
             <BackBlue />
@@ -37,8 +42,7 @@ const styles = StyleSheet.create({
     marginHorizontal: windowWidth / 42.3,
     marginVertical: windowHeight / 86.4,
     borderRadius: 10,
-    padding: 10,
-    paddingVertical: 15,
+    padding: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -59,21 +63,21 @@ const styles = StyleSheet.create({
   },
   textProfile: {
     fontWeight: '700',
-    fontSize: windowHeight > 800 ? 12 : 10,
+    fontSize: 10,
     fontFamily: 'Roboto',
     marginTop: windowWidth / 100,
     marginLeft: windowHeight / 84.6,
   },
   textProfileProductive: {
     fontWeight: '700',
-    fontSize: windowHeight > 800 ? 24 : 16,
+    fontSize: 14,
     fontFamily: 'Roboto',
     marginTop: windowWidth / 100,
     marginLeft: windowHeight / 84.6,
   },
   content: {
     flexDirection: 'column',
-
+    width: '100%',
     marginLeft: windowWidth / 42.3,
   },
   titleContent: {

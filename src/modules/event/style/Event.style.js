@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingVertical: 20,
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
+    marginVertical: 20,
     width: '100%',
     height: 35,
     borderRadius: 10,
@@ -158,9 +158,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
     borderColor: '#085D7A',
-    marginVertical: 10,
     color: 'black',
     height: 35,
     fontSize: 12,

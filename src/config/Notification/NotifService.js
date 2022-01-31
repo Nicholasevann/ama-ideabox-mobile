@@ -80,8 +80,8 @@ export default class NotifService {
       autoCancel: true, // (optional) default: true
       largeIcon: 'ic_launcher', // (optional) default: "ic_launcher"
       smallIcon: 'ic_notification', // (optional) default: "ic_notification" with fallback for "ic_launcher"
-      bigText: 'Ini push notif pertama', // (optional) default: "message" prop
-      subText: 'This is a subText', // (optional) default: none
+      bigText: 'message', // (optional) default: "message" prop
+      subText: '', // (optional) default: none
       color: 'red', // (optional) default: system default
       vibrate: true, // (optional) default: true
       vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
@@ -105,8 +105,8 @@ export default class NotifService {
       title: 'Hello Nicholas', // (optional)
       message: 'My Notification Message', // (required)
       userInfo: {screen: 'home'}, // (optional) default: {} (using null throws a JSON value '<null>' error)
-      playSound: !!soundName, // (optional) default: true
-      soundName: soundName ? soundName : 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+      playSound: false, // (optional) default: true
+      soundName: 'android.resource://com.seeed/raw/ideabox.mp3', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
       number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
     });
   }

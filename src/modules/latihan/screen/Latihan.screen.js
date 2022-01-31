@@ -6,8 +6,11 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import LoadingScreen from '../../../components/LoadingScreen';
+import SuccesModal from '../../../components/SuccesModal';
+import FailedModal from '../../../components/FailedModal';
 import NotifService from '../../../config/Notification/NotifService';
 
 const Latihan = () => {
@@ -28,6 +31,7 @@ const Latihan = () => {
 
   return (
     <View style={styles.container}>
+      <FailedModal desc={'Congrats your profile have been updated!'} />
       <Text style={styles.title}>
         Example app react-native-push-notification
       </Text>
@@ -38,7 +42,10 @@ const Latihan = () => {
         placeholder="Register token"
       />
       <View style={styles.spacer}></View>
-
+      <Image
+        source={require('../../../assets/gif/success.gif')}
+        style={{width: 120, height: 120}}
+      />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,46 +9,143 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
+import getData from '../../../components/GetData';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {defaultAuthState} from '../../../config/Auth.cfg';
+import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/MyIdea.style';
 const SubmittedIdea = ({navigation}) => {
-  const dataSubmitted = require('../data/dataSubmitted.json');
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [data, setData] = useState(defaultAuthState);
+  const [submittedIdea, setSubmittedIdea] = useState(null);
+  useEffect(() => {
+    if (submittedIdea === null || data === defaultAuthState) {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataSubmittedIdea(data.id).then(response =>
+        setSubmittedIdea(response),
+      );
+    }
+  });
+  if (submittedIdea === null || data === defaultAuthState) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
-
-      {/* Header navigation */}
-      <View style={styles.headerContainer}>
-        <View style={styles.headerWrap}>
-          <TouchableOpacity style={styles.wrap} onPress={() => {}}>
-            <View style={styles.tabBarActive}>
-              <Text style={styles.textActive}>Submitted Idea</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.wrap}
-            onPress={() => navigation.navigate('MyAction')}>
-            <View style={styles.tabBar}>
-              <Text style={styles.textNonActive}>My Action</Text>
-            </View>
-          </TouchableOpacity>
+      <ScrollView>
+        {/* Header navigation */}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerWrap}>
+            <TouchableOpacity style={styles.wrap} onPress={() => {}}>
+              <View style={styles.tabBarActive}>
+                <Text style={styles.textActive}>Submitted Idea</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.wrap}
+              onPress={() => navigation.navigate('MyAction')}>
+              <View style={styles.tabBar}>
+                <Text style={styles.textNonActive}>Sharing Idea</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      {/* content */}
-      <View style={styles.contentContainer}>
-        {/* <View style={styles.iconContainer}>
+        {/* content */}
+        <View style={styles.contentContainer}>
+          {/* <View style={styles.iconContainer}>
           <View style={styles.icon}>
             <Text>1</Text>
           </View>
         </View> */}
+
+          {/* Content */}
+          <View style={styles.content}>
+            <View style={styles.titleContent}>
+              <View style={styles.title}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Idea Name
+                </Text>
+              </View>
+              <View style={styles.title}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Created By
+                </Text>
+              </View>
+              <View style={styles.email}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Created Date
+                </Text>
+              </View>
+            </View>
+            <SwipeListView
+              data={submittedIdea.ideas}
+              renderItem={({item}) => {
+                // console.log(item)
+                return (
+                  <View>
+                    <CardSubmittedIdea
+                      delete={() => setModalDeleteVisible(true)}
+                      title={item.desc[0].value}
+                      name={item.createdBy}
+                      createdDate={item.createdDate}
+                    />
+                  </View>
+                );
+              }}
+              renderHiddenItem={({item}) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                    <Trash />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                    onPress={() =>
+                      navigation.navigate('DetailIdeaUser', {data: item})
+                    }>
+                    <Eye />
+                  </TouchableOpacity>
+                </View>
+              )}
+              rightOpenValue={-150}
+              leftOpenValue={0}
+            />
+            {/* <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={submittedIdea.ideas}
+            renderItem={({item, index}) => {
+              return (
+                <ScrollView>
+                  <CardSubmittedIdea
+                    onDetail={() =>
+                      navigation.navigate('DetailIdeaUser', {data: item})
+                    }
+                    delete={() => setModalDeleteVisible(true)}
+                    title={item.desc[0].value}
+                    name={item.createdBy}
+                    createdDate={item.createdDate}
+                  />
+                </ScrollView>
+              );
+            }}
+          /> */}
+          </View>
+        </View>
 
         {/* Popup delete  */}
         <Modal
@@ -91,51 +188,7 @@ const SubmittedIdea = ({navigation}) => {
           </View>
         </Modal>
         {/* EndPopup */}
-
-        {/* Content */}
-        <View style={styles.content}>
-          <View style={styles.titleContent}>
-            <View style={styles.title}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Idea Name
-              </Text>
-            </View>
-            <View style={styles.email}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Created By
-              </Text>
-            </View>
-            <View style={styles.email}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Created Date
-              </Text>
-            </View>
-          </View>
-
-          <FlatList
-            keyExtractor={(item, index) => index.toString()}
-            data={dataSubmitted}
-            renderItem={({item, index}) => {
-              return (
-                <ScrollView>
-                  <CardSubmittedIdea
-                    onDetail={() =>
-                      navigation.navigate('DetailIdeaUser', {data: item})
-                    }
-                    delete={() => setModalDeleteVisible(true)}
-                    title={item.title}
-                    name={item.createdby}
-                    createdDate={item.createddate}
-                  />
-                </ScrollView>
-              );
-            }}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

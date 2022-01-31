@@ -148,7 +148,6 @@ const Login = ({navigation, route}) => {
   useEffect(() => {
     expiredCheck();
   }, [data]);
-  console.log(authStateLdap);
   return (
     <NativeBaseProvider theme={FontTampilan}>
       <View style={styles.container}>

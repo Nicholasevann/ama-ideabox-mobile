@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,13 @@ import {
 } from 'react-native';
 import CardDetailTeamDesc from '../../../components/CardDetailTeamsDesc';
 import CardProfile from '../../../components/CardProfile';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 const DetailTeams = ({route, navigation}) => {
   const data = route.params.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -20,7 +23,11 @@ const DetailTeams = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.goBack()}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -75,11 +82,20 @@ const DetailTeams = ({route, navigation}) => {
               <Text>NIP</Text>
             </View>
             <View style={styles.title}>
-              <Text>Perusahaan</Text>
+              <Text>CFU/FU</Text>
             </View>
           </View>
           <ScrollView>
-            <CardDetailTeamDesc />
+            {data.approval.map((val, index) => {
+              return (
+                <CardDetailTeamDesc
+                  number={index + 1}
+                  name={val.approvalTo.name}
+                  nip={val.approvalTo.nik}
+                  cfu={val.approvalTo.cfufuName}
+                />
+              );
+            })}
           </ScrollView>
         </View>
       </View>

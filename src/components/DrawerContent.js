@@ -38,7 +38,6 @@ const DrawerContent = props => {
   const {state, descriptors, navigation} = props;
   let lastGroupName = '';
   let newGroup = true;
-  console.log('Data :', data);
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>

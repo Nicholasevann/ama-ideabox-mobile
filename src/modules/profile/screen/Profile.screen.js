@@ -40,16 +40,14 @@ const Profile = ({navigation}) => {
   var indexJoin = 0;
   useEffect(() => {
     getData().then(jsonValue => setData(jsonValue));
-    prefetchConfiguration({
-      warmAndPrefetchChrome: Platform.OS === 'android',
-      ...AuthConfig,
-    });
-    GetDataTrackRecord().then(response => setDataTrackRecord(response));
-  }, []);
-  if (dataTrackRecord === '') {
+    if (data === defaultAuthState) {
+      return <LoadingScreen />;
+    }
+    GetDataTrackRecord(data.id).then(response => setDataTrackRecord(response));
+  }, [data]);
+  if (dataTrackRecord === '' || data === defaultAuthState) {
     return <LoadingScreen />;
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -116,7 +114,7 @@ const Profile = ({navigation}) => {
               color={'#177FC6'}
             />
             <CardTrackRecord
-              number={'016'}
+              number={dataTrackRecord.trending}
               text={'Trendings'}
               image={require('../../../assets/image/dummy4.png')}
               color={'#3ACECA'}
@@ -190,8 +188,19 @@ const Profile = ({navigation}) => {
               <Text style={styles.title}>Innovation</Text>
             </View>
             <View style={styles.textInnovation}>
-              {dataTrackRecord.ideas.map(val => (
+              {dataTrackRecord.ideas.map((val, index) => (
                 <View>
+                  {index === 0 ? null : (
+                    <View
+                      style={{
+                        height: 1,
+                        width: '100%',
+                        backgroundColor: 'grey',
+                        marginVertical: 15,
+                      }}
+                    />
+                  )}
+
                   <View
                     style={{
                       width: '100%',
@@ -215,7 +224,7 @@ const Profile = ({navigation}) => {
                         width: '100%',
                         flexWrap: 'wrap',
                       }}>
-                      {val.approval.map(data => {
+                      {val.approvalTeam.map(data => {
                         if (data.request === 'join') {
                           indexJoin = indexJoin + 1;
                           return (
@@ -233,7 +242,7 @@ const Profile = ({navigation}) => {
                     <Text style={[style.h4, {marginVertical: 10}]}>
                       Support:
                     </Text>
-                    {val.approval.map(data => {
+                    {val.approvalTeam.map(data => {
                       if (data.request === 'support') {
                         indexSupport = indexSupport + 1;
                         return (

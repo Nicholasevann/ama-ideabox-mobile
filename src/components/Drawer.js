@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from './DrawerContent';
 import TabNavigation from './Tabs';
 import MyIdea from '../modules/myidea/screen/MyIdea.route';
 import TalentBooster from '../modules/talentBooster/screen/TalentBooster.screen';
-import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
+import TalentApprovalRoute from '../modules/talentapproval/screen/TalentApproval.route';
 import IdeaManagement from '../modules/administrator/screen/IdeaManagement.screen';
 import {Admin, HomeDrawer, IconFaq, Idea, Talent} from '../assets/icon';
 import RoleManagement from '../modules/administrator/screen/RoleManagement.screen';
@@ -14,9 +14,16 @@ import RoutesCategoryManagement from '../config/Routes/RoutesCategoryManagement'
 import Faq from '../modules/faq/screen/Faq.screen';
 import Latihan from '../modules/latihan/screen/Latihan.screen';
 import Dashboard from '../modules/dashboard/screen/Dashboard.screen';
+import getData from './GetData';
+import RoutesTalentApproval from '../config/Routes/RoutesTalentApproval';
+import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
+  const [data, setData] = useState('');
+  useEffect(() => {
+    getData().then(jsonValue => setData(jsonValue));
+  }, []);
   return (
     <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
       <Drawer.Screen
@@ -29,7 +36,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="TalentBooster"
         component={TalentBooster}
         options={{
@@ -38,9 +45,9 @@ const DrawerNavigation = () => {
           drawerIcon: () => <Talent />,
           activeTintColor: '#085D7A',
         }}
-      />
+      /> */}
       <Drawer.Screen
-        name="SubmittedIdea"
+        name="RoutesSubmittedIdea"
         component={MyIdea}
         options={{
           drawerLabel: 'List Idea',
@@ -52,7 +59,7 @@ const DrawerNavigation = () => {
       />
       <Drawer.Screen
         name="TalentApproval"
-        component={TalentApproval}
+        component={RoutesTalentApproval}
         options={{
           drawerLabel: 'Talent Approval',
           headerShown: false,
@@ -61,7 +68,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="UserManagement"
         component={RoutesUserManagement}
         options={{
@@ -71,7 +78,8 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
           groupName: 'Administrator',
         }}
-      />
+      /> */}
+
       <Drawer.Screen
         name="CategoryManagement"
         component={RoutesCategoryManagement}
@@ -94,7 +102,7 @@ const DrawerNavigation = () => {
           groupName: 'Administrator',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="RoleManagement"
         component={RoleManagement}
         options={{
@@ -104,7 +112,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
           groupName: 'Administrator',
         }}
-      />
+      /> */}
 
       <Drawer.Screen
         name="Faq"
@@ -130,8 +138,9 @@ const DrawerNavigation = () => {
         name="Latihan"
         component={Latihan}
         options={{
-          drawerLabel: 'Latihan',
+          drawerLabel: 'Notification',
           headerShown: false,
+          drawerIcon: () => <HomeDrawer />,
         }}
       />
     </Drawer.Navigator>

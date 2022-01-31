@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,15 +9,35 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import CardTalentApproval from '../../../components/CardTalentApproval';
+import getData from '../../../components/GetData';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {defaultAuthState} from '../../../config/Auth.cfg';
+import GetDataTalentApproval from '../../../config/GetData/GetDataTalentApproval';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/TalentApproval.style';
 const TalentApproval = ({navigation}) => {
-  const dataSubmitted = require('../data/dataSubmitted.json');
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [dataTalentApproval, setDataTalentApproval] = useState(null);
+  const [data, setData] = useState(defaultAuthState);
+  useEffect(() => {
+    if (dataTalentApproval === null) {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataTalentApproval(data.id).then(response =>
+        setDataTalentApproval(response),
+      );
+    }
+  });
+  if (dataTalentApproval === null) {
+    return <LoadingScreen />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -65,10 +85,45 @@ const TalentApproval = ({navigation}) => {
               </Text>
             </View>
           </View>
-          <ScrollView>
-            <FlatList
+          <SwipeListView
+            data={dataTalentApproval}
+            renderItem={({item}) => {
+              // console.log(item)
+              return (
+                <View>
+                  <CardTalentApproval
+                    onDetail={() =>
+                      navigation.navigate('DetailIdeaUser', {data: item})
+                    }
+                    delete={() => setModalDeleteVisible(true)}
+                    title={item.ideas.desc.value}
+                    name={item.approvalTo.name}
+                    createdDate={item.createdDate}
+                  />
+                </View>
+              );
+            }}
+            renderHiddenItem={({item}) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  <Trash />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                  onPress={() =>
+                    navigation.navigate('DetailIdeaUser', {data: item})
+                  }>
+                  <Eye />
+                </TouchableOpacity>
+              </View>
+            )}
+            rightOpenValue={-150}
+            leftOpenValue={0}
+          />
+          {/* <FlatList
               keyExtractor={(item, index) => index.toString()}
-              data={dataSubmitted}
+              data={dataTalentApproval}
               renderItem={({item, index}) => {
                 return (
                   <CardTalentApproval
@@ -76,14 +131,13 @@ const TalentApproval = ({navigation}) => {
                       navigation.navigate('DetailIdeaUser', {data: item})
                     }
                     delete={() => setModalDeleteVisible(true)}
-                    title={item.title}
-                    name={item.createdby}
-                    createdDate={item.createddate}
+                    title={item.ideas.desc.value}
+                    name={item.approvalTo.name}
+                    createdDate={item.createdDate}
                   />
                 );
               }}
-            />
-          </ScrollView>
+            /> */}
         </View>
       </View>
 

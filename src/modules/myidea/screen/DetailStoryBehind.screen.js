@@ -14,7 +14,7 @@ const DetailStoryBehind = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -56,7 +56,11 @@ const DetailStoryBehind = ({navigation, route}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailStoryBehindDesc />
+          <DetailStoryBehindDesc
+            why={data.gc[0].value}
+            how={data.gc[1].value}
+            what={data.gc[2].value}
+          />
         </View>
       </View>
     </SafeAreaView>

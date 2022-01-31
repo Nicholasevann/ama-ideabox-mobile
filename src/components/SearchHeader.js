@@ -33,6 +33,7 @@ const SearchHeader = props => {
           <TextInput
             style={styles.inputSearch}
             placeholder={props.placeholder}
+            placeholderTextColor={'grey'}
             onChangeText={val => props.getData(val)}
             onFocus={() => FocusClick()}
             onBlur={() => BlurClick()}

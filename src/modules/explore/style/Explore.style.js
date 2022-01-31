@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     backgroundColor: '#FFFFFF',
-    marginTop: 500,
+    marginTop: 550,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderTopWidth: 2,
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   totalComment: {color: '#085D7A', fontSize: 18, fontWeight: '700'},
-  contentModal: {padding: 20},
+  contentModal: {padding: 15, marginBottom: 70},
   boxInput: {
     height: 150,
     borderWidth: 1,

@@ -1,12 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import {useState} from 'react/cjs/react.development';
 import CardProfile from '../../../components/CardProfile';
 import DetailLeanCanvasDesc from '../../../components/DetailLeanCanvasDesc';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 
 const DetailLeanCanvas = ({route, navigation}) => {
   const data = route.params.data;
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -15,7 +19,11 @@ const DetailLeanCanvas = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.goBack()}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
