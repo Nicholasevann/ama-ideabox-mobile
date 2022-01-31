@@ -44,17 +44,7 @@ const CardContent = props => {
           <TouchableOpacity
             onPress={() => clicked()}
             style={styles.iconContent}>
-            {liked === false ? (
-              <Image
-                source={require('../assets/icon/loveFalse.png')}
-                style={styles.icon}
-              />
-            ) : (
-              <Image
-                source={require('../assets/icon/loveTrue.png')}
-                style={styles.icon}
-              />
-            )}
+            <Image source={props.like} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={props.comment}>
             <View style={styles.iconContent}>
@@ -80,7 +70,7 @@ const CardContent = props => {
       <View style={styles.rowLike}>
         <Image source={require('../assets/icon/hearth.png')} />
         <Text style={[styles.textLike, style.h6]}>
-          Pak Fraz and 100 peoples
+          Liked by {props.likedBy}
         </Text>
       </View>
       <View style={styles.content}>

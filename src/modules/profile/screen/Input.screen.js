@@ -21,8 +21,13 @@ import {
 import axios from 'axios';
 import {DatePicker} from 'react-native-woodpicker';
 import ImagePicker from 'react-native-image-crop-picker';
+import LoadingScreen from '../../../components/LoadingScreen';
+import GetDataProfile from '../../../config/GetData/GetDataProfile';
+import SuccesModal from '../../../components/SuccesModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
+  const [success, setSuccess] = useState(false);
   const [update, setUpdate] = useState(defaulthAuthData);
   const [pickedDate, setPickedDate] = useState([]);
   const [imageUri, setImageUri] = useState(
@@ -31,6 +36,7 @@ const InputProfile = ({navigation}) => {
   const [image, setImage] = useState(
     'https://reactnative.dev/img/tiny_logo.png',
   );
+  const [dataProfile, setDataProfile] = useState(null);
   const takePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       width: 640,
@@ -42,54 +48,63 @@ const InputProfile = ({navigation}) => {
     });
   };
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    if (dataProfile === null) {
       getData().then(jsonValue => setData(jsonValue));
       prefetchConfiguration({
         warmAndPrefetchChrome: Platform.OS === 'android',
         ...AuthConfig,
       });
-    });
-    return unsubscribe;
-  }, [navigation]);
-  useEffect(() => {
-    axios
-      .get('http://10.0.2.2:8080/profile/?id=3')
-      .then(response => {
-        setUpdate(response.data.data);
-      })
-      .catch(err => console.log(err));
-  }, []);
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
+    }
+  });
 
   const handlePost = () => {
     axios({
       crossDomain: true,
       method: 'post',
-      url: 'http://10.0.2.2:8080/profile/update/',
+      url: 'https://dev-users.digitalamoeba.id/profile/update/',
       data: {
-        id: 3,
-        name: update.name,
-        email: update.email,
-        noTelp: update.noTelp,
-        tglLahir: update.tglLahir,
-        namaAtasan: update.namaAtasan,
-        nikAtasan: update.nikAtasan,
-        anakPerusahaan: update.anakPerusahaan,
-        loker: update.loker,
-        regional: update.regional,
-        teamStructure: update.teamStructure,
+        id: dataProfile.id,
+        name: dataProfile.name,
+        nik: dataProfile.nik,
+        email: dataProfile.email,
+        noTelp: dataProfile.noTelp,
+        tglLahir: dataProfile.tglLahir,
+        namaAtasan: dataProfile.namaAtasan,
+        nikAtasan: dataProfile.nikAtasan,
+        anakPerusahaan: dataProfile.anakPerusahaan,
+        loker: dataProfile.loker,
+        regional: dataProfile.regional,
+        teamStructure: dataProfile.teamStructure,
       },
       validateStatus: false,
     })
-      .then(response => {
-        console.log(response);
+      .then((response, status) => {
+        console.log(response.status);
+        if (response.status === 200) {
+          console.log('berhasil');
+          setSuccess(true);
+        } else {
+          console.log('gagal');
+        }
       })
       .catch(function (error) {
         console.log(error);
         // need handling error
       });
   };
+  if (dataProfile === null) {
+    return <LoadingScreen />;
+  }
+  // console.log(dataProfile);
   return (
     <SafeAreaView style={styles.container}>
+      {success === true ? (
+        <SuccesModal desc={'Congrats your profile have been updated!'} />
+      ) : null}
       <ScrollView>
         {/* header */}
         <View style={styles.head}>
@@ -118,39 +133,43 @@ const InputProfile = ({navigation}) => {
             />
           </View>
           <View style={styles.contentContainer}>
-            <Text style={styles.h1}>PROFILE DATA DIRI</Text>
-            <Text style={styles.h2}>Nama Lengkap</Text>
+            <Text style={styles.h1}>PROFILE DATA</Text>
+            <Text style={styles.h2}>Name</Text>
             <TextInput
               style={styles.input}
-              value={update.name}
-              onChangeText={val => setUpdate({...update, name: val})}
+              value={dataProfile.name}
+              onChangeText={val => setDataProfile({...dataProfile, name: val})}
               // need handle ASYNCSTORAGE
             />
             <Text style={styles.h2}>NIK</Text>
             <TextInput
               style={styles.input}
-              value={update.nik}
-              onChangeText={val => setUpdate({...update, nik: val})}
+              value={dataProfile.nik}
+              onChangeText={val => setDataProfile({...dataProfile, nik: val})}
             />
             <Text style={styles.h2}>Email</Text>
             <TextInput
               style={styles.input}
-              value={update.email}
-              onChangeText={val => setUpdate({...update, email: val})}
+              value={dataProfile.email}
+              onChangeText={val => setDataProfile({...dataProfile, email: val})}
             />
-            <Text style={styles.h2}>Nomor HP</Text>
+            <Text style={styles.h2}>No. HP</Text>
             <TextInput
               style={styles.input}
-              value={update.noTelp}
-              onChangeText={val => setUpdate({...update, noTelp: val})}
+              value={dataProfile.noTelp}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, noTelp: val})
+              }
             />
-            <Text style={styles.h2}>Tanggal Lahir</Text>
-            {/* <TextInput
+            <Text style={styles.h2}>Date of Birth</Text>
+            <TextInput
               style={styles.input}
-              value={update.tglLahir}
-              onChangeText={val => setUpdate({ ...update, tglLahir: val })}
-            /> */}
-            <DatePicker
+              value={dataProfile.tglLahir}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, tglLahir: val})
+              }
+            />
+            {/* <DatePicker
               value={pickedDate}
               onDateChange={val => setPickedDate(val)}
               style={styles.input}
@@ -163,45 +182,75 @@ const InputProfile = ({navigation}) => {
               androidMode="countdown"
               androidDisplay="spinner"
               locale="fr"
+            /> */}
+            <Text style={styles.h2}>Work Location :</Text>
+            <TextInput
+              style={styles.input}
+              value={dataProfile.loker}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, tglLahir: val})
+              }
             />
+            <Text style={styles.h2}>Name Office Supervisor :</Text>
+            {/* <TextInput
+              style={styles.input}
+              value={update.tglLahir}
+              onChangeText={val => setUpdate({...update, tglLahir: val})}
+            /> */}
+            <Text style={styles.h2}>NIK Supervisor :</Text>
+            {/* <TextInput
+              style={styles.input}
+              value={update.tglLahir}
+              onChangeText={val => setUpdate({...update, tglLahir: val})}
+            /> */}
             <Text style={styles.h1}>DETAIL</Text>
             <Text style={styles.h2}>Nama Atasan</Text>
             <TextInput
               style={styles.input}
-              value={update.namaAtasan}
-              onChangeText={val => setUpdate({...update, namaAtasan: val})}
+              value={dataProfile.namaAtasan}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, namaAtasan: val})
+              }
             />
             <Text style={styles.h2}>NIK Atasan</Text>
             <TextInput
               style={styles.input}
-              value={update.nikAtasan}
-              onChangeText={val => setUpdate({...update, nikAtasan: val})}
+              value={dataProfile.nikAtasan}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, nikAtasan: val})
+              }
             />
             <Text style={styles.h2}>
               Unit( Anak Perusahaan atau direktorat )
             </Text>
             <TextInput
               style={styles.input}
-              value={update.anakPerusahaan}
-              onChangeText={val => setUpdate({...update, anakPerusahaan: val})}
+              value={dataProfile.anakPerusahaan}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, anakPerusahaan: val})
+              }
             />
             <Text style={styles.h2}>Lokasi Kerja</Text>
             <TextInput
               style={styles.input}
-              value={update.loker}
-              onChangeText={val => setUpdate({...update, loker: val})}
+              value={dataProfile.loker}
+              onChangeText={val => setDataProfile({...dataProfile, loker: val})}
             />
             <Text style={styles.h2}>Area</Text>
             <TextInput
               style={styles.input}
-              value={update.regional}
-              onChangeText={val => setUpdate({...update, regional: val})}
+              value={dataProfile.regional}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, regional: val})
+              }
             />
             <Text style={styles.h2}>Struktur Tim</Text>
             <TextInput
               style={styles.input}
-              value={update.teamStructure}
-              onChangeText={val => setUpdate({...update, teamStructure: val})}
+              value={dataProfile.teamStructure}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, teamStructure: val})
+              }
             />
             <TouchableOpacity
               onPress={() => {

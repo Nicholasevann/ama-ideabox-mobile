@@ -40,6 +40,7 @@ import More from './more.svg';
 import TopLine from './topLine.svg';
 import IconFaq from './iconfaq.svg';
 import WhiteDotHome from './whitedothome.svg';
+import Eye from './eye.svg';
 export {
   IconEvent,
   IconExplore,
@@ -83,4 +84,5 @@ export {
   TopLine,
   IconFaq,
   WhiteDotHome,
+  Eye,
 };

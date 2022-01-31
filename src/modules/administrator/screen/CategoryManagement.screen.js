@@ -12,7 +12,8 @@ import {
   Alert,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardCategoryManagement from '../../../components/CardCategoryManagement';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
@@ -278,8 +279,44 @@ const CategoryManagement = ({navigation}) => {
               </Text>
             </View>
           </View>
-
-          <FlatList
+          <SwipeListView
+            data={dataCategoryManagement}
+            renderItem={({item}) => {
+              // console.log(item)
+              return (
+                <View>
+                  <CardCategoryManagement
+                    onPress={() =>
+                      navigation.navigate('DetailCategory', {data: item})
+                    }
+                    edit={() => setModalVisible(true)}
+                    delete={() => setModalDeleteVisible(true)}
+                    id={item.id}
+                    title={item.name}
+                    status={item.activeFlag}
+                  />
+                </View>
+              );
+            }}
+            renderHiddenItem={({item}) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  <Trash />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                  onPress={() =>
+                    navigation.navigate('DetailIdeaUser', {data: item})
+                  }>
+                  <Eye />
+                </TouchableOpacity>
+              </View>
+            )}
+            rightOpenValue={-150}
+            leftOpenValue={0}
+          />
+          {/* <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={dataCategoryManagement}
             renderItem={({item, index}) => {
@@ -298,7 +335,7 @@ const CategoryManagement = ({navigation}) => {
                 </ScrollView>
               );
             }}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>

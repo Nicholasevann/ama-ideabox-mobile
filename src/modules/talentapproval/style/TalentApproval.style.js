@@ -165,6 +165,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-end',
   },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+  },
+  backRightBtnRight: {
+    backgroundColor: 'red',
+    right: 0,
+  },
+  backRightBtnRight2: {
+    backgroundColor: '#34A68A',
+    right: 75,
+  },
+  rowBack: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    marginHorizontal: 8,
+    margin: 5,
+    borderRadius: 5,
+  },
 });
 
 export default styles;

@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {windowHeight} from './WindowDimensions';
 
 const DetailIdeaDesc = props => {
   return (
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   imageContent: {
     width: '100%',
-    height: 200,
+    height: windowHeight / 3,
     borderRadius: 10,
     resizeMode: 'cover',
   },

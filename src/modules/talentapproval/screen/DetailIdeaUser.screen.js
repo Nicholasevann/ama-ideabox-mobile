@@ -5,7 +5,7 @@ import DetailIdeaDesc from '../../../components/DetailIdeaDesc';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
-import styles from '../style/MyIdea.style';
+import styles from '../../myidea/style/MyIdea.style';
 const DetailIdeaUser = ({route, navigation}) => {
   const [detailIdea, setDetailIdea] = useState(null);
   const data = route.params.data;
@@ -20,6 +20,7 @@ const DetailIdeaUser = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
+  console.log(detailIdea);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -72,11 +73,11 @@ const DetailIdeaUser = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailIdeaDesc
+          {/* <DetailIdeaDesc
             title={detailIdea.desc[0].value}
             perusahaan={detailIdea.CFUFU[0].name}
             desc={detailIdea.desc[2].value}
-          />
+          /> */}
         </View>
       </View>
     </SafeAreaView>

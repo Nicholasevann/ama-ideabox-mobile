@@ -26,7 +26,7 @@ import {windowWidth} from '../../../components/WindowDimensions';
 import axios from 'axios';
 import {defaultAuthDataUser} from '../../../config/Auth.cfg';
 import {GetDataIdea} from '../../../config/GetData/GetDataIdea';
-
+import CardReplyComment from '../../../components/CardReplyComment';
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -37,14 +37,16 @@ const ExploreContent = ({navigation, route}) => {
   const [modalBottom, setModalBottom] = useState(false);
   const [hasil, setHasil] = useState('');
   const [value, setValue] = useState('');
+  const [idIdea, setIdIdea] = useState(0);
   const getData = dataSearch => {
     setHasil(dataSearch);
   };
   useEffect(() => {
     // setData(getDataIdea());
-    GetDataIdea().then(response => setData(response));
-    setLoading(false);
-  }, []);
+    if (data === null) {
+      GetDataIdea().then(response => setData(response));
+    }
+  });
   const ref = useRef(null);
   useScrollToTop(ref);
   const suggestions = [
@@ -109,7 +111,7 @@ const ExploreContent = ({navigation, route}) => {
       </View>
     );
   };
-  if (isLoading || data === null) {
+  if (data === null) {
     return <LoadingScreen />;
   }
   return (
@@ -118,7 +120,7 @@ const ExploreContent = ({navigation, route}) => {
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
         getData={getData}
-        placeholder={'Search an Idea ... '}
+        placeholder={'Search an Idea ...'}
       />
       <ScrollView ref={ref}>
         {data
@@ -131,18 +133,27 @@ const ExploreContent = ({navigation, route}) => {
               return val;
             }
           })
-          .map((val, key) => {
+          .map((val, index) => {
+            const like =
+              val.activeFlag === 0
+                ? require('../../../assets/icon/loveFalse.png')
+                : require('../../../assets/icon/loveTrue.png');
             return (
-              <View key={key}>
+              <View key={index}>
                 <CardContent
-                  name={val.user[0].name}
+                  name={val.user.name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}
+                  like={like}
+                  likedBy={val.totalLike}
                   cover={val.desc[1].value}
                   more={() =>
                     navigation.navigate('DetailIdeaUser', {data: val})
                   }
-                  comment={() => setModalComment(true)}
+                  comment={() => {
+                    setModalComment(true);
+                    setIdIdea(index);
+                  }}
                   share={() => onShare()}
                   join={() => setModalJoinVisible(true)}
                   promote={() => setModalPromoteVisible(true)}
@@ -167,20 +178,37 @@ const ExploreContent = ({navigation, route}) => {
           }}>
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.totalComment}>Comments(4)</Text>
+              <Text style={styles.totalComment}>
+                Total Comment ({data[idIdea].totalComment})
+              </Text>
               <TouchableOpacity onPress={() => setModalComment(false)}>
                 <Cross />
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.contentModal}>
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
-              <CardComment desc={'HEbat, kamu harus bisa melakukannya'} />
+              {data[idIdea].comment.map(val => {
+                return (
+                  <View>
+                    <CardComment desc={val.comment} name={val.createdBy.name} />
+                    {val.replyComment.map(val => {
+                      return (
+                        <CardReplyComment
+                          desc={val.comment}
+                          name={val.createdBy.name}
+                        />
+                      );
+                    })}
+                    <View
+                      style={{
+                        height: 1,
+                        width: '100%',
+                        backgroundColor: '#E5E5E5',
+                        marginVertical: 10,
+                      }}
+                    />
+                  </View>
+                );
+              })}
             </ScrollView>
           </View>
           <View style={styles.textInputContainer}>
@@ -287,55 +315,58 @@ const ExploreContent = ({navigation, route}) => {
               setModalPromoteVisible(!modalPromoteVisible);
             }}>
             <ScrollView>
-              <View style={styles.modalPromoteContainer}>
-                <View style={styles.titleWrap}>
-                  <View style={styles.topLine}>
-                    <TouchableOpacity
-                      onPress={() => setModalPromoteVisible(false)}>
-                      <TopLine />
-                      <View style={styles.lineSpace} />
-                      <TopLine />
-                    </TouchableOpacity>
+              <View style={{flex: 1}}>
+                <View style={styles.modalPromoteContainer}>
+                  <View style={styles.titleWrap}>
+                    <View style={styles.topLine}>
+                      <TouchableOpacity
+                        onPress={() => setModalPromoteVisible(false)}>
+                        <TopLine />
+                        <View style={styles.lineSpace} />
+                        <TopLine />
+                      </TouchableOpacity>
+                    </View>
+                    <Text style={styles.textTitle}>Promote Idea</Text>
                   </View>
-                  <Text style={styles.textTitle}>Promote Idea</Text>
-                </View>
-                <Text style={style.h5}>
-                  Sebelum kamu memutuskan untuk mempromosikan inovasi kamu harus
-                  melengkapi beberapa informasi dibawah agar komunikasi diluar
-                  website ideabox berjalan dengan lancar, good luck !
-                </Text>
-                <Text style={[style.h4, {marginVertical: 10}]}>
-                  Nomor Telepon :
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
-                />
-                <Text style={[style.h4, {marginVertical: 10}]}>Alasan :</Text>
-                <View style={styles.inputAbout}>
+                  <Text style={style.h5}>
+                    Sebelum kamu memutuskan untuk mempromosikan inovasi kamu
+                    harus melengkapi beberapa informasi dibawah agar komunikasi
+                    diluar website ideabox berjalan dengan lancar, good luck !
+                  </Text>
+                  <Text style={[style.h4, {marginVertical: 10}]}>
+                    Nomor Telepon :
+                  </Text>
                   <TextInput
-                    multiline={true}
+                    style={styles.input}
                     // value={''}
                     // onChangeText={() => { }}
                   />
+                  <Text style={[style.h4, {marginVertical: 10}]}>Alasan :</Text>
+                  <View style={styles.inputAbout}>
+                    <TextInput
+                      multiline={true}
+                      // value={''}
+                      // onChangeText={() => { }}
+                    />
+                  </View>
                 </View>
-              </View>
-              <View style={styles.buttonWrap}>
-                <TouchableOpacity
-                  style={styles.buttonYakin}
-                  onPress={() => setModalPromoteVisible(false)}>
-                  <View>
-                    <Text style={styles.textYakin}>Yakin</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.buttonBatal}
-                  onPress={() => setModalPromoteVisible(false)}>
-                  <View>
-                    <Text style={styles.textBatal}>Batal</Text>
-                  </View>
-                </TouchableOpacity>
+
+                <View style={styles.buttonWrap}>
+                  <TouchableOpacity
+                    style={styles.buttonYakin}
+                    onPress={() => setModalPromoteVisible(false)}>
+                    <View>
+                      <Text style={styles.textYakin}>Yakin</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttonBatal}
+                    onPress={() => setModalPromoteVisible(false)}>
+                    <View>
+                      <Text style={styles.textBatal}>Batal</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
           </Modal>

@@ -9,7 +9,8 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
@@ -23,12 +24,16 @@ const SubmittedIdea = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [submittedIdea, setSubmittedIdea] = useState(null);
   useEffect(() => {
-    getData().then(jsonValue => setData(jsonValue));
-    if (data === defaultAuthState) {
-      return <LoadingScreen />;
+    if (submittedIdea === null || data === defaultAuthState) {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataSubmittedIdea(data.id).then(response =>
+        setSubmittedIdea(response),
+      );
     }
-    GetDataSubmittedIdea(data.id).then(response => setSubmittedIdea(response));
-  }, [data]);
+  });
   if (submittedIdea === null || data === defaultAuthState) {
     return <LoadingScreen />;
   }
@@ -38,57 +43,89 @@ const SubmittedIdea = ({navigation}) => {
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
-
-      {/* Header navigation */}
-      <View style={styles.headerContainer}>
-        <View style={styles.headerWrap}>
-          <TouchableOpacity style={styles.wrap} onPress={() => {}}>
-            <View style={styles.tabBarActive}>
-              <Text style={styles.textActive}>Submitted Idea</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.wrap}
-            onPress={() => navigation.navigate('MyAction')}>
-            <View style={styles.tabBar}>
-              <Text style={styles.textNonActive}>Sharing Idea</Text>
-            </View>
-          </TouchableOpacity>
+      <ScrollView>
+        {/* Header navigation */}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerWrap}>
+            <TouchableOpacity style={styles.wrap} onPress={() => {}}>
+              <View style={styles.tabBarActive}>
+                <Text style={styles.textActive}>Submitted Idea</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.wrap}
+              onPress={() => navigation.navigate('MyAction')}>
+              <View style={styles.tabBar}>
+                <Text style={styles.textNonActive}>Sharing Idea</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      {/* content */}
-      <View style={styles.contentContainer}>
-        {/* <View style={styles.iconContainer}>
+        {/* content */}
+        <View style={styles.contentContainer}>
+          {/* <View style={styles.iconContainer}>
           <View style={styles.icon}>
             <Text>1</Text>
           </View>
         </View> */}
 
-        {/* Content */}
-        <View style={styles.content}>
-          <View style={styles.titleContent}>
-            <View style={styles.title}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Idea Name
-              </Text>
+          {/* Content */}
+          <View style={styles.content}>
+            <View style={styles.titleContent}>
+              <View style={styles.title}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Idea Name
+                </Text>
+              </View>
+              <View style={styles.title}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Created By
+                </Text>
+              </View>
+              <View style={styles.email}>
+                <Text
+                  style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
+                  Created Date
+                </Text>
+              </View>
             </View>
-            <View style={styles.title}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Created By
-              </Text>
-            </View>
-            <View style={styles.email}>
-              <Text
-                style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Created Date
-              </Text>
-            </View>
-          </View>
-
-          <FlatList
+            <SwipeListView
+              data={submittedIdea.ideas}
+              renderItem={({item}) => {
+                // console.log(item)
+                return (
+                  <View>
+                    <CardSubmittedIdea
+                      delete={() => setModalDeleteVisible(true)}
+                      title={item.desc[0].value}
+                      name={item.createdBy}
+                      createdDate={item.createdDate}
+                    />
+                  </View>
+                );
+              }}
+              renderHiddenItem={({item}) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                    <Trash />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                    onPress={() =>
+                      navigation.navigate('DetailIdeaUser', {data: item})
+                    }>
+                    <Eye />
+                  </TouchableOpacity>
+                </View>
+              )}
+              rightOpenValue={-150}
+              leftOpenValue={0}
+            />
+            {/* <FlatList
             keyExtractor={(item, index) => index.toString()}
             data={submittedIdea.ideas}
             renderItem={({item, index}) => {
@@ -106,50 +143,52 @@ const SubmittedIdea = ({navigation}) => {
                 </ScrollView>
               );
             }}
-          />
+          /> */}
+          </View>
         </View>
-      </View>
 
-      {/* Popup delete  */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalDeleteVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalDeleteVisible(!modalDeleteVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>Delete User</Text>
-                <TouchableOpacity onPress={() => setModalDeleteVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
-                <View style={styles.rowDelete}>
-                  <View style={styles.buttondelete}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Hapus</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.buttoncancel}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Batal</Text>
-                    </TouchableOpacity>
+        {/* Popup delete  */}
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={modalDeleteVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+            setModalDeleteVisible(!modalDeleteVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.centeredcontainer}>
+              <View style={styles.modalView}>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.textEdit}>Delete User</Text>
+                  <TouchableOpacity
+                    onPress={() => setModalDeleteVisible(false)}>
+                    <Cross />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                  <View style={styles.rowDelete}>
+                    <View style={styles.buttondelete}>
+                      <TouchableOpacity
+                        onPress={() => setModalDeleteVisible(false)}>
+                        <Text style={styles.save}>Hapus</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.buttoncancel}>
+                      <TouchableOpacity
+                        onPress={() => setModalDeleteVisible(false)}>
+                        <Text style={styles.save}>Batal</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      {/* EndPopup */}
+        </Modal>
+        {/* EndPopup */}
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -6,10 +6,13 @@ import {
   View,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import LoadingScreen from '../../../components/LoadingScreen';
+import SuccesModal from '../../../components/SuccesModal';
+import FailedModal from '../../../components/FailedModal';
 import NotifService from '../../../config/Notification/NotifService';
-// import {Root, SPSheet} from 'react-native-popup-confirm-toast';
+
 const Latihan = () => {
   const [registerToken, setRegisterToken] = useState('');
   const [fcmRegistered, setFcmRegistered] = useState(false);
@@ -24,14 +27,11 @@ const Latihan = () => {
   const handlePerm = perms => {
     Alert.alert('Permissions', JSON.stringify(perms));
   };
-  const component = props => {
-    //hook or class
-    return null;
-  };
   console.log('ini adalah ' + notif.lastId);
 
   return (
     <View style={styles.container}>
+      <FailedModal desc={'Congrats your profile have been updated!'} />
       <Text style={styles.title}>
         Example app react-native-push-notification
       </Text>
@@ -42,7 +42,10 @@ const Latihan = () => {
         placeholder="Register token"
       />
       <View style={styles.spacer}></View>
-
+      <Image
+        source={require('../../../assets/gif/success.gif')}
+        style={{width: 120, height: 120}}
+      />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -134,27 +137,6 @@ const Latihan = () => {
         }}>
         <Text>popInitialNotification {notif.title}</Text>
       </TouchableOpacity>
-      {/* <Root>
-        <View>
-          <TouchableOpacity
-            onPress={() => {
-              const spSheet = SPSheet;
-              spSheet.show({
-                component: () => component({...this.props, spSheet}),
-                dragFromTopOnly: true,
-                onCloseComplete: () => {
-                  alert('onCloseComplete');
-                },
-                onOpenComplete: () => {
-                  alert('onOpenComplete');
-                },
-                height: 260,
-              });
-            }}>
-            <Text>Open Popup Message</Text>
-          </TouchableOpacity>
-        </View>
-      </Root> */}
 
       <View style={styles.spacer}></View>
 

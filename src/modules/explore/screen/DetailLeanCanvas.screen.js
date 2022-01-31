@@ -19,7 +19,11 @@ const DetailLeanCanvas = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.goBack()}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>

@@ -1,31 +1,21 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import Swipeable from 'react-native-swipeable';
 import {Trash} from '../assets/icon';
 import style from '../config/Style/style.cfg';
 
 const CardIdeaManagement = props => {
   return (
-    <Swipeable
-      rightButtons={[
-        <TouchableOpacity
-          onPress={props.delete}
-          style={[styles.rightSwipeItem, {backgroundColor: '#DE1B1B'}]}>
-          <Trash />
-        </TouchableOpacity>,
-      ]}>
-      <View style={styles.cardContent}>
-        <View style={styles.title}>
-          <Text style={style.h5}>{props.id}</Text>
-        </View>
-        <View style={styles.email}>
-          <Text style={style.h5}>{props.title}</Text>
-        </View>
-        <View style={styles.title}>
-          <Text style={style.h5}>{props.create}</Text>
-        </View>
+    <View style={styles.cardContent}>
+      <View style={styles.title}>
+        <Text style={style.h5}>{props.id}</Text>
       </View>
-    </Swipeable>
+      <View style={styles.email}>
+        <Text style={style.h5}>{props.title}</Text>
+      </View>
+      <View style={styles.title}>
+        <Text style={style.h5}>{props.create}</Text>
+      </View>
+    </View>
   );
 };
 

@@ -10,25 +10,27 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardIdeaManagement from '../../../components/CardIdeaManagement';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
-import {GetDataCategoryManagement} from '../../../config/GetData/GetDataAdministrator';
+import {
+  GetDataCategoryManagement,
+  GetDataIdeaManagement,
+} from '../../../config/GetData/GetDataAdministrator';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/Administrator.style';
 
 const IdeaManagement = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
-  const [dataCategoryManagement, setDataCategoryManagement] = useState();
+  const [dataIdeaManagement, setDataIdeaManagement] = useState();
   const data = require('../data/dataIDeaManagement.json');
 
   useEffect(() => {
-    GetDataCategoryManagement().then(response =>
-      setDataCategoryManagement(response),
-    );
+    GetDataIdeaManagement().then(response => setDataIdeaManagement(response));
   }, []);
-  if (dataCategoryManagement === null) {
+  if (dataIdeaManagement === null) {
     return <LoadingScreen />;
   }
   return (
@@ -104,23 +106,55 @@ const IdeaManagement = ({navigation}) => {
               </Text>
             </View>
           </View>
-
-          <FlatList
+          <SwipeListView
+            data={dataIdeaManagement}
+            renderItem={({item}) => {
+              // console.log(item)
+              return (
+                <View>
+                  <CardIdeaManagement
+                    delete={() => setModalDeleteVisible(true)}
+                    id={item.id}
+                    title={item.desc[0].value}
+                    create={item.createdBy}
+                  />
+                </View>
+              );
+            }}
+            renderHiddenItem={({item}) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  <Trash />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                  onPress={() =>
+                    navigation.navigate('DetailIdeaUser', {data: item})
+                  }>
+                  <Eye />
+                </TouchableOpacity>
+              </View>
+            )}
+            rightOpenValue={-150}
+            leftOpenValue={0}
+          />
+          {/* <FlatList
             keyExtractor={(item, index) => index.toString()}
-            data={data}
+            data={dataIdeaManagement}
             renderItem={({item, index}) => {
               return (
                 <ScrollView>
                   <CardIdeaManagement
                     delete={() => setModalDeleteVisible(true)}
                     id={item.id}
-                    title={item.title}
-                    create={item.created}
+                    title={item.desc[0].value}
+                    create={item.createdBy}
                   />
                 </ScrollView>
               );
             }}
-          />
+          /> */}
         </View>
       </View>
       {/* Popup delete  */}

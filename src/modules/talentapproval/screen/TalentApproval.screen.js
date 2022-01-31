@@ -9,7 +9,8 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {Cross} from '../../../assets/icon';
+import {SwipeListView} from 'react-native-swipe-list-view';
+import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import CardTalentApproval from '../../../components/CardTalentApproval';
 import getData from '../../../components/GetData';
@@ -24,14 +25,16 @@ const TalentApproval = ({navigation}) => {
   const [dataTalentApproval, setDataTalentApproval] = useState(null);
   const [data, setData] = useState(defaultAuthState);
   useEffect(() => {
-    getData().then(jsonValue => setData(jsonValue));
-    if (data === defaultAuthState) {
-      return <LoadingScreen />;
+    if (dataTalentApproval === null) {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataTalentApproval(data.id).then(response =>
+        setDataTalentApproval(response),
+      );
     }
-    GetDataTalentApproval(data.id).then(response =>
-      setDataTalentApproval(response),
-    );
-  }, [data]);
+  });
   if (dataTalentApproval === null) {
     return <LoadingScreen />;
   }
@@ -82,8 +85,43 @@ const TalentApproval = ({navigation}) => {
               </Text>
             </View>
           </View>
-          <ScrollView>
-            <FlatList
+          <SwipeListView
+            data={dataTalentApproval}
+            renderItem={({item}) => {
+              // console.log(item)
+              return (
+                <View>
+                  <CardTalentApproval
+                    onDetail={() =>
+                      navigation.navigate('DetailIdeaUser', {data: item})
+                    }
+                    delete={() => setModalDeleteVisible(true)}
+                    title={item.ideas.desc.value}
+                    name={item.approvalTo.name}
+                    createdDate={item.createdDate}
+                  />
+                </View>
+              );
+            }}
+            renderHiddenItem={({item}) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  <Trash />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
+                  onPress={() =>
+                    navigation.navigate('DetailIdeaUser', {data: item})
+                  }>
+                  <Eye />
+                </TouchableOpacity>
+              </View>
+            )}
+            rightOpenValue={-150}
+            leftOpenValue={0}
+          />
+          {/* <FlatList
               keyExtractor={(item, index) => index.toString()}
               data={dataTalentApproval}
               renderItem={({item, index}) => {
@@ -99,8 +137,7 @@ const TalentApproval = ({navigation}) => {
                   />
                 );
               }}
-            />
-          </ScrollView>
+            /> */}
         </View>
       </View>
 

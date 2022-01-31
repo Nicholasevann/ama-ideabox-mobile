@@ -11,5 +11,16 @@ const GetDataCategoryManagement = () => {
       console.log(err);
     });
 };
+const GetDataIdeaManagement = () => {
+  return axios
+    .get('https://dev-ideas.digitalamoeba.id/ideamanagement/showideas')
+    .then(response => {
+      // setUpdate(response.data.data);
+      return response.data.data;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
-export {GetDataCategoryManagement};
+export {GetDataCategoryManagement, GetDataIdeaManagement};

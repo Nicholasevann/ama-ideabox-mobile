@@ -5,7 +5,7 @@ import DrawerContent from './DrawerContent';
 import TabNavigation from './Tabs';
 import MyIdea from '../modules/myidea/screen/MyIdea.route';
 import TalentBooster from '../modules/talentBooster/screen/TalentBooster.screen';
-import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
+import TalentApprovalRoute from '../modules/talentapproval/screen/TalentApproval.route';
 import IdeaManagement from '../modules/administrator/screen/IdeaManagement.screen';
 import {Admin, HomeDrawer, IconFaq, Idea, Talent} from '../assets/icon';
 import RoleManagement from '../modules/administrator/screen/RoleManagement.screen';
@@ -15,6 +15,8 @@ import Faq from '../modules/faq/screen/Faq.screen';
 import Latihan from '../modules/latihan/screen/Latihan.screen';
 import Dashboard from '../modules/dashboard/screen/Dashboard.screen';
 import getData from './GetData';
+import RoutesTalentApproval from '../config/Routes/RoutesTalentApproval';
+import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
@@ -45,7 +47,7 @@ const DrawerNavigation = () => {
         }}
       /> */}
       <Drawer.Screen
-        name="SubmittedIdea"
+        name="RoutesSubmittedIdea"
         component={MyIdea}
         options={{
           drawerLabel: 'List Idea',
@@ -57,7 +59,7 @@ const DrawerNavigation = () => {
       />
       <Drawer.Screen
         name="TalentApproval"
-        component={TalentApproval}
+        component={RoutesTalentApproval}
         options={{
           drawerLabel: 'Talent Approval',
           headerShown: false,

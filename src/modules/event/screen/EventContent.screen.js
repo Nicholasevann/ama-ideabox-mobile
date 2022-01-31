@@ -13,26 +13,47 @@ import CardEventCategory from '../../../components/CardEventCategory';
 import SearchHeader from '../../../components/SearchHeader';
 import LoadingScreen from '../../../components/LoadingScreen';
 import CardEventContent from '../../../components/CardEventContent';
-import {defaultCategoryEvent, defaultEvent} from '../../../config/Auth.cfg';
+import {
+  defaultAuthState,
+  defaultCategoryEvent,
+  defaultEvent,
+} from '../../../config/Auth.cfg';
 import {
   GetDataCategory,
   GetDataEvent,
 } from '../../../config/GetData/GetDataEvent';
+import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import styles from '../style/Event.style';
 import {Cross} from '../../../assets/icon';
 import style from '../../../config/Style/style.cfg';
 import DropDownPicker from 'react-native-dropdown-picker';
+import getData from '../../../components/GetData';
 
 const EventContent = ({navigation}) => {
   const [hasil, setHasil] = useState('');
   const [stateDataCategory, setStateDataCategory] =
     useState(defaultCategoryEvent);
   const [stateDataEvent, setStateDataEvent] = useState(defaultEvent);
+  const [stateDataSubmitted, setStateDataSubmitted] = useState(null);
+  const [data, setData] = useState(defaultAuthState);
   useEffect(() => {
-    GetDataCategory().then(response => setStateDataCategory(response));
-    GetDataEvent().then(response => setStateDataEvent(response));
-  }, []);
-  const getData = dataSearch => {
+    if (
+      stateDataEvent === defaultEvent ||
+      stateDataCategory === defaultCategoryEvent ||
+      stateDataSubmitted === null
+    ) {
+      GetDataCategory().then(response => setStateDataCategory(response));
+      GetDataEvent().then(response => setStateDataEvent(response));
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataSubmittedIdea(data.id).then(response =>
+        setStateDataSubmitted(response),
+      );
+    }
+  });
+  const GetData = dataSearch => {
     setHasil(dataSearch);
   };
   const [selectedId, setSelectedId] = useState(17);
@@ -43,26 +64,31 @@ const EventContent = ({navigation}) => {
   // dropdown
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
+  const [items, setItems] = useState([{label: 'ada', value: 'ada'}]);
+  const [array, setArray] = useState(false);
   if (
     stateDataEvent === defaultEvent ||
-    stateDataCategory === defaultCategoryEvent
+    stateDataCategory === defaultCategoryEvent ||
+    stateDataSubmitted === null
   ) {
     return <LoadingScreen />;
   }
   const selectedData = stateDataEvent.filter(
     x => x.category[0].id === stateDataCategory[selectedId - 17].id,
   );
-
+  if (array === false) {
+    stateDataSubmitted.ideas.map(val => {
+      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
+    });
+    setArray(true);
+  }
+  console.log(items);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
-        getData={getData}
+        getData={GetData}
         placeholder={'Search an Event ... '}
       />
       <ScrollView style={styles.contentContainer}>
@@ -70,25 +96,29 @@ const EventContent = ({navigation}) => {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={{flexDirection: 'row'}}>
             {allCategory === true ? (
-              <CardEventCategory
-                title={'All Category'}
-                getId={() => {
-                  setAllCategory(true);
-                }}
-                borderColor={'#085D7A'}
-                textColor={'#085D7A'}
-                image={require('../../../assets/image/categoryall.png')}
-              />
+              <View>
+                <CardEventCategory
+                  title={'All Category'}
+                  getId={() => {
+                    setAllCategory(true);
+                  }}
+                  borderColor={'#085D7A'}
+                  textColor={'#085D7A'}
+                  image={require('../../../assets/image/categoryall.png')}
+                />
+              </View>
             ) : (
-              <CardEventCategory
-                title={'All Category'}
-                getId={() => {
-                  setAllCategory(true);
-                }}
-                borderColor={'grey'}
-                textColor={'grey'}
-                image={require('../../../assets/image/categoryall.png')}
-              />
+              <View>
+                <CardEventCategory
+                  title={'All Category'}
+                  getId={() => {
+                    setAllCategory(true);
+                  }}
+                  borderColor={'grey'}
+                  textColor={'grey'}
+                  image={require('../../../assets/image/categoryall.png')}
+                />
+              </View>
             )}
 
             <FlatList
@@ -208,7 +238,7 @@ const EventContent = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={style.h5}>
+                  <Text style={[style.h5, {marginBottom: 20}]}>
                     Untuk mengikuti event ini, kamu harus memilih ide kamu mana
                     yang akan kamu ikut sertakan:
                   </Text>
@@ -221,6 +251,8 @@ const EventContent = ({navigation}) => {
                     setItems={setItems}
                     style={styles.input}
                     placeholder="Pilih ide"
+                    maxHeight={100}
+                    listItemContainerStyle={{height: 35}}
                   />
                   <TouchableOpacity
                     style={styles.button}

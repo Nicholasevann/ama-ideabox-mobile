@@ -41,7 +41,7 @@ const TopIdea = ({navigation}) => {
     } else if (selectedId === 3) {
       setPlaceholder('Search an Idea ... ');
     } else if (selectedId === 4) {
-      setPlaceholder('Search a Profile ... ');
+      setPlaceholder('Search a Idea ... ');
     }
   }, [selectedId]);
   const ref = useRef(null);
@@ -95,7 +95,9 @@ const TopIdea = ({navigation}) => {
                 if (hasil === '') {
                   return top;
                 } else if (
-                  top.title.toLowerCase().includes(hasil.toLowerCase())
+                  top.ideas.desc[0].value
+                    .toLowerCase()
+                    .includes(hasil.toLowerCase())
                 ) {
                   return top;
                 }
@@ -105,7 +107,7 @@ const TopIdea = ({navigation}) => {
                 return (
                   <View key={key}>
                     <CardTopTrending
-                      title={top.ideas.desc[2].value}
+                      title={top.ideas.desc[0].value}
                       name={top.ideas.user.name}
                       image={top.image}
                     />
@@ -135,30 +137,56 @@ const TopIdea = ({navigation}) => {
           //       );
           //     })
           selectedId === 3
-          ? dataTopLike.map((top, key) => {
-              // console.log(top.title);
-              return (
-                <View key={key}>
-                  <CardTopTrending
-                    title={top.ideas.desc[2].value}
-                    name={top.ideas.user.name}
-                    image={top.image}
-                  />
-                </View>
-              );
-            })
-          : dataTop.map((top, key) => {
-              // console.log(top.title);
-              return (
-                <View key={key}>
-                  <CardTopTrending
-                    title={top.title}
-                    name={top.name}
-                    image={top.image}
-                  />
-                </View>
-              );
-            })}
+          ? dataTopLike
+              .filter(top => {
+                if (hasil === '') {
+                  return top;
+                } else if (
+                  top.ideas.desc[0].value
+                    .toLowerCase()
+                    .includes(hasil.toLowerCase())
+                ) {
+                  return top;
+                }
+              })
+              .map((top, key) => {
+                // console.log(top.title);
+                return (
+                  <View key={key}>
+                    <CardTopTrending
+                      title={top.ideas.desc[0].value}
+                      name={top.ideas.user.name}
+                      image={top.image}
+                    />
+                  </View>
+                );
+              })
+          : selectedId === 4
+          ? dataTopComment
+              .filter(top => {
+                if (hasil === '') {
+                  return top;
+                } else if (
+                  top.ideas.desc[0].value
+                    .toLowerCase()
+                    .includes(hasil.toLowerCase())
+                ) {
+                  return top;
+                }
+              })
+              .map((top, key) => {
+                // console.log(top.title);
+                return (
+                  <View key={key}>
+                    <CardTopTrending
+                      title={top.ideas.desc[0].value}
+                      name={top.ideas.user.name}
+                      image={top.image}
+                    />
+                  </View>
+                );
+              })
+          : null}
       </ScrollView>
 
       {/* CARD */}

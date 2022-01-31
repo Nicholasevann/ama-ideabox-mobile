@@ -43,7 +43,7 @@ const ProfileUser = ({navigation, route}) => {
     if (dataProfile === null) {
       return <LoadingScreen />;
     }
-    GetDataTrackRecord(dataProfile.user[0].userId).then(response =>
+    GetDataTrackRecord(dataProfile.user.userId).then(response =>
       setDataTrackRecord(response),
     );
   }, [dataProfile]);
@@ -135,7 +135,7 @@ const ProfileUser = ({navigation, route}) => {
               <Text style={styles.title}>Skill</Text>
             </View>
             {/* Tag */}
-            <View style={styles.tagContainer}>
+            <View style={styles.textBox}>
               {dataTrackRecord.skillSet.map(val => (
                 <Tag title={val.name} />
               ))}

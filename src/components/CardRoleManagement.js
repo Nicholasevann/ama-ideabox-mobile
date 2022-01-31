@@ -1,36 +1,21 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {TouchableNativeFeedback} from 'react-native-gesture-handler';
-import Swipeable from 'react-native-swipeable';
 import {EditCategory, Trash} from '../assets/icon';
 import style from '../config/Style/style.cfg';
 
 const CardRoleManagement = props => {
   return (
-    <Swipeable
-      rightButtons={[
-        <TouchableOpacity
-          onPress={props.edit}
-          style={[styles.rightSwipeItem, {backgroundColor: '#34A68A'}]}>
-          <EditCategory />
-        </TouchableOpacity>,
-        <TouchableOpacity
-          onPress={props.delete}
-          style={[styles.rightSwipeItem, {backgroundColor: '#DE1B1B'}]}>
-          <Trash />
-        </TouchableOpacity>,
-      ]}>
-      <TouchableNativeFeedback onPress={props.onPress}>
-        <View style={styles.cardContent}>
-          <View style={styles.title}>
-            <Text style={style.h5}>{props.id}</Text>
-          </View>
-          <View style={styles.email}>
-            <Text style={style.h5}>{props.title}</Text>
-          </View>
+    <TouchableNativeFeedback onPress={props.onPress}>
+      <View style={styles.cardContent}>
+        <View style={styles.title}>
+          <Text style={style.h5}>{props.id}</Text>
         </View>
-      </TouchableNativeFeedback>
-    </Swipeable>
+        <View style={styles.email}>
+          <Text style={style.h5}>{props.title}</Text>
+        </View>
+      </View>
+    </TouchableNativeFeedback>
   );
 };
 

@@ -10,7 +10,7 @@ import React, {useEffect} from 'react';
 import style from '../config/Style/style.cfg';
 import {useState} from 'react/cjs/react.development';
 
-const SuccesModal = props => {
+const FailedModal = props => {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
     setTimeout(() => {
@@ -30,10 +30,10 @@ const SuccesModal = props => {
           <View style={styles.modalView}>
             <View style={styles.inputContainer}>
               <Image
-                source={require('../assets/gif/success.gif')}
+                source={require('../assets/gif/failed.gif')}
                 style={{width: 100, height: 100}}
               />
-              <Text style={[style.h2, {color: '#4AC994'}]}>SUCCESS</Text>
+              <Text style={[style.h2, {color: '#D31A15'}]}>FAILED</Text>
               <Text style={[style.h4, {marginTop: 20, textAlign: 'center'}]}>
                 {props.desc}
               </Text>
@@ -45,7 +45,7 @@ const SuccesModal = props => {
   );
 };
 
-export default SuccesModal;
+export default FailedModal;
 
 const styles = StyleSheet.create({
   centeredcontainer: {

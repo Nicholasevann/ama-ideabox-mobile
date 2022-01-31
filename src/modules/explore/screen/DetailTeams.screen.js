@@ -23,7 +23,11 @@ const DetailTeams = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.goBack()}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -87,7 +91,7 @@ const DetailTeams = ({route, navigation}) => {
                 <CardDetailTeamDesc
                   number={index + 1}
                   name={val.approvalTo.name}
-                  nip={val.approvalTo.id}
+                  nip={val.approvalTo.nik}
                   cfu={val.approvalTo.cfufuName}
                 />
               );
