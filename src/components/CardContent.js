@@ -42,7 +42,7 @@ const CardContent = props => {
       <View style={styles.rowIcon}>
         <View style={styles.iconContentContainer}>
           <TouchableOpacity
-            onPress={() => clicked()}
+            onPress={props.clickLike}
             style={styles.iconContent}>
             <Image source={props.like} style={styles.icon} />
           </TouchableOpacity>
@@ -68,9 +68,12 @@ const CardContent = props => {
         </TouchableOpacity>
       </View>
       <View style={styles.rowLike}>
-        <Image source={require('../assets/icon/hearth.png')} />
+        <Image
+          source={require('../assets/icon/loveTrue.png')}
+          style={{width: 15, height: 15}}
+        />
         <Text style={[styles.textLike, style.h6]}>
-          Liked by {props.likedBy}
+          Liked by {props.likedBy} people
         </Text>
       </View>
       <View style={styles.content}>

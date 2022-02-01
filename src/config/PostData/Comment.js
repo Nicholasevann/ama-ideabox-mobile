@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-const JoinEvent = (userId, ideaId, eventId, createdBy) => {
+const CommentIdea = (ideaId, comment, createdBy) => {
   return axios({
     crossDomain: true,
     method: 'post',
-    url: 'https://dev-events.digitalamoeba.id/joinevent',
+    url: 'https://dev-ideas.digitalamoeba.id/addcomment',
     data: {
-      userId: userId,
       ideaId: ideaId,
-      eventId: eventId,
+      comment: comment,
+      commentId: 0,
       createdBy: createdBy,
     },
     validateStatus: false,
@@ -27,4 +27,4 @@ const JoinEvent = (userId, ideaId, eventId, createdBy) => {
     });
 };
 
-export default JoinEvent;
+export default CommentIdea;

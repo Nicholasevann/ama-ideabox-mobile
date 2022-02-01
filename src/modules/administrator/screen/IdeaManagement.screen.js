@@ -15,6 +15,8 @@ import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardIdeaManagement from '../../../components/CardIdeaManagement';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import SuccesModal from '../../../components/SuccesModal';
+import DeleteIdeaManagement from '../../../config/DeleteData/DeleteIdeaManagement';
 import {
   GetDataCategoryManagement,
   GetDataIdeaManagement,
@@ -25,6 +27,8 @@ import styles from '../style/Administrator.style';
 const IdeaManagement = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [dataIdeaManagement, setDataIdeaManagement] = useState();
+  const [deleteData, setDeleteData] = useState(null);
+  const [success, setSuccess] = useState(null);
   const data = require('../data/dataIDeaManagement.json');
 
   useEffect(() => {
@@ -33,8 +37,21 @@ const IdeaManagement = ({navigation}) => {
   if (dataIdeaManagement === null) {
     return <LoadingScreen />;
   }
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
+  const handleDelete = () => {
+    DeleteIdeaManagement(deleteData).then(val => setSuccess(val));
+  };
+  console.log(success);
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your data idea management have been deleted!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader onPress={() => navigation.openDrawer()} />
 
       {/* Header navigation */}
@@ -75,14 +92,14 @@ const IdeaManagement = ({navigation}) => {
 
       {/* content */}
       <View style={styles.contentContainer}>
-        <View style={styles.iconContainer}>
+        {/* <View style={styles.iconContainer}>
           <TouchableOpacity style={styles.icon}>
             <Image
               source={require('../../../assets/icon/plusAdmin.png')}
               style={styles.imageAdmin}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* Content */}
         <View style={styles.content}>
@@ -99,7 +116,7 @@ const IdeaManagement = ({navigation}) => {
                 Nama Idea
               </Text>
             </View>
-            <View style={styles.title}>
+            <View style={styles.email}>
               <Text
                 style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
                 Created By
@@ -113,7 +130,7 @@ const IdeaManagement = ({navigation}) => {
               return (
                 <View>
                   <CardIdeaManagement
-                    delete={() => setModalDeleteVisible(true)}
+                    // delete={() => setModalDeleteVisible(true)}
                     id={item.id}
                     title={item.desc[0].value}
                     create={item.createdBy}
@@ -124,19 +141,16 @@ const IdeaManagement = ({navigation}) => {
             renderHiddenItem={({item}) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}
+                  onPress={() => {
+                    setDeleteData(item.id);
+                    setModalDeleteVisible(true);
+                  }}>
                   <Trash />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
-                  onPress={() =>
-                    navigation.navigate('DetailIdeaUser', {data: item})
-                  }>
-                  <Eye />
                 </TouchableOpacity>
               </View>
             )}
-            rightOpenValue={-150}
+            rightOpenValue={-75}
             leftOpenValue={0}
           />
           {/* <FlatList
@@ -178,18 +192,19 @@ const IdeaManagement = ({navigation}) => {
               <View style={styles.inputContainer}>
                 <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
                 <View style={styles.rowDelete}>
-                  <View style={styles.buttondelete}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Hapus</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.buttoncancel}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Batal</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    style={styles.buttondelete}
+                    onPress={() => {
+                      handleDelete();
+                      setModalDeleteVisible(false);
+                    }}>
+                    <Text style={styles.save}>Hapus</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttoncancel}
+                    onPress={() => setModalDeleteVisible(false)}>
+                    <Text style={styles.save}>Batal</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

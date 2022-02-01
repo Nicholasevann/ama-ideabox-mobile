@@ -56,7 +56,7 @@ const Profile = ({navigation}) => {
           <View style={styles.Button}>
             <TouchableOpacity
               onPress={() => {
-                navigation.goBack();
+                navigation.replace('DrawerNavigation');
               }}>
               <Back />
             </TouchableOpacity>
@@ -85,7 +85,7 @@ const Profile = ({navigation}) => {
             <Text style={styles.h2}>{data.email}</Text>
             <Text style={styles.h3}>Kota Bandung, Jawa Barat</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('InputProfile')}>
+          <TouchableOpacity onPress={() => navigation.replace('InputProfile')}>
             <View style={styles.Button}>
               <Edit />
             </View>

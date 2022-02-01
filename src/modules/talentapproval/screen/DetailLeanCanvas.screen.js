@@ -3,7 +3,7 @@ import {SafeAreaView, Text, View, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailLeanCanvasDesc from '../../../components/DetailLeanCanvasDesc';
 import SearchHeader from '../../../components/SearchHeader';
-import styles from '../style/TalentApproval.style';
+import styles from '../../myidea/style/MyIdea.style';
 const DetailLeanCanvas = ({navigation, route}) => {
   const data = route.params.data;
   return (
@@ -14,7 +14,11 @@ const DetailLeanCanvas = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.navigate('TalentApptoval')} />
+      <CardProfile
+        onPress={() => navigation.navigate('TalentApproval')}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>

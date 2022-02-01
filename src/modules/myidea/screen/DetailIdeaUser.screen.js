@@ -20,6 +20,7 @@ const DetailIdeaUser = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
+  console.log(detailIdea);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -28,7 +29,11 @@ const DetailIdeaUser = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.goBack()}
+        name={detailIdea.user[0].name}
+        nik={detailIdea.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -43,7 +48,9 @@ const DetailIdeaUser = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: detailIdea})
+                navigation.navigate('DetailStoryBehind', {
+                  data: detailIdea,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -52,7 +59,9 @@ const DetailIdeaUser = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: detailIdea})
+                navigation.navigate('DetailLeanCanvas', {
+                  data: detailIdea,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>
@@ -61,7 +70,9 @@ const DetailIdeaUser = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailTeams', {data: detailIdea})
+                navigation.navigate('DetailTeams', {
+                  data: detailIdea,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>

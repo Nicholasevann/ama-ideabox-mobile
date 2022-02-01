@@ -31,7 +31,7 @@ const FailedModal = props => {
             <View style={styles.inputContainer}>
               <Image
                 source={require('../assets/gif/failed.gif')}
-                style={{width: 100, height: 100}}
+                style={{width: 140, height: 140}}
               />
               <Text style={[style.h2, {color: '#D31A15'}]}>FAILED</Text>
               <Text style={[style.h4, {marginTop: 20, textAlign: 'center'}]}>

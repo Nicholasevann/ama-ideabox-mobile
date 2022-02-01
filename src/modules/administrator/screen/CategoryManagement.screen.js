@@ -17,6 +17,8 @@ import {Cross, Eye, Trash} from '../../../assets/icon';
 import CardCategoryManagement from '../../../components/CardCategoryManagement';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import SuccesModal from '../../../components/SuccesModal';
+import DeleteCategoryManagement from '../../../config/DeleteData/DeleteCategoryManagement';
 import {GetDataCategoryManagement} from '../../../config/GetData/GetDataAdministrator';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/Administrator.style';
@@ -25,6 +27,8 @@ const CategoryManagement = ({navigation}) => {
   const [modalAddVisible, setModalAddVisible] = useState(false);
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [dataCategoryManagement, setDataCategoryManagement] = useState(null);
+  const [deleteSelected, setDeleteSelected] = useState(null);
+  const [success, setSuccess] = useState(null);
   const data = require('../data/dataCategoryManagement.json');
 
   // dropdown1
@@ -43,15 +47,30 @@ const CategoryManagement = ({navigation}) => {
   ]);
 
   useEffect(() => {
-    GetDataCategoryManagement().then(response =>
-      setDataCategoryManagement(response),
-    );
+    if (dataCategoryManagement === null) {
+      GetDataCategoryManagement().then(response =>
+        setDataCategoryManagement(response),
+      );
+    }
   }, []);
   if (dataCategoryManagement === null) {
     return <LoadingScreen />;
   }
+  const handleDelete = () => {
+    DeleteCategoryManagement(deleteSelected).then(val => setSuccess(val));
+  };
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
+  console.log(success);
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your data idea management have been deleted!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader onPress={() => navigation.openDrawer()} />
 
       {/* Header navigation */}
@@ -90,7 +109,7 @@ const CategoryManagement = ({navigation}) => {
 
       {/* content */}
       <View style={styles.contentContainer}>
-        <View style={styles.iconContainer}>
+        {/* <View style={styles.iconContainer}>
           <TouchableOpacity onPress={() => setModalAddVisible(true)}>
             <View style={styles.icon}>
               <Image
@@ -99,10 +118,10 @@ const CategoryManagement = ({navigation}) => {
               />
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         {/* Popup Add category */}
-        <Modal
+        {/* <Modal
           animationType="none"
           transparent={true}
           visible={modalAddVisible}
@@ -155,11 +174,11 @@ const CategoryManagement = ({navigation}) => {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         {/* EndPopup */}
 
         {/* Popup Edit category */}
-        <Modal
+        {/* <Modal
           animationType="none"
           transparent={true}
           visible={modalVisible}
@@ -212,7 +231,7 @@ const CategoryManagement = ({navigation}) => {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         {/* EndPopup */}
 
         {/* Popup delete  */}
@@ -237,18 +256,19 @@ const CategoryManagement = ({navigation}) => {
                 <View style={styles.inputContainer}>
                   <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
                   <View style={styles.rowDelete}>
-                    <View style={styles.buttondelete}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Hapus</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttoncancel}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Batal</Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                      style={styles.buttondelete}
+                      onPress={() => {
+                        handleDelete();
+                        setModalDeleteVisible(false);
+                      }}>
+                      <Text style={styles.save}>Hapus</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttoncancel}
+                      onPress={() => setModalDeleteVisible(false)}>
+                      <Text style={styles.save}>Batal</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -286,11 +306,6 @@ const CategoryManagement = ({navigation}) => {
               return (
                 <View>
                   <CardCategoryManagement
-                    onPress={() =>
-                      navigation.navigate('DetailCategory', {data: item})
-                    }
-                    edit={() => setModalVisible(true)}
-                    delete={() => setModalDeleteVisible(true)}
                     id={item.id}
                     title={item.name}
                     status={item.activeFlag}
@@ -301,13 +316,17 @@ const CategoryManagement = ({navigation}) => {
             renderHiddenItem={({item}) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity
+                  onPress={() => {
+                    setDeleteSelected(item.id);
+                    setModalDeleteVisible(true);
+                  }}
                   style={[styles.backRightBtn, styles.backRightBtnRight]}>
                   <Trash />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.backRightBtn, styles.backRightBtnRight2]}
                   onPress={() =>
-                    navigation.navigate('DetailIdeaUser', {data: item})
+                    navigation.navigate('DetailCategory', {data: item})
                   }>
                   <Eye />
                 </TouchableOpacity>

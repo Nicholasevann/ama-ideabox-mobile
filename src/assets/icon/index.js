@@ -41,6 +41,8 @@ import TopLine from './topLine.svg';
 import IconFaq from './iconfaq.svg';
 import WhiteDotHome from './whitedothome.svg';
 import Eye from './eye.svg';
+import Check from './check.svg';
+import Xapproval from './xapproval.svg';
 export {
   IconEvent,
   IconExplore,
@@ -85,4 +87,6 @@ export {
   IconFaq,
   WhiteDotHome,
   Eye,
+  Check,
+  Xapproval,
 };

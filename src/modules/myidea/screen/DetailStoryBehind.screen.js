@@ -14,7 +14,11 @@ const DetailStoryBehind = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
+      <CardProfile
+        onPress={() => navigation.navigate('SubmittedIdea')}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -38,7 +42,9 @@ const DetailStoryBehind = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: data})
+                navigation.navigate('DetailLeanCanvas', {
+                  data: data,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>

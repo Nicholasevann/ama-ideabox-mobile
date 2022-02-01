@@ -9,7 +9,7 @@ import {
 import CardDetailTeamDesc from '../../../components/CardDetailTeamsDesc';
 import CardProfile from '../../../components/CardProfile';
 import SearchHeader from '../../../components/SearchHeader';
-import styles from '../style/TalentApproval.style';
+import styles from '../../myidea/style/MyIdea.style';
 const DetailTeams = ({navigation, route}) => {
   const data = route.params.data;
   return (
@@ -20,7 +20,11 @@ const DetailTeams = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.navigate('TalentApptoval')} />
+      <CardProfile
+        onPress={() => navigation.navigate('TalentApproval')}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>

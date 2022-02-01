@@ -12,7 +12,7 @@ const CardIdeaManagement = props => {
       <View style={styles.email}>
         <Text style={style.h5}>{props.title}</Text>
       </View>
-      <View style={styles.title}>
+      <View style={styles.email}>
         <Text style={style.h5}>{props.create}</Text>
       </View>
     </View>
