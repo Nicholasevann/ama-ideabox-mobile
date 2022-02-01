@@ -12,9 +12,11 @@ import {useState} from 'react/cjs/react.development';
 
 const SuccesModal = props => {
   const [visible, setVisible] = useState(true);
+  const [data, setData] = useState(null);
   useEffect(() => {
     setTimeout(() => {
       setVisible(false);
+      props.getData(data);
     }, 3000);
   }, []);
   return (

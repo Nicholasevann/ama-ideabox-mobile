@@ -6,6 +6,7 @@ import SearchHeader from '../../../components/SearchHeader';
 import styles from '../style/MyIdea.style';
 const DetailLeanCanvas = ({navigation, route}) => {
   const data = route.params.data;
+  const item = route.params.item;
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -14,7 +15,11 @@ const DetailLeanCanvas = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
+      <CardProfile
+        onPress={() => navigation.navigate('SubmittedIdea')}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -24,7 +29,7 @@ const DetailLeanCanvas = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailIdeaUser', {data: data})
+                navigation.navigate('DetailIdeaUser', {data: data, item: item})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Idea Description</Text>
@@ -33,7 +38,10 @@ const DetailLeanCanvas = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: data})
+                navigation.navigate('DetailStoryBehind', {
+                  data: data,
+                  item: item,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -46,7 +54,9 @@ const DetailLeanCanvas = ({navigation, route}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.wrap}
-              onPress={() => navigation.navigate('DetailTeams', {data: data})}>
+              onPress={() =>
+                navigation.navigate('DetailTeams', {data: data, item: item})
+              }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>
               </View>

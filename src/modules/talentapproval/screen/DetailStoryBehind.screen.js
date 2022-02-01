@@ -3,7 +3,7 @@ import {SafeAreaView, Text, View, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailStoryBehindDesc from '../../../components/DetailStoryBehind';
 import SearchHeader from '../../../components/SearchHeader';
-import styles from '../style/TalentApproval.style';
+import styles from '../../myidea/style/MyIdea.style';
 const DetailStoryBehind = ({navigation, route}) => {
   const data = route.params.data;
   return (
@@ -14,7 +14,11 @@ const DetailStoryBehind = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.navigate('SubmittedIdea')} />
+      <CardProfile
+        onPress={() => navigation.navigate('TalentApproval')}
+        name={data.user[0].name}
+        nik={data.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -24,7 +28,7 @@ const DetailStoryBehind = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('TalentApptoval', {data: data})
+                navigation.navigate('DetailIdeaUser', {data: data})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Idea Description</Text>
@@ -38,7 +42,9 @@ const DetailStoryBehind = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: data})
+                navigation.navigate('DetailLeanCanvas', {
+                  data: data,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>

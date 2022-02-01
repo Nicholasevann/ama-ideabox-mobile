@@ -10,7 +10,7 @@ import {
   FlatList,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Cross, Eye, Trash} from '../../../assets/icon';
+import {Check, Cross, Eye, Trash, Xapproval} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import CardTalentApproval from '../../../components/CardTalentApproval';
 import getData from '../../../components/GetData';
@@ -22,8 +22,10 @@ import style from '../../../config/Style/style.cfg';
 import styles from '../style/TalentApproval.style';
 const TalentApproval = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
+  const [modalAcceptVisible, setModalAcceptVisible] = useState(false);
   const [dataTalentApproval, setDataTalentApproval] = useState(null);
   const [data, setData] = useState(defaultAuthState);
+  const [name, setName] = useState(null);
   useEffect(() => {
     if (dataTalentApproval === null) {
       getData().then(jsonValue => setData(jsonValue));
@@ -92,11 +94,7 @@ const TalentApproval = ({navigation}) => {
               return (
                 <View>
                   <CardTalentApproval
-                    onDetail={() =>
-                      navigation.navigate('DetailIdeaUser', {data: item})
-                    }
-                    delete={() => setModalDeleteVisible(true)}
-                    title={item.ideas.desc.value}
+                    title={item.ideasId}
                     name={item.approvalTo.name}
                     createdDate={item.createdDate}
                   />
@@ -106,19 +104,31 @@ const TalentApproval = ({navigation}) => {
             renderHiddenItem={({item}) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
-                  <Trash />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
                   onPress={() =>
                     navigation.navigate('DetailIdeaUser', {data: item})
-                  }>
+                  }
+                  style={[styles.backRightBtn, styles.backRightBtnRight3]}>
                   <Eye />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setName(item.approvalTo.name);
+                    setModalDeleteVisible(true);
+                  }}
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}>
+                  <Xapproval />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setName(item.approvalTo.name);
+                    setModalAcceptVisible(true);
+                  }}
+                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                  <Check />
                 </TouchableOpacity>
               </View>
             )}
-            rightOpenValue={-150}
+            rightOpenValue={-225}
             leftOpenValue={0}
           />
           {/* <FlatList
@@ -154,26 +164,66 @@ const TalentApproval = ({navigation}) => {
           <View style={styles.centeredcontainer}>
             <View style={styles.modalView}>
               <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>Delete User</Text>
+                <Text style={styles.textEdit}>Talent Approval</Text>
                 <TouchableOpacity onPress={() => setModalDeleteVisible(false)}>
                   <Cross />
                 </TouchableOpacity>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                <Text style={styles.h2}>
+                  Apakah kamu yakin menolak {name} ke dalam ide ini?
+                </Text>
                 <View style={styles.rowDelete}>
-                  <View style={styles.buttondelete}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Hapus</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.buttoncancel}>
-                    <TouchableOpacity
-                      onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Batal</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    style={styles.buttondelete}
+                    onPress={() => setModalDeleteVisible(false)}>
+                    <Text style={styles.save}>Ya</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttoncancel}
+                    onPress={() => setModalDeleteVisible(false)}>
+                    <Text style={styles.save}>Tidak</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      {/* EndPopup */}
+      {/* Popup delete  */}
+      <Modal
+        animationType="none"
+        transparent={true}
+        visible={modalAcceptVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalDeleteVisible(!modalAcceptVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.centeredcontainer}>
+            <View style={styles.modalView}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.textEdit}>Talent Approval</Text>
+                <TouchableOpacity onPress={() => setModalAcceptVisible(false)}>
+                  <Cross />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.h2}>
+                  Apakah kamu yakin menerima {name} ke dalam ide ini?
+                </Text>
+                <View style={styles.rowDelete}>
+                  <TouchableOpacity
+                    style={styles.buttonaccept}
+                    onPress={() => setModalAcceptVisible(false)}>
+                    <Text style={styles.save}>Ya</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttoncancel}
+                    onPress={() => setModalAcceptVisible(false)}>
+                    <Text style={styles.save}>Tidak</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

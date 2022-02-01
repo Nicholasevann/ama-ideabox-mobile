@@ -28,6 +28,8 @@ import {Cross} from '../../../assets/icon';
 import style from '../../../config/Style/style.cfg';
 import DropDownPicker from 'react-native-dropdown-picker';
 import getData from '../../../components/GetData';
+import JoinEvent from '../../../config/PostData/JoinEvent';
+import SuccesModal from '../../../components/SuccesModal';
 
 const EventContent = ({navigation}) => {
   const [hasil, setHasil] = useState('');
@@ -57,14 +59,16 @@ const EventContent = ({navigation}) => {
     setHasil(dataSearch);
   };
   const [selectedId, setSelectedId] = useState(17);
+  const [eventId, setEventId] = useState(null);
+  const [createdBy, setCreatedBy] = useState(null);
   const [allCategory, setAllCategory] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalSubmitVisible, setModalSubmitVisible] = useState(false);
-
+  const [success, setSuccess] = useState(null);
   // dropdown
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([{label: 'ada', value: 'ada'}]);
+  const [items, setItems] = useState([]);
   const [array, setArray] = useState(false);
   if (
     stateDataEvent === defaultEvent ||
@@ -82,9 +86,20 @@ const EventContent = ({navigation}) => {
     });
     setArray(true);
   }
-  console.log(items);
+  const handleJoin = () => {
+    JoinEvent(data.id, value, eventId, createdBy).then(val => setSuccess(val));
+  };
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Congrats you have been join event!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
@@ -186,10 +201,14 @@ const EventContent = ({navigation}) => {
                       title={val.name}
                       desc={val.description}
                       image={val.image}
-                      join={() => setModalVisible(true)}
-                      detail={() =>
-                        navigation.navigate('DetailEventContent', {data: val})
-                      }
+                      join={() => {
+                        setEventId(val.id);
+                        setCreatedBy(val.createdBy);
+                        setModalVisible(true);
+                      }}
+                      detail={() => {
+                        navigation.navigate('DetailEventContent', {data: val});
+                      }}
                     />
                   </View>
                 );
@@ -211,7 +230,11 @@ const EventContent = ({navigation}) => {
                       title={val.name}
                       desc={val.description}
                       image={val.image}
-                      join={() => setModalVisible(true)}
+                      join={() => {
+                        setEventId(val.id);
+                        setCreatedBy(val.createdBy);
+                        setModalVisible(true);
+                      }}
                       detail={() =>
                         navigation.navigate('DetailEventContent', {data: val})
                       }
@@ -257,6 +280,7 @@ const EventContent = ({navigation}) => {
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
+                      handleJoin();
                       setModalVisible(false);
                       setModalSubmitVisible(true);
                     }}>
@@ -269,7 +293,7 @@ const EventContent = ({navigation}) => {
         </Modal>
         {/* End Modal */}
         {/* Popup submit  */}
-        <Modal
+        {/* <Modal
           animationType="none"
           transparent={true}
           visible={modalSubmitVisible}
@@ -308,7 +332,7 @@ const EventContent = ({navigation}) => {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
         {/* EndPopup */}
       </ScrollView>
     </SafeAreaView>

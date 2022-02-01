@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-const JoinEvent = (userId, ideaId, eventId, createdBy) => {
+const LikeIdea = (ideaId, createdBy) => {
   return axios({
     crossDomain: true,
     method: 'post',
-    url: 'https://dev-events.digitalamoeba.id/joinevent',
+    url: 'https://dev-ideas.digitalamoeba.id/addlike',
     data: {
-      userId: userId,
       ideaId: ideaId,
-      eventId: eventId,
       createdBy: createdBy,
     },
     validateStatus: false,
@@ -16,7 +14,7 @@ const JoinEvent = (userId, ideaId, eventId, createdBy) => {
     .then((response, status) => {
       // console.log(response.data.status);
       if (response.data.status === 200) {
-        return response.data.status;
+        return response.data.messages;
       } else {
         console.log('gagal');
       }
@@ -27,4 +25,4 @@ const JoinEvent = (userId, ideaId, eventId, createdBy) => {
     });
 };
 
-export default JoinEvent;
+export default LikeIdea;

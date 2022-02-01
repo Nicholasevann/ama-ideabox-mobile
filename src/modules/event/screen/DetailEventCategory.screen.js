@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
 import {
   Text,
@@ -15,6 +15,12 @@ import {BackBlue, Cross} from '../../../assets/icon';
 import SearchHeader from '../../../components/SearchHeader';
 import styles from '../style/Event.style';
 import style from '../../../config/Style/style.cfg';
+import getData from '../../../components/GetData';
+import {defaultAuthState} from '../../../config/Auth.cfg';
+import LoadingScreen from '../../../components/LoadingScreen';
+import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
+import JoinEvent from '../../../config/PostData/JoinEvent';
+import SuccesModal from '../../../components/SuccesModal';
 const DetailEventCategory = ({navigation, route}) => {
   const data = route.params.data;
 
@@ -23,12 +29,48 @@ const DetailEventCategory = ({navigation, route}) => {
   // dropdown
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-  ]);
+  const [items, setItems] = useState([]);
+  const [dataAsync, setDataAsync] = useState(defaultAuthState);
+  const [stateDataSubmitted, setStateDataSubmitted] = useState(null);
+  const [array, setArray] = useState(false);
+  const [success, setSuccess] = useState(null);
+  useEffect(() => {
+    if (stateDataSubmitted === null) {
+      getData().then(jsonValue => setDataAsync(jsonValue));
+      if (dataAsync === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataSubmittedIdea(data.id).then(response =>
+        setStateDataSubmitted(response),
+      );
+    }
+  });
+  if (stateDataSubmitted === null) {
+    return <LoadingScreen />;
+  }
+
+  if (array === false) {
+    stateDataSubmitted.ideas.map(val => {
+      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
+    });
+    setArray(true);
+  }
+  const handleJoin = () => {
+    JoinEvent(dataAsync.id, value, data.id, data.createdBy).then(val =>
+      setSuccess(val),
+    );
+  };
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Congrats you have been join event!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       {/* Awal Modal */}
       <Modal
         animationType="none"
@@ -60,12 +102,16 @@ const DetailEventCategory = ({navigation, route}) => {
                   setValue={setValue}
                   setItems={setItems}
                   style={styles.input}
+                  placeholder="Pilih ide"
+                  maxHeight={100}
+                  listItemContainerStyle={{height: 35}}
                 />
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
                     setModalVisible(false);
                     setModalSubmitVisible(true);
+                    handleJoin();
                   }}>
                   <Text style={styles.save}>JOIN NOW</Text>
                 </TouchableOpacity>
@@ -76,7 +122,7 @@ const DetailEventCategory = ({navigation, route}) => {
       </Modal>
       {/* End Modal */}
       {/* Popup submit  */}
-      <Modal
+      {/* <Modal
         animationType="none"
         transparent={true}
         visible={modalSubmitVisible}
@@ -114,7 +160,7 @@ const DetailEventCategory = ({navigation, route}) => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
       {/* EndPopup */}
 
       {/* Content */}

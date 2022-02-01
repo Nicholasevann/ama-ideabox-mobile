@@ -45,6 +45,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: 'center',
   },
+  textEdit: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    color: '#085D7A',
+  },
   contentContainer: {
     flex: 1,
     marginHorizontal: 10,
@@ -141,6 +147,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#DE1B1B',
     alignSelf: 'flex-end',
   },
+  buttonaccept: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    width: '35%',
+    height: 35,
+    borderRadius: 10,
+    backgroundColor: '#4AC994',
+    alignSelf: 'flex-end',
+  },
   buttoncancel: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -174,12 +190,16 @@ const styles = StyleSheet.create({
     width: 75,
   },
   backRightBtnRight: {
-    backgroundColor: 'red',
+    backgroundColor: '#4AC994',
     right: 0,
   },
   backRightBtnRight2: {
-    backgroundColor: '#34A68A',
+    backgroundColor: 'red',
     right: 75,
+  },
+  backRightBtnRight3: {
+    backgroundColor: '#34A68A',
+    right: 150,
   },
   rowBack: {
     alignItems: 'center',

@@ -14,7 +14,7 @@ const DetailIdeaUser = ({route, navigation}) => {
       if (data === null) {
         return <LoadingScreen />;
       }
-      GetDetailIdea(data.id).then(response => setDetailIdea(response));
+      GetDetailIdea(data.ideaId).then(response => setDetailIdea(response));
     }
   });
   if (detailIdea === null) {
@@ -29,7 +29,11 @@ const DetailIdeaUser = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile onPress={() => navigation.goBack()} />
+      <CardProfile
+        onPress={() => navigation.navigate('TalentApproval')}
+        name={detailIdea.user[0].name}
+        nik={detailIdea.user[0].nik}
+      />
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -73,11 +77,11 @@ const DetailIdeaUser = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          {/* <DetailIdeaDesc
+          <DetailIdeaDesc
             title={detailIdea.desc[0].value}
             perusahaan={detailIdea.CFUFU[0].name}
             desc={detailIdea.desc[2].value}
-          /> */}
+          />
         </View>
       </View>
     </SafeAreaView>

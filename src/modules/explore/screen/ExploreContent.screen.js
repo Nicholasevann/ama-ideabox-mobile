@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import styles from '../style/Explore.style';
 import {
   View,
@@ -12,6 +12,7 @@ import {
   Pressable,
   Share,
   Image,
+  RefreshControl,
 } from 'react-native';
 import CardContent from '../../../components/CardContent';
 import SearchHeader from '../../../components/SearchHeader';
@@ -24,11 +25,20 @@ import {MentionInput} from 'react-native-controlled-mentions';
 import style from '../../../config/Style/style.cfg';
 import {windowWidth} from '../../../components/WindowDimensions';
 import axios from 'axios';
-import {defaultAuthDataUser} from '../../../config/Auth.cfg';
+import {defaultAuthDataUser, defaultAuthState} from '../../../config/Auth.cfg';
 import {GetDataIdea} from '../../../config/GetData/GetDataIdea';
 import CardReplyComment from '../../../components/CardReplyComment';
+import LikeIdea from '../../../config/PostData/Like';
+import CommentIdea from '../../../config/PostData/Comment';
+import SuccesModal from '../../../components/SuccesModal';
+import getData from '../../../components/GetData';
+
+const wait = timeout => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+};
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
+  const [idLike, setIdLike] = useState(null);
   const [data, setData] = useState(null);
   const [data2, setData2] = useState(null);
   const [modalComment, setModalComment] = useState(false);
@@ -38,17 +48,33 @@ const ExploreContent = ({navigation, route}) => {
   const [hasil, setHasil] = useState('');
   const [value, setValue] = useState('');
   const [idIdea, setIdIdea] = useState(0);
-  const getData = dataSearch => {
+  const [idComment, setIdComment] = useState(null);
+  const [idUser, setIdUser] = useState(null);
+  const [like, setLike] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [dataAsync, setDataAsync] = useState(defaultAuthState);
+  const [imageLike, setImageLike] = useState(
+    require('../../../assets/icon/loveFalse.png'),
+  );
+  const [refreshing, setRefreshing] = useState(false);
+  const [comment, setComment] = useState('');
+  const getDataIdea = dataSearch => {
     setHasil(dataSearch);
   };
+
   useEffect(() => {
     // setData(getDataIdea());
     if (data === null) {
+      getData().then(jsonValue => setDataAsync(jsonValue));
       GetDataIdea().then(response => setData(response));
     }
   });
   const ref = useRef(null);
   useScrollToTop(ref);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
   const suggestions = [
     {id: '1', name: 'David Tabaka'},
     {id: '2', name: 'Mary'},
@@ -75,7 +101,12 @@ const ExploreContent = ({navigation, route}) => {
       alert(error.message);
     }
   };
-
+  const handleLike = id => {
+    LikeIdea(id, dataAsync.id).then(val => setLike(val));
+  };
+  const handleComment = text => {
+    CommentIdea(idComment, text, dataAsync.id).then(val => setSuccess(val));
+  };
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
       return null;
@@ -114,15 +145,28 @@ const ExploreContent = ({navigation, route}) => {
   if (data === null) {
     return <LoadingScreen />;
   }
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your comment have been added!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
-        getData={getData}
+        getData={getDataIdea}
         placeholder={'Search an Idea ...'}
       />
-      <ScrollView ref={ref}>
+      <ScrollView
+        ref={ref}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {data
           .filter((val, key) => {
             if (hasil === '') {
@@ -134,17 +178,26 @@ const ExploreContent = ({navigation, route}) => {
             }
           })
           .map((val, index) => {
-            const like =
-              val.activeFlag === 0
-                ? require('../../../assets/icon/loveFalse.png')
-                : require('../../../assets/icon/loveTrue.png');
+            if (like === 'Like Idea sucessfully') {
+              if (imageLike !== require('../../../assets/icon/loveTrue.png')) {
+                setImageLike(require('../../../assets/icon/loveTrue.png'));
+              }
+            } else if (like === 'Unlike Idea sucessfully') {
+              if (imageLike !== require('../../../assets/icon/loveFalse.png')) {
+                setImageLike(require('../../../assets/icon/loveFalse.png'));
+              }
+            }
+
             return (
               <View key={index}>
                 <CardContent
+                  clickLike={() => {
+                    handleLike(val.id);
+                  }}
                   name={val.user.name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}
-                  like={like}
+                  like={imageLike}
                   likedBy={val.totalLike}
                   cover={val.desc[1].value}
                   more={() =>
@@ -153,6 +206,8 @@ const ExploreContent = ({navigation, route}) => {
                   comment={() => {
                     setModalComment(true);
                     setIdIdea(index);
+                    setIdComment(val.id);
+                    setIdUser(data.id);
                   }}
                   share={() => onShare()}
                   join={() => setModalJoinVisible(true)}
@@ -185,7 +240,11 @@ const ExploreContent = ({navigation, route}) => {
                 <Cross />
               </TouchableOpacity>
             </View>
-            <ScrollView style={styles.contentModal}>
+            <ScrollView
+              style={styles.contentModal}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
               {data[idIdea].comment.map(val => {
                 return (
                   <View>
@@ -210,14 +269,16 @@ const ExploreContent = ({navigation, route}) => {
                 );
               })}
             </ScrollView>
+            <View style={{height: 100}} />
           </View>
+
           <View style={styles.textInputContainer}>
             <View style={styles.textInputWrap}>
               <View style={styles.textInputRow}>
                 <View style={{flex: 7}}>
                   <MentionInput
-                    value={value}
-                    onChange={setValue}
+                    value={comment}
+                    onChange={setComment}
                     partTypes={[
                       {
                         trigger: '@', // Should be a single character like '@' or '#'
@@ -231,7 +292,9 @@ const ExploreContent = ({navigation, route}) => {
                   />
                 </View>
 
-                <TouchableOpacity onPress={() => {}} style={styles.buttonSend}>
+                <TouchableOpacity
+                  onPress={() => handleComment(comment)}
+                  style={styles.buttonSend}>
                   <Text style={styles.textSend}>Send</Text>
                 </TouchableOpacity>
               </View>
@@ -418,17 +481,6 @@ const ExploreContent = ({navigation, route}) => {
                     </View>
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalBottom(false);
-                  }}>
-                  <View style={styles.wrapPromote}>
-                    <Image
-                      source={require('../../../assets/icon/backbluebig.png')}
-                    />
-                    <Text style={styles.textPromote}>Back</Text>
-                  </View>
-                </TouchableOpacity>
               </View>
             </View>
           </ScrollView>

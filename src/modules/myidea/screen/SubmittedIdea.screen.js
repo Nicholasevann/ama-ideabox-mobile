@@ -15,7 +15,9 @@ import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
 import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import SuccesModal from '../../../components/SuccesModal';
 import {defaultAuthState} from '../../../config/Auth.cfg';
+import DeleteIdeaManagement from '../../../config/DeleteData/DeleteIdeaManagement';
 import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/MyIdea.style';
@@ -23,6 +25,8 @@ const SubmittedIdea = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [data, setData] = useState(defaultAuthState);
   const [submittedIdea, setSubmittedIdea] = useState(null);
+  const [deleteData, setDeleteData] = useState(null);
+  const [success, setSuccess] = useState(null);
   useEffect(() => {
     if (submittedIdea === null || data === defaultAuthState) {
       getData().then(jsonValue => setData(jsonValue));
@@ -37,8 +41,21 @@ const SubmittedIdea = ({navigation}) => {
   if (submittedIdea === null || data === defaultAuthState) {
     return <LoadingScreen />;
   }
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
+  const handleDelete = () => {
+    DeleteIdeaManagement(deleteData).then(val => setSuccess(val));
+  };
+  console.log(deleteData);
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your data idea management have been deleted!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
@@ -110,6 +127,10 @@ const SubmittedIdea = ({navigation}) => {
               renderHiddenItem={({item}) => (
                 <View style={styles.rowBack}>
                   <TouchableOpacity
+                    onPress={() => {
+                      setModalDeleteVisible(true);
+                      setDeleteData(item.id);
+                    }}
                     style={[styles.backRightBtn, styles.backRightBtnRight]}>
                     <Trash />
                   </TouchableOpacity>
@@ -169,18 +190,19 @@ const SubmittedIdea = ({navigation}) => {
                 <View style={styles.inputContainer}>
                   <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
                   <View style={styles.rowDelete}>
-                    <View style={styles.buttondelete}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Hapus</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttoncancel}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Batal</Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                      style={styles.buttondelete}
+                      onPress={() => {
+                        handleDelete();
+                        setModalDeleteVisible(false);
+                      }}>
+                      <Text style={styles.save}>Hapus</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttoncancel}
+                      onPress={() => setModalDeleteVisible(false)}>
+                      <Text style={styles.save}>Batal</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>

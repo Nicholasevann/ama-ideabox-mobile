@@ -25,9 +25,12 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import GetDataProfile from '../../../config/GetData/GetDataProfile';
 import SuccesModal from '../../../components/SuccesModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FailedModal from '../../../components/FailedModal';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
+  const [successModal, setSuccessModal] = useState(null);
+  const [failed, setFailed] = useState(false);
   const [update, setUpdate] = useState(defaulthAuthData);
   const [pickedDate, setPickedDate] = useState([]);
   const [imageUri, setImageUri] = useState(
@@ -46,6 +49,17 @@ const InputProfile = ({navigation}) => {
       console.log(image);
       setImage(image.path);
     });
+  };
+
+  const storeDataLdap = async () => {
+    try {
+      if (dataProfile.name !== '') {
+        const jsonValue = JSON.stringify(dataProfile);
+        await AsyncStorage.setItem('authState', jsonValue);
+      }
+    } catch (e) {
+      console.log('failed to store data');
+    }
   };
   useEffect(() => {
     if (dataProfile === null) {
@@ -86,9 +100,10 @@ const InputProfile = ({navigation}) => {
         console.log(response.status);
         if (response.status === 200) {
           console.log('berhasil');
-          setSuccess(true);
+          setSuccessModal(200);
+          storeDataLdap();
         } else {
-          console.log('gagal');
+          setSuccessModal(-1);
         }
       })
       .catch(function (error) {
@@ -99,17 +114,25 @@ const InputProfile = ({navigation}) => {
   if (dataProfile === null) {
     return <LoadingScreen />;
   }
+  const getDataSuccess = data => {
+    setSuccessModal(data);
+  };
   // console.log(dataProfile);
   return (
     <SafeAreaView style={styles.container}>
-      {success === true ? (
-        <SuccesModal desc={'Congrats your profile have been updated!'} />
+      {successModal === 200 ? (
+        <SuccesModal
+          desc={'Congrats your profile have been updated!'}
+          getData={getDataSuccess}
+        />
+      ) : successModal === -1 ? (
+        <FailedModal desc={'Your data failed to update!'} />
       ) : null}
       <ScrollView>
         {/* header */}
         <View style={styles.head}>
           <View style={styles.Button}>
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity onPress={() => navigation.replace('Profile')}>
               <Cross />
             </TouchableOpacity>
           </View>
@@ -192,19 +215,6 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h2}>Name Office Supervisor :</Text>
-            {/* <TextInput
-              style={styles.input}
-              value={update.tglLahir}
-              onChangeText={val => setUpdate({...update, tglLahir: val})}
-            /> */}
-            <Text style={styles.h2}>NIK Supervisor :</Text>
-            {/* <TextInput
-              style={styles.input}
-              value={update.tglLahir}
-              onChangeText={val => setUpdate({...update, tglLahir: val})}
-            /> */}
-            <Text style={styles.h1}>DETAIL</Text>
-            <Text style={styles.h2}>Nama Atasan</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.namaAtasan}
@@ -212,7 +222,7 @@ const InputProfile = ({navigation}) => {
                 setDataProfile({...dataProfile, namaAtasan: val})
               }
             />
-            <Text style={styles.h2}>NIK Atasan</Text>
+            <Text style={styles.h2}>NIK Supervisor :</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.nikAtasan}
@@ -220,6 +230,11 @@ const InputProfile = ({navigation}) => {
                 setDataProfile({...dataProfile, nikAtasan: val})
               }
             />
+            <Text style={styles.h1}>DETAIL</Text>
+            {/* <Text style={styles.h2}>Nama Atasan</Text>
+            
+            <Text style={styles.h2}>NIK Atasan</Text> */}
+
             <Text style={styles.h2}>
               Unit( Anak Perusahaan atau direktorat )
             </Text>

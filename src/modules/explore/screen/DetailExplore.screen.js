@@ -35,8 +35,8 @@ const DetailExplore = ({route, navigation}) => {
       <CardProfile
         onPress={() => navigation.goBack()}
         profile={() => navigation.navigate('ProfileUser')}
-        name={data.user.name}
-        nik={data.user.nik}
+        name={detailIdea.user[0].name}
+        nik={detailIdea.user[0].nik}
       />
 
       {/* content */}

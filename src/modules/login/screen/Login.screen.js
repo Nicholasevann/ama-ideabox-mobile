@@ -43,6 +43,7 @@ const Login = ({navigation, route}) => {
   const expiredCheck = () => {
     if (data.expireAt > moment().unix()) {
       navigation.replace('DrawerNavigation');
+      return <LoadingScreen />;
     }
     //expired
   };
