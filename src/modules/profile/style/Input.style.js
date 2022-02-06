@@ -64,13 +64,15 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 100,
     zIndex: 3,
+    borderWidth: 2,
+    borderColor: '#E5E5E5',
   },
   profileImage: {
     flex: 1,
     width: null,
     height: null,
     borderRadius: 1080 / 2,
-    resizeMode: 'contain',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     paddingTop: 70,

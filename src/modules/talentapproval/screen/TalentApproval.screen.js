@@ -16,8 +16,10 @@ import CardTalentApproval from '../../../components/CardTalentApproval';
 import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import SuccesModal from '../../../components/SuccesModal';
 import {defaultAuthState} from '../../../config/Auth.cfg';
 import GetDataTalentApproval from '../../../config/GetData/GetDataTalentApproval';
+import PostTalentApproval from '../../../config/PostData/TalentApproval';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/TalentApproval.style';
 const TalentApproval = ({navigation}) => {
@@ -26,6 +28,9 @@ const TalentApproval = ({navigation}) => {
   const [dataTalentApproval, setDataTalentApproval] = useState(null);
   const [data, setData] = useState(defaultAuthState);
   const [name, setName] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [id, setId] = useState(null);
+  const [success, setSuccess] = useState(null);
   useEffect(() => {
     if (dataTalentApproval === null) {
       getData().then(jsonValue => setData(jsonValue));
@@ -37,11 +42,28 @@ const TalentApproval = ({navigation}) => {
       );
     }
   });
+  useEffect(() => {
+    GetDataTalentApproval(data.id).then(response =>
+      setDataTalentApproval(response),
+    );
+  }, [success]);
   if (dataTalentApproval === null) {
     return <LoadingScreen />;
   }
+  const handleApproval = () => {
+    PostTalentApproval(data.id, status, id).then(val => setSuccess(val));
+  };
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your approval have been change!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
@@ -90,7 +112,6 @@ const TalentApproval = ({navigation}) => {
           <SwipeListView
             data={dataTalentApproval}
             renderItem={({item}) => {
-              // console.log(item)
               return (
                 <View>
                   <CardTalentApproval
@@ -102,30 +123,80 @@ const TalentApproval = ({navigation}) => {
               );
             }}
             renderHiddenItem={({item}) => (
-              <View style={styles.rowBack}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('DetailIdeaUser', {data: item})
-                  }
-                  style={[styles.backRightBtn, styles.backRightBtnRight3]}>
-                  <Eye />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setName(item.approvalTo.name);
-                    setModalDeleteVisible(true);
-                  }}
-                  style={[styles.backRightBtn, styles.backRightBtnRight2]}>
-                  <Xapproval />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setName(item.approvalTo.name);
-                    setModalAcceptVisible(true);
-                  }}
-                  style={[styles.backRightBtn, styles.backRightBtnRight]}>
-                  <Check />
-                </TouchableOpacity>
+              <View style={{flex: 1}}>
+                {item.status === 'pending' ? (
+                  <View style={styles.rowBack}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('DetailIdeaUser', {data: item})
+                      }
+                      style={[styles.backRightBtn, styles.backRightBtnRight3]}>
+                      <Eye />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setName(item.approvalTo.name);
+                        setModalDeleteVisible(true);
+                        setId(item.id);
+                        setStatus('rejected');
+                      }}
+                      style={[styles.backRightBtn, styles.backRightBtnRight2]}>
+                      <Xapproval />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setName(item.approvalTo.name);
+                        setModalAcceptVisible(true);
+                        setId(item.id);
+                        setStatus('approved');
+                      }}
+                      style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                      <Check />
+                    </TouchableOpacity>
+                  </View>
+                ) : item.status === 'approved' ? (
+                  <View style={styles.rowBack}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('DetailIdeaUser', {data: item})
+                      }
+                      style={[styles.backRightBtn, styles.backRightBtnRight3]}>
+                      <Eye />
+                    </TouchableOpacity>
+                    <View
+                      style={[styles.backRightBtn2, styles.backRightBtnRight]}>
+                      <Check />
+                      <Text
+                        style={[
+                          style.h4medium,
+                          {color: '#FFFFFF', marginLeft: 15},
+                        ]}>
+                        Approved
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.rowBack}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('DetailIdeaUser', {data: item})
+                      }
+                      style={[styles.backRightBtn, styles.backRightBtnRight3]}>
+                      <Eye />
+                    </TouchableOpacity>
+                    <View
+                      style={[styles.backRightBtn2, styles.backRightBtnRight4]}>
+                      <Xapproval />
+                      <Text
+                        style={[
+                          style.h4medium,
+                          {color: '#FFFFFF', marginLeft: 15},
+                        ]}>
+                        Rejected
+                      </Text>
+                    </View>
+                  </View>
+                )}
               </View>
             )}
             rightOpenValue={-225}
@@ -170,13 +241,16 @@ const TalentApproval = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.h2}>
+                <Text style={[style.h4normal, {marginVertical: 20}]}>
                   Apakah kamu yakin menolak {name} ke dalam ide ini?
                 </Text>
                 <View style={styles.rowDelete}>
                   <TouchableOpacity
                     style={styles.buttondelete}
-                    onPress={() => setModalDeleteVisible(false)}>
+                    onPress={() => {
+                      setModalDeleteVisible(false);
+                      handleApproval();
+                    }}>
                     <Text style={styles.save}>Ya</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -210,13 +284,16 @@ const TalentApproval = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.h2}>
+                <Text style={[style.h4normal, {marginVertical: 20}]}>
                   Apakah kamu yakin menerima {name} ke dalam ide ini?
                 </Text>
                 <View style={styles.rowDelete}>
                   <TouchableOpacity
                     style={styles.buttonaccept}
-                    onPress={() => setModalAcceptVisible(false)}>
+                    onPress={() => {
+                      setModalAcceptVisible(false);
+                      handleApproval();
+                    }}>
                     <Text style={styles.save}>Ya</Text>
                   </TouchableOpacity>
                   <TouchableOpacity

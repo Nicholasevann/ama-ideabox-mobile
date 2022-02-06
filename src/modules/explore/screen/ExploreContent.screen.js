@@ -12,7 +12,6 @@ import {
   Pressable,
   Share,
   Image,
-  RefreshControl,
 } from 'react-native';
 import CardContent from '../../../components/CardContent';
 import SearchHeader from '../../../components/SearchHeader';
@@ -32,6 +31,7 @@ import LikeIdea from '../../../config/PostData/Like';
 import CommentIdea from '../../../config/PostData/Comment';
 import SuccesModal from '../../../components/SuccesModal';
 import getData from '../../../components/GetData';
+import JoinIdea from '../../../config/PostData/JoinIdea';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -39,6 +39,8 @@ const wait = timeout => {
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [idLike, setIdLike] = useState(null);
+  const [idCommentReply, setIdCommentReply] = useState(null);
+  const [nameReply, setNameReply] = useState(null);
   const [data, setData] = useState(null);
   const [data2, setData2] = useState(null);
   const [modalComment, setModalComment] = useState(false);
@@ -48,16 +50,19 @@ const ExploreContent = ({navigation, route}) => {
   const [hasil, setHasil] = useState('');
   const [value, setValue] = useState('');
   const [idIdea, setIdIdea] = useState(0);
+  const [idIdeaJoin, setIdIdeaJoin] = useState(0);
   const [idComment, setIdComment] = useState(null);
   const [idUser, setIdUser] = useState(null);
+  const [join, setJoin] = useState(null);
+  const [textJoin, setTextJoin] = useState('');
   const [like, setLike] = useState(null);
   const [success, setSuccess] = useState(null);
   const [dataAsync, setDataAsync] = useState(defaultAuthState);
   const [imageLike, setImageLike] = useState(
     require('../../../assets/icon/loveFalse.png'),
   );
-  const [refreshing, setRefreshing] = useState(false);
   const [comment, setComment] = useState('');
+  const [replyComment, setReplyComment] = useState('');
   const getDataIdea = dataSearch => {
     setHasil(dataSearch);
   };
@@ -69,12 +74,17 @@ const ExploreContent = ({navigation, route}) => {
       GetDataIdea().then(response => setData(response));
     }
   });
+  useEffect(() => {
+    GetDataIdea().then(response => setData(response));
+  }, [like]);
+  useEffect(() => {
+    GetDataIdea().then(response => setData(response));
+    setComment('');
+    setReplyComment('');
+  }, [success]);
   const ref = useRef(null);
   useScrollToTop(ref);
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+
   const suggestions = [
     {id: '1', name: 'David Tabaka'},
     {id: '2', name: 'Mary'},
@@ -105,13 +115,21 @@ const ExploreContent = ({navigation, route}) => {
     LikeIdea(id, dataAsync.id).then(val => setLike(val));
   };
   const handleComment = text => {
-    CommentIdea(idComment, text, dataAsync.id).then(val => setSuccess(val));
+    CommentIdea(idComment, text, 0, dataAsync.id).then(val => setSuccess(val));
   };
+  const handleReplyComment = text => {
+    CommentIdea(idComment, text, idCommentReply, dataAsync.id).then(val =>
+      setSuccess(val),
+    );
+  };
+  const handleJoin = () => {
+    JoinIdea(idIdeaJoin, idUser, textJoin).then(val => setJoin(val));
+  };
+  // Sugesstion
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
       return null;
     }
-
     return (
       <View style={{position: 'relative', flex: 1}}>
         <ScrollView
@@ -142,12 +160,14 @@ const ExploreContent = ({navigation, route}) => {
       </View>
     );
   };
+  // End Sugesstion
   if (data === null) {
     return <LoadingScreen />;
   }
   const getDataSuccess = data => {
     setSuccess(data);
   };
+  console.log(idCommentReply);
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -162,11 +182,7 @@ const ExploreContent = ({navigation, route}) => {
         getData={getDataIdea}
         placeholder={'Search an Idea ...'}
       />
-      <ScrollView
-        ref={ref}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
+      <ScrollView ref={ref}>
         {data
           .filter((val, key) => {
             if (hasil === '') {
@@ -187,7 +203,6 @@ const ExploreContent = ({navigation, route}) => {
                 setImageLike(require('../../../assets/icon/loveFalse.png'));
               }
             }
-
             return (
               <View key={index}>
                 <CardContent
@@ -207,12 +222,16 @@ const ExploreContent = ({navigation, route}) => {
                     setModalComment(true);
                     setIdIdea(index);
                     setIdComment(val.id);
-                    setIdUser(data.id);
+                    setIdUser(dataAsync.id);
                   }}
                   share={() => onShare()}
                   join={() => setModalJoinVisible(true)}
                   promote={() => setModalPromoteVisible(true)}
-                  morePromote={() => setModalBottom(true)}
+                  morePromote={() => {
+                    setIdUser(dataAsync.id);
+                    setIdIdeaJoin(val.id);
+                    setModalBottom(true);
+                  }}
                   onProfile={() =>
                     navigation.navigate('ProfileUser', {data: val})
                   }
@@ -240,21 +259,26 @@ const ExploreContent = ({navigation, route}) => {
                 <Cross />
               </TouchableOpacity>
             </View>
-            <ScrollView
-              style={styles.contentModal}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }>
+            <ScrollView style={styles.contentModal}>
               {data[idIdea].comment.map(val => {
                 return (
                   <View>
-                    <CardComment desc={val.comment} name={val.createdBy.name} />
+                    <CardComment
+                      desc={val.comment}
+                      name={val.createdBy.name}
+                      reply={() => {
+                        setIdCommentReply(val.id);
+                        setNameReply(val.createdBy.name);
+                      }}
+                    />
                     {val.replyComment.map(val => {
                       return (
-                        <CardReplyComment
-                          desc={val.comment}
-                          name={val.createdBy.name}
-                        />
+                        <View style={{marginVertical: 10}}>
+                          <CardReplyComment
+                            desc={val.comment}
+                            name={val.createdBy.name}
+                          />
+                        </View>
                       );
                     })}
                     <View
@@ -273,31 +297,72 @@ const ExploreContent = ({navigation, route}) => {
           </View>
 
           <View style={styles.textInputContainer}>
-            <View style={styles.textInputWrap}>
-              <View style={styles.textInputRow}>
-                <View style={{flex: 7}}>
-                  <MentionInput
-                    value={comment}
-                    onChange={setComment}
-                    partTypes={[
-                      {
-                        trigger: '@', // Should be a single character like '@' or '#'
-                        renderSuggestions: renderSuggestions,
-                        textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
-                      },
-                    ]}
-                    style={styles.textInput}
-                    multiline={true}
-                    placeholder="Masukkan Komentar..."
-                  />
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => handleComment(comment)}
-                  style={styles.buttonSend}>
-                  <Text style={styles.textSend}>Send</Text>
+            {idCommentReply !== null ? (
+              <View
+                style={{
+                  padding: 15,
+                  backgroundColor: '#e5e5e5',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text style={style.h5}>Replying to {nameReply}</Text>
+                <TouchableOpacity onPress={() => setIdCommentReply(null)}>
+                  <Cross />
                 </TouchableOpacity>
               </View>
+            ) : null}
+            <View style={styles.textInputWrap}>
+              {idCommentReply === null ? (
+                <View style={styles.textInputRow}>
+                  <View style={{flex: 7}}>
+                    <MentionInput
+                      value={comment}
+                      onChange={setComment}
+                      partTypes={[
+                        {
+                          trigger: '@', // Should be a single character like '@' or '#'
+                          renderSuggestions: renderSuggestions,
+                          textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
+                        },
+                      ]}
+                      style={styles.textInput}
+                      multiline={true}
+                      placeholder="Masukkan Komentar..."
+                    />
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={() => handleComment(comment)}
+                    style={styles.buttonSend}>
+                    <Text style={styles.textSend}>Send</Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <View style={styles.textInputRow}>
+                  <View style={{flex: 7}}>
+                    <MentionInput
+                      value={replyComment}
+                      onChange={setReplyComment}
+                      partTypes={[
+                        {
+                          trigger: '@', // Should be a single character like '@' or '#'
+                          renderSuggestions: renderSuggestions,
+                          textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
+                        },
+                      ]}
+                      style={styles.textInput}
+                      multiline={true}
+                      placeholder="Masukkan Komentar..."
+                    />
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={() => handleReplyComment(replyComment)}
+                    style={styles.buttonSend}>
+                    <Text style={styles.textSend}>Send</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
         </Modal>
@@ -337,15 +402,20 @@ const ExploreContent = ({navigation, route}) => {
                 <View style={styles.inputAbout}>
                   <TextInput
                     multiline={true}
-                    // value={''}
-                    // onChangeText={() => { }}
+                    value={textJoin}
+                    onChangeText={val => {
+                      setTextJoin(val);
+                    }}
                   />
                 </View>
               </View>
               <View style={styles.buttonWrap}>
                 <TouchableOpacity
                   style={styles.buttonYakin}
-                  onPress={() => setModalJoinVisible(false)}>
+                  onPress={() => {
+                    setModalJoinVisible(false);
+                    handleJoin();
+                  }}>
                   <View>
                     <Text style={styles.textYakin}>Yakin</Text>
                   </View>

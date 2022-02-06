@@ -10,8 +10,9 @@ import {
   FlatList,
 } from 'react-native';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Cross, Eye, Trash} from '../../../assets/icon';
+import {Cross, Eye, Left, Trash} from '../../../assets/icon';
 import CardSubmittedIdea from '../../../components/CardSubmittedIdea';
+import CardJoinIdea from '../../../components/CardJoinIdea';
 import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
@@ -55,7 +56,7 @@ const MyAction = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.wrap} onPress={() => {}}>
               <View style={styles.tabBarActive}>
-                <Text style={styles.textActive}>Sharing Idea</Text>
+                <Text style={styles.textActive}>Join Idea</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -87,7 +88,7 @@ const MyAction = ({navigation}) => {
               <View style={styles.email}>
                 <Text
                   style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                  Created Date
+                  Status
                 </Text>
               </View>
             </View>
@@ -110,7 +111,7 @@ const MyAction = ({navigation}) => {
                 <View style={styles.rowBack}>
                   <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight]}>
-                    <Trash />
+                    <Left />
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight2]}
@@ -123,6 +124,12 @@ const MyAction = ({navigation}) => {
               )}
               rightOpenValue={-150}
               leftOpenValue={0}
+            />
+            <CardJoinIdea
+              delete={() => setModalDeleteVisible(true)}
+              title={'ada'}
+              name={'ada'}
+              createdDate={'ada'}
             />
           </View>
         </View>

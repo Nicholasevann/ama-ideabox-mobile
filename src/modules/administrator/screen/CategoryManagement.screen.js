@@ -30,7 +30,13 @@ const CategoryManagement = ({navigation}) => {
   const [deleteSelected, setDeleteSelected] = useState(null);
   const [success, setSuccess] = useState(null);
   const data = require('../data/dataCategoryManagement.json');
-
+  // search
+  const [filterData, setFilterData] = useState([]);
+  const [masterData, setMasterData] = useState([]);
+  const [search, setSearch] = useState('');
+  const getDataIdea = dataSearch => {
+    searchFilter(dataSearch);
+  };
   // dropdown1
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -48,11 +54,17 @@ const CategoryManagement = ({navigation}) => {
 
   useEffect(() => {
     if (dataCategoryManagement === null) {
-      GetDataCategoryManagement().then(response =>
-        setDataCategoryManagement(response),
-      );
+      GetDataCategoryManagement().then(response => {
+        setDataCategoryManagement(response);
+        setFilterData(response);
+      });
     }
   }, []);
+  useEffect(() => {
+    GetDataCategoryManagement().then(response =>
+      setDataCategoryManagement(response),
+    );
+  }, [success]);
   if (dataCategoryManagement === null) {
     return <LoadingScreen />;
   }
@@ -62,7 +74,24 @@ const CategoryManagement = ({navigation}) => {
   const getDataSuccess = data => {
     setSuccess(data);
   };
-  console.log(success);
+  // const getDataIdea = dataSearch => {
+  //   searchFilter(dataSearch);
+  // };
+  const searchFilter = text => {
+    if (text) {
+      const newData = dataCategoryManagement.filter(item => {
+        const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+      setSearch(text);
+    } else {
+      setFilterData(dataCategoryManagement);
+      setSearch(text);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -71,8 +100,19 @@ const CategoryManagement = ({navigation}) => {
           getData={getDataSuccess}
         />
       ) : null}
-      <SearchHeader onPress={() => navigation.openDrawer()} />
-
+      <SearchHeader
+        onPress={() => navigation.openDrawer()}
+        notification={() => navigation.navigate('Notification')}
+        getData={getDataIdea}
+        placeholder={'Search a Category ...'}
+      />
+      {/* <TextInput
+        style={styles.textInputStyle}
+        value={search}
+        placeholder="Search Item"
+        underlineColorAndroid="transparent"
+        onChangeText={text => searchFilter(text)}
+      /> */}
       {/* Header navigation */}
       <View style={styles.headerContainer}>
         <View style={styles.headerWrap}>
@@ -300,16 +340,18 @@ const CategoryManagement = ({navigation}) => {
             </View>
           </View>
           <SwipeListView
-            data={dataCategoryManagement}
-            renderItem={({item}) => {
-              // console.log(item)
+            data={filterData}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item, index}) => {
               return (
                 <View>
-                  <CardCategoryManagement
-                    id={item.id}
-                    title={item.name}
-                    status={item.activeFlag}
-                  />
+                  {item.activeFlag === '1' ? (
+                    <CardCategoryManagement
+                      id={index}
+                      title={item.name}
+                      status={item.activeFlag}
+                    />
+                  ) : null}
                 </View>
               );
             }}

@@ -1,15 +1,14 @@
 import axios from 'axios';
 
-const CommentIdea = (ideaId, comment, commentId, createdBy) => {
+const PostTalentApproval = (userId, status, id) => {
   return axios({
     crossDomain: true,
     method: 'post',
-    url: 'https://dev-ideas.digitalamoeba.id/addcomment',
+    url: 'https://dev-ideas.digitalamoeba.id/TalentApproval/talentApproval',
     data: {
-      ideaId: ideaId,
-      comment: comment,
-      commentId: commentId,
-      createdBy: createdBy,
+      userId: userId,
+      status: status,
+      id: id,
     },
     validateStatus: false,
   })
@@ -27,4 +26,4 @@ const CommentIdea = (ideaId, comment, commentId, createdBy) => {
     });
 };
 
-export default CommentIdea;
+export default PostTalentApproval;

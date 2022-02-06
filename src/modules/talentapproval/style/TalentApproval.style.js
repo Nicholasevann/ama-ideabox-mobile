@@ -189,6 +189,15 @@ const styles = StyleSheet.create({
     top: 0,
     width: 75,
   },
+  backRightBtn2: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 150,
+    flexDirection: 'row',
+  },
   backRightBtnRight: {
     backgroundColor: '#4AC994',
     right: 0,
@@ -200,6 +209,10 @@ const styles = StyleSheet.create({
   backRightBtnRight3: {
     backgroundColor: '#34A68A',
     right: 150,
+  },
+  backRightBtnRight4: {
+    backgroundColor: 'red',
+    right: 0,
   },
   rowBack: {
     alignItems: 'center',
