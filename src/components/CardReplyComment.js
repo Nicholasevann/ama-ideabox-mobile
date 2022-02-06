@@ -5,9 +5,7 @@ const CardReplyComment = props => {
   return (
     <View
       style={{
-        marginTop: 5,
         marginLeft: 30,
-        marginBottom: 5,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <Image
@@ -16,7 +14,7 @@ const CardReplyComment = props => {
         />
         <Text style={{fontWeight: '700', marginLeft: 10}}>{props.name}</Text>
       </View>
-      <Text style={{marginLeft: 10, marginVertical: 10}}>{props.desc}</Text>
+      <Text style={{marginLeft: 10, marginTop: 10}}>{props.desc}</Text>
     </View>
   );
 };

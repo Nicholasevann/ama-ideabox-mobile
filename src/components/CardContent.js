@@ -67,15 +67,18 @@ const CardContent = props => {
           <Text style={[style.h4, styles.moreDescContent]}>More Detail</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.rowLike}>
-        <Image
-          source={require('../assets/icon/loveTrue.png')}
-          style={{width: 15, height: 15}}
-        />
-        <Text style={[styles.textLike, style.h6]}>
-          Liked by {props.likedBy} people
-        </Text>
-      </View>
+      {props.likedBy === [] ? null : (
+        <View style={styles.rowLike}>
+          <Image
+            source={require('../assets/icon/loveTrue.png')}
+            style={{width: 15, height: 15}}
+          />
+          <Text style={[styles.textLike, style.h6]}>
+            Liked by {props.likedBy} people
+          </Text>
+        </View>
+      )}
+
       <View style={styles.content}>
         <Text style={style.h4} key={props.keyIndex + 'Title'}>
           {props.title}

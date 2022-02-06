@@ -43,6 +43,8 @@ import WhiteDotHome from './whitedothome.svg';
 import Eye from './eye.svg';
 import Check from './check.svg';
 import Xapproval from './xapproval.svg';
+import Left from './left.svg';
+import ArrowDown from './arrowdownblue.svg';
 export {
   IconEvent,
   IconExplore,
@@ -89,4 +91,6 @@ export {
   Eye,
   Check,
   Xapproval,
+  Left,
+  ArrowDown,
 };

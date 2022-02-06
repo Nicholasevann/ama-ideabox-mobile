@@ -86,6 +86,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  desc: {
+    flex: 3,
+    padding: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
   email: {
     flex: 3,
     padding: 5,
@@ -210,6 +216,8 @@ const styles = StyleSheet.create({
   backRightBtnRight: {
     backgroundColor: 'red',
     right: 0,
+    borderTopEndRadius: 5,
+    borderBottomRightRadius: 5,
   },
   backRightBtnRight2: {
     backgroundColor: '#34A68A',

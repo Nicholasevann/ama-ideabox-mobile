@@ -160,9 +160,10 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   title: {
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 20,
     fontWeight: 'bold',
+    textTransform: 'capitalize',
   },
   caption: {
     color: 'black',

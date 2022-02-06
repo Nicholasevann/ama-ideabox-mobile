@@ -17,10 +17,13 @@ const DetailCategoryUserManagement = ({navigation, route}) => {
       <SearchHeader />
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.button}>
             <Back />
           </TouchableOpacity>
           <Text style={styles.textEdit}>Detail User</Text>
+          <View style={styles.button}></View>
         </View>
         <ScrollView>
           <View style={styles.inputContainer}>
@@ -50,12 +53,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     margin: 20,
+    padding: 15,
     backgroundColor: '#EBEBEB',
     borderRadius: 10,
     paddingBottom: 70,
   },
   titleContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 10,
   },
   textEdit: {
@@ -64,17 +69,11 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#085D7A',
     alignSelf: 'center',
-    marginLeft: 120,
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 20,
-    width: '35%',
-    height: 35,
-    borderRadius: 10,
-    backgroundColor: '#085D7A',
-    alignSelf: 'flex-end',
+    marginRight: 20,
   },
   save: {
     color: '#FFFFFF',

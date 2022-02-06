@@ -63,7 +63,9 @@ const HomeContent = ({navigation}) => {
             <View>
               <Text style={[style.h4medium, styles.title]}>
                 Welcome back,{'\n'}
-                <Text style={{fontWeight: 'bold'}}>{data.name}</Text>
+                <Text style={{fontWeight: 'bold', textTransform: 'capitalize'}}>
+                  {data.name}
+                </Text>
                 {'\n'}
               </Text>
               <Text style={[style.h4medium, styles.title]}>

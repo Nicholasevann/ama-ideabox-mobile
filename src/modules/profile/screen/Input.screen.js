@@ -36,8 +36,13 @@ const InputProfile = ({navigation}) => {
   const [imageUri, setImageUri] = useState(
     require('../../../assets/image/dummyPicture2.png'),
   );
-  const [image, setImage] = useState(
-    'https://reactnative.dev/img/tiny_logo.png',
+  const [profile, setProfile] = useState(false);
+  const [imageCover, setImageCover] = useState(
+    'https://www.ilmubahasa.net/wp-content/uploads/2018/10/backgroundkeren1.jpg',
+  );
+  // require('../../../assets/image/coverProfile.png'),
+  const [imageProfile, setImageProfile] = useState(
+    require('../../../assets/image/fotoProfile.png'),
   );
   const [dataProfile, setDataProfile] = useState(null);
   const takePhotoFromLibrary = () => {
@@ -47,7 +52,16 @@ const InputProfile = ({navigation}) => {
       cropping: true,
     }).then(image => {
       console.log(image);
-      setImage(image.path);
+      setImageCover(image.path);
+    });
+  };
+  const takePhotoFromLibraryProfile = () => {
+    ImagePicker.openPicker({
+      width: 200,
+      height: 200,
+      cropping: true,
+    }).then(image => {
+      setImageProfile(image.path);
     });
   };
 
@@ -74,7 +88,13 @@ const InputProfile = ({navigation}) => {
       GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
     }
   });
-
+  // if (takePhotoFromLibraryProfile()) {
+  //   setProfile(true);
+  // }
+  // useEffect(() => {
+  //
+  // }, [takePhotoFromLibraryProfile()]);
+  console.log(profile);
   const handlePost = () => {
     axios({
       crossDomain: true,
@@ -118,6 +138,7 @@ const InputProfile = ({navigation}) => {
     setSuccessModal(data);
   };
   // console.log(dataProfile);
+
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
@@ -142,18 +163,34 @@ const InputProfile = ({navigation}) => {
         </View>
         <View style={styles.mainContainer}>
           <View style={styles.imageBackground}>
-            <Image source={{uri: image}} style={styles.backgroundImage} />
+            <Image source={{uri: imageCover}} style={styles.backgroundImage} />
             <TouchableOpacity
               style={styles.ButtonCamera}
-              onPress={takePhotoFromLibrary}>
+              onPress={() => {
+                takePhotoFromLibrary;
+              }}>
               <Camera />
             </TouchableOpacity>
           </View>
           <View style={styles.profilePicture}>
-            <Image
-              source={require('../../../assets/image/profilepicture.jpg')}
-              style={styles.profileImage}
-            />
+            <TouchableOpacity
+              onPress={() => {
+                takePhotoFromLibraryProfile();
+              }}
+              style={{position: 'absolute', bottom: 0, zIndex: 3, right: 0}}>
+              <Image
+                source={require('../../../assets/icon/iconcameraprofile.png')}
+                style={{
+                  width: 35,
+                  height: 35,
+                }}
+              />
+            </TouchableOpacity>
+            {profile === false ? (
+              <Image source={imageProfile} style={styles.profileImage} />
+            ) : (
+              <Image source={{uri: imageProfile}} style={styles.profileImage} />
+            )}
           </View>
           <View style={styles.contentContainer}>
             <Text style={styles.h1}>PROFILE DATA</Text>

@@ -73,7 +73,7 @@ const SubmittedIdea = ({navigation}) => {
               style={styles.wrap}
               onPress={() => navigation.navigate('MyAction')}>
               <View style={styles.tabBar}>
-                <Text style={styles.textNonActive}>Sharing Idea</Text>
+                <Text style={styles.textNonActive}>Join Idea</Text>
               </View>
             </TouchableOpacity>
           </View>

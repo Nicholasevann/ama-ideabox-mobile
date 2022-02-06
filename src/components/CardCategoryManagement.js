@@ -9,7 +9,7 @@ const CardCategoryManagement = props => {
       <View style={styles.title}>
         <Text style={style.h5}>{props.id}</Text>
       </View>
-      <View style={styles.email}>
+      <View style={styles.desc}>
         <Text style={style.h5}>{props.title}</Text>
       </View>
       <View style={styles.title}>
@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  desc: {
+    flex: 3,
+    padding: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   email: {
     flex: 3,
