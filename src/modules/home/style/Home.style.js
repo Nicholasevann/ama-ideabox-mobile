@@ -123,6 +123,33 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
+
+  // Modal
+  centeredcontainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centeredView: {
+    flex: 1,
+  },
+  modalView: {
+    backgroundColor: 'white',
+    width: '70%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

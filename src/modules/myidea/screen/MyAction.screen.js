@@ -20,27 +20,76 @@ import {defaultAuthState} from '../../../config/Auth.cfg';
 import {GetDataSharingIdea} from '../../../config/GetData/GetDataMyIdea';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/MyIdea.style';
+import LeftSharingIdea from '../../../config/DeleteData/LeftSharingIdea';
+import SuccesModal from '../../../components/SuccesModal';
 const MyAction = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [sharingIdea, setSharingIdea] = useState(null);
   const [data, setData] = useState(defaultAuthState);
+  const [idIdea, setIdIdea] = useState(null);
+  const [success, setSuccess] = useState(null);
+  // search
+  const [filterData, setFilterData] = useState([]);
+  const getDataIdea = dataSearch => {
+    searchFilter(dataSearch);
+  };
   useEffect(() => {
     if (sharingIdea === null) {
       getData().then(jsonValue => setData(jsonValue));
       if (data === defaultAuthState) {
         return <LoadingScreen />;
       }
-      GetDataSharingIdea(data.id).then(response => setSharingIdea(response));
+      GetDataSharingIdea(data.id).then(response => {
+        setSharingIdea(response);
+        setFilterData(response.ideas);
+      });
     }
   });
   if (sharingIdea === null) {
     return <LoadingScreen />;
   }
+  const getDataSuccess = data => {
+    setSuccess(data);
+  };
+  const handleLeft = () => {
+    LeftSharingIdea(data.id, idIdea).then(response => setSuccess(response));
+    // LeftSharingIdea(3, 96).then(response => setSuccess(response));
+  };
+  const searchFilter = text => {
+    if (text) {
+      const newData = sharingIdea.ideas.filter(item => {
+        const itemData = item.desc[0].value
+          ? item.desc[0].value.toUpperCase()
+          : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+    } else {
+      setFilterData(sharingIdea.ideas);
+    }
+  };
+  if (success === 200) {
+    GetDataSharingIdea(data.id).then(response => {
+      setSharingIdea(response);
+      setFilterData(response.ideas);
+    });
+  }
+  console.log(success);
   return (
     <SafeAreaView style={styles.container}>
+      {success === 200 ? (
+        <SuccesModal
+          desc={'Your data idea management have been deleted!'}
+          getData={getDataSuccess}
+        />
+      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
+        getData={getDataIdea}
+        placeholder={'Search an Idea ...'}
       />
 
       {/* Header navigation */}
@@ -158,7 +207,10 @@ const MyAction = ({navigation}) => {
                   <View style={styles.rowDelete}>
                     <View style={styles.buttondelete}>
                       <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
+                        onPress={() => {
+                          setModalDeleteVisible(false);
+                          handleLeft();
+                        }}>
                         <Text style={styles.save}>Hapus</Text>
                       </TouchableOpacity>
                     </View>

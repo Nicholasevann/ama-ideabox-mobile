@@ -200,6 +200,8 @@ const styles = StyleSheet.create({
   },
   backRightBtnRight: {
     backgroundColor: '#4AC994',
+    borderTopRightRadius: 5,
+    borderBottomEndRadius: 5,
     right: 0,
   },
   backRightBtnRight2: {
@@ -212,6 +214,8 @@ const styles = StyleSheet.create({
   },
   backRightBtnRight4: {
     backgroundColor: 'red',
+    borderTopRightRadius: 5,
+    borderBottomEndRadius: 5,
     right: 0,
   },
   rowBack: {

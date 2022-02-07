@@ -113,6 +113,7 @@ const ExploreContent = ({navigation, route}) => {
   };
   const handleLike = id => {
     LikeIdea(id, dataAsync.id).then(val => setLike(val));
+    setIdLike(id);
   };
   const handleComment = text => {
     CommentIdea(idComment, text, 0, dataAsync.id).then(val => setSuccess(val));
@@ -167,7 +168,10 @@ const ExploreContent = ({navigation, route}) => {
   const getDataSuccess = data => {
     setSuccess(data);
   };
-  console.log(idCommentReply);
+  const getDataJoin = data => {
+    setJoin(data);
+  };
+  console.log(join);
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -175,6 +179,9 @@ const ExploreContent = ({navigation, route}) => {
           desc={'Your comment have been added!'}
           getData={getDataSuccess}
         />
+      ) : null}
+      {join === 200 ? (
+        <SuccesModal desc={'Your have join the idea'} getData={getDataJoin} />
       ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}

@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, SafeAreaView, Image, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Image,
+  ScrollView,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import SearchHeader from '../../../components/SearchHeader';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/Home.style';
@@ -10,7 +18,6 @@ import {Logo} from '../../../assets/image';
 import Header from '../../../components/Header';
 import Carousel from 'react-native-snap-carousel';
 import {WhiteDotHome} from '../../../assets/icon';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import getData from '../../../components/GetData';
 
 const HomeContent = ({navigation}) => {
@@ -20,6 +27,9 @@ const HomeContent = ({navigation}) => {
     'https://p16-hera-va.ibyteimg.com/tos-useast2a-i-hn4qzgxq2n/f0e9d7a074db4f2db68f6b821fca82b6~tplv-hn4qzgxq2n-image:0:0.image',
   ];
   const [data, setData] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
+  const [visible3, setVisible3] = useState(false);
   useEffect(() => {
     getData().then(jsonValue => setData(jsonValue));
   }, []);
@@ -161,7 +171,10 @@ const HomeContent = ({navigation}) => {
         </View> */}
         <View style={styles.horizontalCard}>
           <TouchableOpacity
-            style={[styles.cardContainer, {backgroundColor: '#F9CC2C'}]}>
+            style={[styles.cardContainer, {backgroundColor: '#F9CC2C'}]}
+            onPress={() => {
+              setVisible(true);
+            }}>
             <View style={styles.tittleCardContainer}>
               <Text style={[style.h6, styles.titleCard]}>The Hipster Guy</Text>
             </View>
@@ -173,7 +186,10 @@ const HomeContent = ({navigation}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.cardContainer, {backgroundColor: '#E15C30'}]}>
+            style={[styles.cardContainer, {backgroundColor: '#E15C30'}]}
+            onPress={() => {
+              setVisible2(true);
+            }}>
             <View style={styles.tittleCardContainer}>
               <Text style={[style.h6, styles.titleCard]}>The Hustler Guy</Text>
             </View>
@@ -185,7 +201,10 @@ const HomeContent = ({navigation}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.cardContainer, {backgroundColor: '#A9E34B'}]}>
+            style={[styles.cardContainer, {backgroundColor: '#A9E34B'}]}
+            onPress={() => {
+              setVisible3(true);
+            }}>
             <View style={styles.tittleCardContainer}>
               <Text style={[style.h6, styles.titleCard]}>The Hacker Guy</Text>
             </View>
@@ -251,6 +270,144 @@ const HomeContent = ({navigation}) => {
             </Text>
           </View>
         </View>
+
+        {/* Modal Hipster Guy */}
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={visible}
+          onRequestClose={() => {
+            setVisible(false);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.centeredcontainer}>
+              <View style={styles.modalView}>
+                <View style={styles.inputContainer}>
+                  <Image
+                    source={require('../../../assets/image/hipsterguy.png')}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
+                  />
+                  <View
+                    style={{
+                      padding: 15,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                    }}>
+                    <Text style={[style.h2]}>The Hipster Guy</Text>
+                    <Text
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
+                      (Marketing & Business) Sell & Communicate the product.
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setVisible(false)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#0C7AB0',
+                    padding: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Modal Hustler Guy */}
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={visible2}
+          onRequestClose={() => {
+            setVisible2(false);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.centeredcontainer}>
+              <View style={styles.modalView}>
+                <View style={styles.inputContainer}>
+                  <Image
+                    source={require('../../../assets/image/hustlerguy.png')}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
+                  />
+                  <View
+                    style={{
+                      padding: 15,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                    }}>
+                    <Text style={[style.h2]}>The Hustler Guy</Text>
+                    <Text
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
+                      (Marketing & Business) Sell & Communicate the product.
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setVisible2(false)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#0C7AB0',
+                    padding: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        {/* Modal Hacker Guy */}
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={visible3}
+          onRequestClose={() => {
+            setVisible3(false);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.centeredcontainer}>
+              <View style={styles.modalView}>
+                <View style={styles.inputContainer}>
+                  <Image
+                    source={require('../../../assets/image/hackerguy.png')}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
+                  />
+                  <View
+                    style={{
+                      padding: 15,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '100%',
+                    }}>
+                    <Text style={[style.h2]}>The Hacker Guy</Text>
+                    <Text
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
+                      (Engineer & Developer) Build the product.
+                    </Text>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  onPress={() => setVisible3(false)}
+                  style={{
+                    width: '100%',
+                    backgroundColor: '#0C7AB0',
+                    padding: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );

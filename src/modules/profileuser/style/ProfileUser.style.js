@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    flexDirection: 'row',
   },
   tagContainer: {
     backgroundColor: '#FFFFFF',

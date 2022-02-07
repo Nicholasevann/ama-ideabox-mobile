@@ -45,6 +45,7 @@ import Check from './check.svg';
 import Xapproval from './xapproval.svg';
 import Left from './left.svg';
 import ArrowDown from './arrowdownblue.svg';
+import ArrowUp from './arrowup.svg';
 export {
   IconEvent,
   IconExplore,
@@ -93,4 +94,5 @@ export {
   Xapproval,
   Left,
   ArrowDown,
+  ArrowUp,
 };

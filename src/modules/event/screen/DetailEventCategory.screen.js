@@ -21,6 +21,7 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
+import Header from '../../../components/Header';
 const DetailEventCategory = ({navigation, route}) => {
   const data = route.params.data;
 
@@ -90,7 +91,7 @@ const DetailEventCategory = ({navigation, route}) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={style.h5}>
+                <Text style={[style.h5, {marginBottom: 20}]}>
                   Untuk mengikuti event ini, kamu harus memilih ide kamu mana
                   yang akan kamu ikut sertakan:
                 </Text>
@@ -164,7 +165,7 @@ const DetailEventCategory = ({navigation, route}) => {
       {/* EndPopup */}
 
       {/* Content */}
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />

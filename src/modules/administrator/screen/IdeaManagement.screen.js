@@ -29,11 +29,23 @@ const IdeaManagement = ({navigation}) => {
   const [dataIdeaManagement, setDataIdeaManagement] = useState();
   const [deleteData, setDeleteData] = useState(null);
   const [success, setSuccess] = useState(null);
-  const data = require('../data/dataIDeaManagement.json');
-
+  // search
+  const [filterData, setFilterData] = useState([]);
+  const getDataIdea = dataSearch => {
+    searchFilter(dataSearch);
+  };
   useEffect(() => {
-    GetDataIdeaManagement().then(response => setDataIdeaManagement(response));
+    GetDataIdeaManagement().then(response => {
+      setDataIdeaManagement(response);
+      setFilterData(response);
+    });
   }, []);
+  useEffect(() => {
+    GetDataIdeaManagement().then(response => {
+      setDataIdeaManagement(response);
+      setFilterData(response);
+    });
+  }, [success]);
   if (dataIdeaManagement === null) {
     return <LoadingScreen />;
   }
@@ -42,6 +54,21 @@ const IdeaManagement = ({navigation}) => {
   };
   const handleDelete = () => {
     DeleteIdeaManagement(deleteData).then(val => setSuccess(val));
+  };
+  const searchFilter = text => {
+    if (text) {
+      const newData = dataIdeaManagement.filter(item => {
+        const itemData = item.desc[0].value
+          ? item.desc[0].value.toUpperCase()
+          : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+    } else {
+      setFilterData(dataIdeaManagement);
+    }
   };
   console.log(success);
   return (
@@ -52,7 +79,12 @@ const IdeaManagement = ({navigation}) => {
           getData={getDataSuccess}
         />
       ) : null}
-      <SearchHeader onPress={() => navigation.openDrawer()} />
+      <SearchHeader
+        onPress={() => navigation.openDrawer()}
+        notification={() => navigation.navigate('Notification')}
+        getData={getDataIdea}
+        placeholder={'Search an Idea ...'}
+      />
 
       {/* Header navigation */}
       <View style={styles.headerContainer}>
@@ -124,7 +156,7 @@ const IdeaManagement = ({navigation}) => {
             </View>
           </View>
           <SwipeListView
-            data={dataIdeaManagement}
+            data={filterData}
             renderItem={({item}) => {
               // console.log(item)
               return (

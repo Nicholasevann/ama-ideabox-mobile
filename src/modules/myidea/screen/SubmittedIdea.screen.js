@@ -27,17 +27,30 @@ const SubmittedIdea = ({navigation}) => {
   const [submittedIdea, setSubmittedIdea] = useState(null);
   const [deleteData, setDeleteData] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  // search
+  const [filterData, setFilterData] = useState([]);
+  const getDataIdea = dataSearch => {
+    searchFilter(dataSearch);
+  };
   useEffect(() => {
     if (submittedIdea === null || data === defaultAuthState) {
       getData().then(jsonValue => setData(jsonValue));
       if (data === defaultAuthState) {
         return <LoadingScreen />;
       }
-      GetDataSubmittedIdea(data.id).then(response =>
-        setSubmittedIdea(response),
-      );
+      GetDataSubmittedIdea(data.id).then(response => {
+        setSubmittedIdea(response);
+        setFilterData(response.ideas);
+      });
     }
   });
+  // useEffect(() => {
+  //   GetDataSubmittedIdea(data.id).then(response => {
+  //     setSubmittedIdea(response);
+  //     setFilterData(response);
+  //   });
+  // }, [success]);
   if (submittedIdea === null || data === defaultAuthState) {
     return <LoadingScreen />;
   }
@@ -47,7 +60,27 @@ const SubmittedIdea = ({navigation}) => {
   const handleDelete = () => {
     DeleteIdeaManagement(deleteData).then(val => setSuccess(val));
   };
-  console.log(deleteData);
+  const searchFilter = text => {
+    if (text) {
+      const newData = submittedIdea.ideas.filter(item => {
+        const itemData = item.desc[0].value
+          ? item.desc[0].value.toUpperCase()
+          : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+    } else {
+      setFilterData(submittedIdea.ideas);
+    }
+  };
+  if (success === 200) {
+    GetDataSubmittedIdea(data.id).then(response => {
+      setSubmittedIdea(response);
+      setFilterData(response);
+    });
+  }
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -59,6 +92,8 @@ const SubmittedIdea = ({navigation}) => {
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
+        getData={getDataIdea}
+        placeholder={'Search an Idea ...'}
       />
       <ScrollView>
         {/* Header navigation */}
@@ -110,7 +145,7 @@ const SubmittedIdea = ({navigation}) => {
               </View>
             </View>
             <SwipeListView
-              data={submittedIdea.ideas}
+              data={filterData}
               renderItem={({item}) => {
                 // console.log(item)
                 return (

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Cross, Eye, Trash} from '../../../assets/icon';
+import {Cross, EditCategory, Eye, Trash} from '../../../assets/icon';
 import CardCategoryManagement from '../../../components/CardCategoryManagement';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
@@ -30,13 +30,13 @@ const CategoryManagement = ({navigation}) => {
   const [deleteSelected, setDeleteSelected] = useState(null);
   const [success, setSuccess] = useState(null);
   const data = require('../data/dataCategoryManagement.json');
+
   // search
   const [filterData, setFilterData] = useState([]);
-  const [masterData, setMasterData] = useState([]);
-  const [search, setSearch] = useState('');
   const getDataIdea = dataSearch => {
     searchFilter(dataSearch);
   };
+
   // dropdown1
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -61,9 +61,10 @@ const CategoryManagement = ({navigation}) => {
     }
   }, []);
   useEffect(() => {
-    GetDataCategoryManagement().then(response =>
-      setDataCategoryManagement(response),
-    );
+    GetDataCategoryManagement().then(response => {
+      setDataCategoryManagement(response);
+      setFilterData(response);
+    });
   }, [success]);
   if (dataCategoryManagement === null) {
     return <LoadingScreen />;
@@ -86,10 +87,8 @@ const CategoryManagement = ({navigation}) => {
         return itemData.indexOf(textData) > -1;
       });
       setFilterData(newData);
-      setSearch(text);
     } else {
       setFilterData(dataCategoryManagement);
-      setSearch(text);
     }
   };
   return (
@@ -218,7 +217,7 @@ const CategoryManagement = ({navigation}) => {
         {/* EndPopup */}
 
         {/* Popup Edit category */}
-        {/* <Modal
+        <Modal
           animationType="none"
           transparent={true}
           visible={modalVisible}
@@ -251,6 +250,7 @@ const CategoryManagement = ({navigation}) => {
                     setValue={setValue}
                     setItems={setItems}
                     style={styles.input}
+                    placeholder={'Select a parent category'}
                   />
                   <Text style={styles.h2}>Type Category :</Text>
                   <DropDownPicker
@@ -261,6 +261,7 @@ const CategoryManagement = ({navigation}) => {
                     setValue={setValue1}
                     setItems={setItems1}
                     style={styles.input}
+                    placeholder={'Select a type category'}
                   />
                   <View style={styles.button}>
                     <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -271,7 +272,7 @@ const CategoryManagement = ({navigation}) => {
               </View>
             </View>
           </View>
-        </Modal> */}
+        </Modal>
         {/* EndPopup */}
 
         {/* Popup delete  */}
@@ -347,7 +348,7 @@ const CategoryManagement = ({navigation}) => {
                 <View>
                   {item.activeFlag === '1' ? (
                     <CardCategoryManagement
-                      id={index}
+                      id={index + 1}
                       title={item.name}
                       status={item.activeFlag}
                     />
@@ -358,6 +359,20 @@ const CategoryManagement = ({navigation}) => {
             renderHiddenItem={({item}) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('DetailCategory', {data: item})
+                  }
+                  style={[styles.backRightBtn, styles.backRightBtnRight3]}>
+                  <Eye />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(true);
+                  }}
+                  style={[styles.backRightBtn, styles.backRightBtnRight2]}>
+                  <EditCategory />
+                </TouchableOpacity>
+                <TouchableOpacity
                   onPress={() => {
                     setDeleteSelected(item.id);
                     setModalDeleteVisible(true);
@@ -365,16 +380,9 @@ const CategoryManagement = ({navigation}) => {
                   style={[styles.backRightBtn, styles.backRightBtnRight]}>
                   <Trash />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnRight2]}
-                  onPress={() =>
-                    navigation.navigate('DetailCategory', {data: item})
-                  }>
-                  <Eye />
-                </TouchableOpacity>
               </View>
             )}
-            rightOpenValue={-150}
+            rightOpenValue={-225}
             leftOpenValue={0}
           />
           {/* <FlatList

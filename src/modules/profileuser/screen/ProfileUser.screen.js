@@ -198,13 +198,9 @@ const ProfileUser = ({navigation, route}) => {
                     }}></View>
                   <View>
                     <Text style={[style.h4, {marginVertical: 10}]}>
-                      {val.desc.value}
+                      {val.desc[0].value}
                     </Text>
-                    <Text style={[style.h5]}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Sed vel, accumsan praesent bibendum aenean morbi. Semper
-                      mauris tempor, neque convallis risus nam.
-                    </Text>
+                    <Text style={[style.h5]}>{val.desc[2].value}</Text>
                     <Text style={[style.h4, {marginVertical: 10}]}>Team:</Text>
                     <View
                       style={{

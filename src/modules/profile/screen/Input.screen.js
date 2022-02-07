@@ -26,13 +26,14 @@ import GetDataProfile from '../../../config/GetData/GetDataProfile';
 import SuccesModal from '../../../components/SuccesModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FailedModal from '../../../components/FailedModal';
+import moment from 'moment';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
   const [successModal, setSuccessModal] = useState(null);
   const [failed, setFailed] = useState(false);
   const [update, setUpdate] = useState(defaulthAuthData);
-  const [pickedDate, setPickedDate] = useState([]);
+  const [pickedDate, setPickedDate] = useState(null);
   const [imageUri, setImageUri] = useState(
     require('../../../assets/image/dummyPicture2.png'),
   );
@@ -42,7 +43,7 @@ const InputProfile = ({navigation}) => {
   );
   // require('../../../assets/image/coverProfile.png'),
   const [imageProfile, setImageProfile] = useState(
-    require('../../../assets/image/fotoProfile.png'),
+    'https://image.flaticon.com/icons/png/512/64/64495.png',
   );
   const [dataProfile, setDataProfile] = useState(null);
   const takePhotoFromLibrary = () => {
@@ -138,7 +139,9 @@ const InputProfile = ({navigation}) => {
     setSuccessModal(data);
   };
   // console.log(dataProfile);
-
+  const handleText = () =>
+    pickedDate ? moment(pickedDate).format('YYYY-MM-DD') : dataProfile.tglLahir;
+  // pickedDate.toDateString()
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
@@ -167,7 +170,7 @@ const InputProfile = ({navigation}) => {
             <TouchableOpacity
               style={styles.ButtonCamera}
               onPress={() => {
-                takePhotoFromLibrary;
+                takePhotoFromLibrary();
               }}>
               <Camera />
             </TouchableOpacity>
@@ -186,11 +189,7 @@ const InputProfile = ({navigation}) => {
                 }}
               />
             </TouchableOpacity>
-            {profile === false ? (
-              <Image source={imageProfile} style={styles.profileImage} />
-            ) : (
-              <Image source={{uri: imageProfile}} style={styles.profileImage} />
-            )}
+            <Image source={{uri: imageProfile}} style={styles.profileImage} />
           </View>
           <View style={styles.contentContainer}>
             <Text style={styles.h1}>PROFILE DATA</Text>
@@ -222,27 +221,22 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h2}>Date of Birth</Text>
-            <TextInput
+            <DatePicker
               style={styles.input}
-              value={dataProfile.tglLahir}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, tglLahir: val})
-              }
-            />
-            {/* <DatePicker
               value={pickedDate}
-              onDateChange={val => setPickedDate(val)}
-              style={styles.input}
+              onDateChange={val => {
+                setDataProfile({
+                  ...dataProfile,
+                  tglLahir: moment(val).format('YYYY-MM-DD'),
+                });
+
+                setPickedDate(val);
+              }}
               title="Date Picker"
-              text={pickedDate}
+              text={handleText()}
               isNullable={false}
-              backdropAnimation={{opacity: 0}}
-              maximumDate={new Date(Date.now())}
-              iosMode="date"
-              androidMode="countdown"
-              androidDisplay="spinner"
-              locale="fr"
-            /> */}
+              iosDisplay="inline"
+            />
             <Text style={styles.h2}>Work Location :</Text>
             <TextInput
               style={styles.input}
@@ -272,9 +266,7 @@ const InputProfile = ({navigation}) => {
             
             <Text style={styles.h2}>NIK Atasan</Text> */}
 
-            <Text style={styles.h2}>
-              Unit( Anak Perusahaan atau direktorat )
-            </Text>
+            <Text style={styles.h2}>CFU / FU</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.anakPerusahaan}
@@ -282,13 +274,13 @@ const InputProfile = ({navigation}) => {
                 setDataProfile({...dataProfile, anakPerusahaan: val})
               }
             />
-            <Text style={styles.h2}>Lokasi Kerja</Text>
+            <Text style={styles.h2}>Category Unit</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.loker}
               onChangeText={val => setDataProfile({...dataProfile, loker: val})}
             />
-            <Text style={styles.h2}>Area</Text>
+            <Text style={styles.h2}>Unit</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.regional}
@@ -296,7 +288,23 @@ const InputProfile = ({navigation}) => {
                 setDataProfile({...dataProfile, regional: val})
               }
             />
-            <Text style={styles.h2}>Struktur Tim</Text>
+            <Text style={styles.h2}>Directorate</Text>
+            <TextInput
+              style={styles.input}
+              value={dataProfile.teamStructure}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, teamStructure: val})
+              }
+            />
+            <Text style={styles.h2}>Team Structure</Text>
+            <TextInput
+              style={styles.input}
+              value={dataProfile.teamStructure}
+              onChangeText={val =>
+                setDataProfile({...dataProfile, teamStructure: val})
+              }
+            />
+            <Text style={styles.h2}>Skill</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.teamStructure}

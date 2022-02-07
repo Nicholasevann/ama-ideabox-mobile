@@ -31,21 +31,28 @@ const TalentApproval = ({navigation}) => {
   const [status, setStatus] = useState(null);
   const [id, setId] = useState(null);
   const [success, setSuccess] = useState(null);
+  // search
+  const [filterData, setFilterData] = useState([]);
+  const getDataIdea = dataSearch => {
+    searchFilter(dataSearch);
+  };
   useEffect(() => {
     if (dataTalentApproval === null) {
       getData().then(jsonValue => setData(jsonValue));
       if (data === defaultAuthState) {
         return <LoadingScreen />;
       }
-      GetDataTalentApproval(data.id).then(response =>
-        setDataTalentApproval(response),
-      );
+      GetDataTalentApproval(data.id).then(response => {
+        setDataTalentApproval(response);
+        setFilterData(response);
+      });
     }
   });
   useEffect(() => {
-    GetDataTalentApproval(data.id).then(response =>
-      setDataTalentApproval(response),
-    );
+    GetDataTalentApproval(data.id).then(response => {
+      setDataTalentApproval(response);
+      setFilterData(response);
+    });
   }, [success]);
   if (dataTalentApproval === null) {
     return <LoadingScreen />;
@@ -55,6 +62,21 @@ const TalentApproval = ({navigation}) => {
   };
   const getDataSuccess = data => {
     setSuccess(data);
+  };
+  const searchFilter = text => {
+    if (text) {
+      const newData = dataTalentApproval.filter(item => {
+        const itemData = item.ideas.desc.value
+          ? item.ideas.desc.value.toUpperCase()
+          : ''.toUpperCase();
+
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilterData(newData);
+    } else {
+      setFilterData(dataTalentApproval);
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -67,6 +89,8 @@ const TalentApproval = ({navigation}) => {
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
+        getData={getDataIdea}
+        placeholder={'Search an Idea ...'}
       />
 
       {/* Header navigation */}
@@ -110,12 +134,12 @@ const TalentApproval = ({navigation}) => {
             </View>
           </View>
           <SwipeListView
-            data={dataTalentApproval}
+            data={filterData}
             renderItem={({item}) => {
               return (
                 <View>
                   <CardTalentApproval
-                    title={item.ideasId}
+                    title={item.ideas.desc.value}
                     name={item.approvalTo.name}
                     createdDate={item.createdDate}
                   />
