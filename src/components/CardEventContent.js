@@ -21,7 +21,7 @@ const CardEventContent = props => {
         </View>
       </View>
       <TouchableOpacity onPress={props.join} style={styles.buttonJoin}>
-        <Text style={styles.textJoin}>Join Now</Text>
+        <Text style={styles.textJoin}>{props.textButton}</Text>
       </TouchableOpacity>
     </View>
   );

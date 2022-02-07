@@ -23,7 +23,7 @@ import {
   GetDataEvent,
 } from '../../../config/GetData/GetDataEvent';
 import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
-import styles from '../style/Event.style';
+import styles from '../style/EventManagement.style';
 import {Cross} from '../../../assets/icon';
 import style from '../../../config/Style/style.cfg';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -31,13 +31,17 @@ import getData from '../../../components/GetData';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
 
-const EventContent = ({navigation}) => {
+const EventContentManagement = ({navigation}) => {
   const [hasil, setHasil] = useState('');
   const [stateDataCategory, setStateDataCategory] =
     useState(defaultCategoryEvent);
   const [stateDataEvent, setStateDataEvent] = useState(defaultEvent);
   const [stateDataSubmitted, setStateDataSubmitted] = useState(null);
   const [data, setData] = useState(defaultAuthState);
+  // dropdown
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([]);
   useEffect(() => {
     if (
       stateDataEvent === defaultEvent ||
@@ -65,11 +69,6 @@ const EventContent = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalSubmitVisible, setModalSubmitVisible] = useState(false);
   const [success, setSuccess] = useState(null);
-  // dropdown
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([]);
-  const [array, setArray] = useState(false);
   if (
     stateDataEvent === defaultEvent ||
     stateDataCategory === defaultCategoryEvent ||
@@ -80,26 +79,8 @@ const EventContent = ({navigation}) => {
   const selectedData = stateDataEvent.filter(
     x => x.category[0].id === stateDataCategory[selectedId - 17].id,
   );
-  if (array === false) {
-    stateDataSubmitted.ideas.map(val => {
-      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
-    });
-    setArray(true);
-  }
-  const handleJoin = () => {
-    JoinEvent(data.id, value, eventId, createdBy).then(val => setSuccess(val));
-  };
-  const getDataSuccess = data => {
-    setSuccess(data);
-  };
   return (
     <SafeAreaView style={styles.container}>
-      {success === 200 ? (
-        <SuccesModal
-          desc={'Congrats you have been join event!'}
-          getData={getDataSuccess}
-        />
-      ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
@@ -201,11 +182,9 @@ const EventContent = ({navigation}) => {
                       title={val.name}
                       desc={val.description}
                       image={val.image}
-                      textButton={'Join'}
+                      textButton={'Management Ideas in event'}
                       join={() => {
-                        setEventId(val.id);
-                        setCreatedBy(val.createdBy);
-                        setModalVisible(true);
+                        navigation.navigate('EventManagementIdea');
                       }}
                       detail={() => {
                         navigation.navigate('DetailEventContent', {data: val});
@@ -281,7 +260,6 @@ const EventContent = ({navigation}) => {
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                      handleJoin();
                       setModalVisible(false);
                       setModalSubmitVisible(true);
                     }}>
@@ -340,4 +318,4 @@ const EventContent = ({navigation}) => {
   );
 };
 
-export default EventContent;
+export default EventContentManagement;
