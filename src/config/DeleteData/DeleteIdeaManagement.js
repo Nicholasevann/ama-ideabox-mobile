@@ -14,7 +14,7 @@ const DeleteIdeaManagement = id => {
       if (response.status === 200) {
         return response.status;
       } else {
-        console.log('gagal');
+        console.log(response.status);
       }
     })
     .catch(function (error) {

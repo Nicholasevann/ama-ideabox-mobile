@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {ArrowDown, Trash} from '../assets/icon';
+import {ArrowDown, ArrowUp, Trash} from '../assets/icon';
 import style from '../config/Style/style.cfg';
 const CardJoinIdea = props => {
   const [open, setOpen] = useState(false);
@@ -21,12 +21,22 @@ const CardJoinIdea = props => {
           <View style={styles.title}>
             <Text style={style.h5}>{props.name}</Text>
           </View>
-          <TouchableOpacity style={styles.email} onPress={() => handleOpen()}>
-            <ArrowDown />
-          </TouchableOpacity>
+          {open === true ? (
+            <TouchableOpacity
+              style={styles.status}
+              onPress={() => handleOpen()}>
+              <ArrowUp />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.status}
+              onPress={() => handleOpen()}>
+              <ArrowDown />
+            </TouchableOpacity>
+          )}
         </View>
         {open === true ? (
-          <View style={{width: '100%', height: 55}}>
+          <View style={{width: '100%'}}>
             <View style={{flexDirection: 'row'}}>
               <View style={styles.email}>
                 <Text style={[{color: '#085D7A'}]}>Status</Text>
@@ -70,6 +80,12 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
+  },
+  status: {
+    flex: 1,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cardContent: {
     borderRadius: 5,

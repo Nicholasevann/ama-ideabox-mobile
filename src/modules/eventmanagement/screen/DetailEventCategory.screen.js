@@ -13,7 +13,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import {BackBlue, Cross} from '../../../assets/icon';
 import SearchHeader from '../../../components/SearchHeader';
-import styles from '../style/Event.style';
+import styles from '../style/EventManagement.style';
 import style from '../../../config/Style/style.cfg';
 import getData from '../../../components/GetData';
 import {defaultAuthState} from '../../../config/Auth.cfg';
@@ -22,10 +22,9 @@ import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
 import Header from '../../../components/Header';
-const DetailEventCategory = ({navigation, route}) => {
+const DetailEventManagement = ({navigation, route}) => {
   const data = route.params.data;
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [modalSubmitVisible, setModalSubmitVisible] = useState(false);
   // dropdown
   const [open, setOpen] = useState(false);
@@ -72,55 +71,7 @@ const DetailEventCategory = ({navigation, route}) => {
           getData={getDataSuccess}
         />
       ) : null}
-      {/* Awal Modal */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>Join Event</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={[style.h5, {marginBottom: 20}]}>
-                  Untuk mengikuti event ini, kamu harus memilih ide kamu mana
-                  yang akan kamu ikut sertakan:
-                </Text>
-                <DropDownPicker
-                  open={open}
-                  value={value}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={setValue}
-                  setItems={setItems}
-                  style={styles.input}
-                  placeholder="Pilih ide"
-                  maxHeight={100}
-                  listItemContainerStyle={{height: 35}}
-                />
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setModalVisible(false);
-                    setModalSubmitVisible(true);
-                    handleJoin();
-                  }}>
-                  <Text style={styles.save}>JOIN NOW</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+
       {/* End Modal */}
       {/* Popup submit  */}
       {/* <Modal
@@ -188,12 +139,9 @@ const DetailEventCategory = ({navigation, route}) => {
             <Text style={style.h5}>{data.description}</Text>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            setModalVisible(true);
-          }}>
+        <TouchableOpacity onPress={() => {}}>
           <View style={styles.buttonJoin}>
-            <Text style={styles.save}>Join Now</Text>
+            <Text style={styles.save}>Management Ideas in event</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -201,4 +149,4 @@ const DetailEventCategory = ({navigation, route}) => {
   );
 };
 
-export default DetailEventCategory;
+export default DetailEventManagement;

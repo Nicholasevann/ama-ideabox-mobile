@@ -22,6 +22,9 @@ import CardContent from '../../../components/CardContent';
 import style from '../../../config/Style/style.cfg';
 import LoadingScreen from '../../../components/LoadingScreen';
 import GetDataTrackRecord from '../../../config/GetData/GetDataTrackRecord';
+import axios from 'axios';
+import SuccesModal from '../../../components/SuccesModal';
+import FailedModal from '../../../components/FailedModal';
 
 const Tag = props => {
   return (
@@ -36,20 +39,65 @@ const Profile = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
   const [dataTrackRecord, setDataTrackRecord] = useState('');
+  const [successModal, setSuccessModal] = useState(null);
+  const [about, setAbout] = useState('');
   var indexSupport = 0;
   var indexJoin = 0;
   useEffect(() => {
-    getData().then(jsonValue => setData(jsonValue));
-    if (data === defaultAuthState) {
-      return <LoadingScreen />;
+    if (dataTrackRecord === '' || data === defaultAuthState) {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataTrackRecord(data.id).then(response =>
+        setDataTrackRecord(response),
+      );
     }
-    GetDataTrackRecord(data.id).then(response => setDataTrackRecord(response));
-  }, [data]);
+  });
+
   if (dataTrackRecord === '' || data === defaultAuthState) {
     return <LoadingScreen />;
   }
+  const handlePost = () => {
+    axios({
+      crossDomain: true,
+      method: 'post',
+      url: 'https://dev-users.digitalamoeba.id/trackrecord/editabout',
+      data: {
+        userId: data.id,
+        bio: about,
+      },
+      validateStatus: false,
+    })
+      .then((response, status) => {
+        if (response.status === 200) {
+          console.log('berhasil');
+          setSuccessModal(200);
+        } else {
+          setSuccessModal(-1);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        // need handling error
+      });
+  };
+  const getDataSuccess = data => {
+    setSuccessModal(data);
+  };
+  if (successModal === 200) {
+    GetDataTrackRecord(data.id).then(response => setDataTrackRecord(response));
+  }
   return (
     <SafeAreaView style={styles.container}>
+      {successModal === 200 ? (
+        <SuccesModal
+          desc={'Congrats your profile have been updated!'}
+          getData={getDataSuccess}
+        />
+      ) : successModal === -1 ? (
+        <FailedModal desc={'Your data failed to update!'} />
+      ) : null}
       <ScrollView>
         {/* header */}
         <View style={styles.head}>
@@ -134,7 +182,7 @@ const Profile = ({navigation}) => {
             </View>
             {/* Textbox using const */}
             <View style={styles.textBox}>
-              <Text style={style.h5}>{dataTrackRecord.about}</Text>
+              <Text style={style.h5}>{dataTrackRecord.user.bio}</Text>
             </View>
           </View>
 
@@ -210,13 +258,9 @@ const Profile = ({navigation}) => {
                     }}></View>
                   <View>
                     <Text style={[style.h4, {marginVertical: 10}]}>
-                      {val.desc.value}
+                      {val.desc[0].value}
                     </Text>
-                    <Text style={[style.h5]}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Sed vel, accumsan praesent bibendum aenean morbi. Semper
-                      mauris tempor, neque convallis risus nam.
-                    </Text>
+                    <Text style={[style.h5]}>{val.desc[2].value}</Text>
                     <Text style={[style.h4, {marginVertical: 10}]}>Team:</Text>
                     <View
                       style={{
@@ -295,11 +339,11 @@ const Profile = ({navigation}) => {
                   // value={''}
                   // onChangeText={() => { }}
                 />
-                <View style={styles.button}>
-                  <TouchableOpacity onPress={() => setModalVisible(false)}>
-                    <Text style={styles.save}>SAVE</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={styles.save}>SAVE</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -330,12 +374,18 @@ const Profile = ({navigation}) => {
                   <TextInput
                     style={styles.textInputAbout}
                     multiline={true}
-                    // value={''}
-                    // onChangeText={() => { }}
+                    value={about}
+                    onChangeText={val => {
+                      setAbout(val);
+                    }}
                   />
                 </View>
                 <View style={styles.button}>
-                  <TouchableOpacity onPress={() => setModalAboutVisible(false)}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalAboutVisible(false);
+                      handlePost();
+                    }}>
                     <Text style={styles.save}>SAVE</Text>
                   </TouchableOpacity>
                 </View>

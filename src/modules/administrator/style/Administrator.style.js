@@ -220,8 +220,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   backRightBtnRight2: {
-    backgroundColor: '#34A68A',
+    backgroundColor: '#F9CC2C',
     right: 75,
+  },
+  backRightBtnRight3: {
+    backgroundColor: '#34A68A',
+    right: 150,
   },
   rowBack: {
     alignItems: 'center',

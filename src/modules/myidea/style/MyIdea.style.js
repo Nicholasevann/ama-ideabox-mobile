@@ -117,14 +117,13 @@ const styles = StyleSheet.create({
   title: {
     flex: 2,
     justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingHorizontal: 10,
+    alignItems: 'center',
   },
   email: {
     flex: 1,
     paddingHorizontal: 10,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   cardContent: {
     height: 100,
@@ -268,13 +267,28 @@ const styles = StyleSheet.create({
     top: 0,
     width: 75,
   },
+  backRightBtn2: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 150,
+    flexDirection: 'row',
+  },
   backRightBtnRight: {
-    backgroundColor: 'red',
+    backgroundColor: '#4AC994',
+    borderTopRightRadius: 5,
+    borderBottomEndRadius: 5,
     right: 0,
   },
   backRightBtnRight2: {
-    backgroundColor: '#34A68A',
+    backgroundColor: 'red',
     right: 75,
+  },
+  backRightBtnRight3: {
+    backgroundColor: '#34A68A',
+    right: 150,
   },
   rowBack: {
     alignItems: 'center',

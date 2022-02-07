@@ -17,6 +17,7 @@ import Dashboard from '../modules/dashboard/screen/Dashboard.screen';
 import getData from './GetData';
 import RoutesTalentApproval from '../config/Routes/RoutesTalentApproval';
 import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
+import EventManagement from '../modules/eventmanagement/screen/Event.route';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
@@ -139,6 +140,15 @@ const DrawerNavigation = () => {
         component={Latihan}
         options={{
           drawerLabel: 'Notification',
+          headerShown: false,
+          drawerIcon: () => <HomeDrawer />,
+        }}
+      />
+      <Drawer.Screen
+        name="EventManagement"
+        component={EventManagement}
+        options={{
+          drawerLabel: 'Event Management',
           headerShown: false,
           drawerIcon: () => <HomeDrawer />,
         }}

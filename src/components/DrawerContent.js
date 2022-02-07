@@ -59,7 +59,7 @@ const DrawerContent = props => {
                     onPress={() => props.navigation.navigate('RouteProfile')}>
                     <Text style={styles.caption2}>Edit Profile </Text>
                   </TouchableOpacity>
-                  <Caption style={styles.caption3}>Setting</Caption>
+                  {/* <Caption style={styles.caption3}>Setting</Caption> */}
                 </View>
               </View>
             </View>
