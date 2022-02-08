@@ -20,6 +20,7 @@ import SearchHeader from '../../../components/SearchHeader';
 import SuccesModal from '../../../components/SuccesModal';
 import DeleteCategoryManagement from '../../../config/DeleteData/DeleteCategoryManagement';
 import {GetDataCategoryManagement} from '../../../config/GetData/GetDataAdministrator';
+import UpdateCategory from '../../../config/PostData/UpdateCategory';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/Administrator.style';
 const CategoryManagement = ({navigation}) => {
@@ -28,7 +29,9 @@ const CategoryManagement = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [dataCategoryManagement, setDataCategoryManagement] = useState(null);
   const [deleteSelected, setDeleteSelected] = useState(null);
+  const [editSelected, setEditSelected] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [update, setUpdate] = useState(null);
   const data = require('../data/dataCategoryManagement.json');
 
   // search
@@ -72,8 +75,14 @@ const CategoryManagement = ({navigation}) => {
   const handleDelete = () => {
     DeleteCategoryManagement(deleteSelected).then(val => setSuccess(val));
   };
+  const handleUpdate = () => {
+    UpdateCategory().then(val => setUpdate(val));
+  };
   const getDataSuccess = data => {
     setSuccess(data);
+  };
+  const getDataUpdate = data => {
+    setUpdate(data);
   };
   // const getDataIdea = dataSearch => {
   //   searchFilter(dataSearch);
@@ -91,12 +100,19 @@ const CategoryManagement = ({navigation}) => {
       setFilterData(dataCategoryManagement);
     }
   };
+  console.log(update);
+  console.log(editSelected);
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
         <SuccesModal
           desc={'Your data idea management have been deleted!'}
           getData={getDataSuccess}
+        />
+      ) : update === 200 ? (
+        <SuccesModal
+          desc={'Your data idea management have been updated!'}
+          getData={getDataUpdate}
         />
       ) : null}
       <SearchHeader
@@ -263,11 +279,14 @@ const CategoryManagement = ({navigation}) => {
                     style={styles.input}
                     placeholder={'Select a type category'}
                   />
-                  <View style={styles.button}>
-                    <TouchableOpacity onPress={() => setModalVisible(false)}>
-                      <Text style={styles.save}>SAVE</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                      handleUpdate();
+                      setModalVisible(false);
+                    }}>
+                    <Text style={styles.save}>SAVE</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -368,6 +387,7 @@ const CategoryManagement = ({navigation}) => {
                 <TouchableOpacity
                   onPress={() => {
                     setModalVisible(true);
+                    setEditSelected(item.id);
                   }}
                   style={[styles.backRightBtn, styles.backRightBtnRight2]}>
                   <EditCategory />

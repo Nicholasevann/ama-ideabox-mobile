@@ -92,7 +92,7 @@ const Profile = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
         <SuccesModal
-          desc={'Congrats your profile have been updated!'}
+          desc={'Congrats your bio have been updated!'}
           getData={getDataSuccess}
         />
       ) : successModal === -1 ? (
@@ -380,15 +380,14 @@ const Profile = ({navigation}) => {
                     }}
                   />
                 </View>
-                <View style={styles.button}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalAboutVisible(false);
-                      handlePost();
-                    }}>
-                    <Text style={styles.save}>SAVE</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    setModalAboutVisible(false);
+                    handlePost();
+                  }}>
+                  <Text style={styles.save}>SAVE</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

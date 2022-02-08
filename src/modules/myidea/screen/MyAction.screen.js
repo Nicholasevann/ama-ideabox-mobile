@@ -76,12 +76,11 @@ const MyAction = ({navigation}) => {
       setFilterData(response.ideas);
     });
   }
-  console.log(success);
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
         <SuccesModal
-          desc={'Your data idea management have been deleted!'}
+          desc={'Your have been left the idea!'}
           getData={getDataSuccess}
         />
       ) : null}
@@ -142,12 +141,12 @@ const MyAction = ({navigation}) => {
               </View>
             </View>
             <SwipeListView
-              data={sharingIdea.ideas}
+              data={filterData}
               renderItem={({item}) => {
                 // console.log(item)
                 return (
                   <View>
-                    <CardSubmittedIdea
+                    <CardJoinIdea
                       delete={() => setModalDeleteVisible(true)}
                       title={item.desc[0].value}
                       name={item.createdBy}
@@ -159,6 +158,10 @@ const MyAction = ({navigation}) => {
               renderHiddenItem={({item}) => (
                 <View style={styles.rowBack}>
                   <TouchableOpacity
+                    onPress={() => {
+                      setModalDeleteVisible(true);
+                      setIdIdea(item.id);
+                    }}
                     style={[styles.backRightBtn, styles.backRightBtnRight]}>
                     <Left />
                   </TouchableOpacity>
@@ -173,12 +176,6 @@ const MyAction = ({navigation}) => {
               )}
               rightOpenValue={-150}
               leftOpenValue={0}
-            />
-            <CardJoinIdea
-              delete={() => setModalDeleteVisible(true)}
-              title={'ada'}
-              name={'ada'}
-              createdDate={'ada'}
             />
           </View>
         </View>
@@ -203,23 +200,23 @@ const MyAction = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                  <Text style={[styles.h2, {marginVertical: 10}]}>
+                    Anda ingin keluar dari idea ini?
+                  </Text>
                   <View style={styles.rowDelete}>
-                    <View style={styles.buttondelete}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setModalDeleteVisible(false);
-                          handleLeft();
-                        }}>
-                        <Text style={styles.save}>Hapus</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttoncancel}>
-                      <TouchableOpacity
-                        onPress={() => setModalDeleteVisible(false)}>
-                        <Text style={styles.save}>Batal</Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                      style={styles.buttondelete}
+                      onPress={() => {
+                        setModalDeleteVisible(false);
+                        handleLeft();
+                      }}>
+                      <Text style={styles.save}>Keluar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.buttoncancel}
+                      onPress={() => setModalDeleteVisible(false)}>
+                      <Text style={styles.save}>Batal</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>

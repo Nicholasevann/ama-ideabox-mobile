@@ -10,7 +10,7 @@ import React, {useEffect} from 'react';
 import style from '../config/Style/style.cfg';
 import {useState} from 'react/cjs/react.development';
 
-const FailedModal = props => {
+const WarningModal = props => {
   const [visible, setVisible] = useState(true);
   const [data, setData] = useState(null);
   useEffect(() => {
@@ -32,10 +32,10 @@ const FailedModal = props => {
           <View style={styles.modalView}>
             <View style={styles.inputContainer}>
               <Image
-                source={require('../assets/gif/failed.gif')}
+                source={require('../assets/gif/warning.gif')}
                 style={{width: 140, height: 140}}
               />
-              <Text style={[style.h2, {color: '#D31A15'}]}>FAILED</Text>
+              <Text style={[style.h2, {color: '#FD6C21'}]}>WARNING!</Text>
               <Text style={[style.h4, {marginTop: 20, textAlign: 'center'}]}>
                 {props.desc}
               </Text>
@@ -47,7 +47,7 @@ const FailedModal = props => {
   );
 };
 
-export default FailedModal;
+export default WarningModal;
 
 const styles = StyleSheet.create({
   centeredcontainer: {
