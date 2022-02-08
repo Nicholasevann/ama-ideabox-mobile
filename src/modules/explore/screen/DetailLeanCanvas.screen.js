@@ -10,7 +10,7 @@ import styles from '../style/Explore.style';
 
 const DetailLeanCanvas = ({route, navigation}) => {
   const data = route.params.data;
-
+  const item = route.params.item;
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -21,6 +21,7 @@ const DetailLeanCanvas = ({route, navigation}) => {
       {/* Profile */}
       <CardProfile
         onPress={() => navigation.goBack()}
+        profile={() => navigation.navigate('ProfileUser', {data: item})}
         name={data.user[0].name}
         nik={data.user[0].nik}
       />
@@ -33,7 +34,7 @@ const DetailLeanCanvas = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailIdeaUser', {data: data})
+                navigation.navigate('DetailIdeaUser', {data: data, item: item})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Idea Description</Text>

@@ -8,12 +8,14 @@ import {
 } from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailIdeaDesc from '../../../components/DetailIdeaDesc';
+import Header from '../../../components/Header';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
 import styles from '../style/Explore.style';
 const DetailExplore = ({route, navigation}) => {
   const data = route.params.data;
+  const item = route.params.item;
   const [detailIdea, setDetailIdea] = useState(null);
   useEffect(() => {
     if (data === null) {
@@ -26,7 +28,7 @@ const DetailExplore = ({route, navigation}) => {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
@@ -34,7 +36,7 @@ const DetailExplore = ({route, navigation}) => {
       {/* Profile */}
       <CardProfile
         onPress={() => navigation.goBack()}
-        profile={() => navigation.navigate('ProfileUser')}
+        profile={() => navigation.navigate('ProfileUser', {data: item})}
         name={detailIdea.user[0].name}
         nik={detailIdea.user[0].nik}
       />
@@ -53,7 +55,10 @@ const DetailExplore = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: detailIdea})
+                navigation.navigate('DetailStoryBehind', {
+                  data: detailIdea,
+                  item: data,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -62,7 +67,10 @@ const DetailExplore = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailLeanCanvas', {data: detailIdea})
+                navigation.navigate('DetailLeanCanvas', {
+                  data: detailIdea,
+                  item: data,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Lean Canvas</Text>
@@ -71,7 +79,10 @@ const DetailExplore = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailTeams', {data: detailIdea})
+                navigation.navigate('DetailTeams', {
+                  data: detailIdea,
+                  item: data,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>

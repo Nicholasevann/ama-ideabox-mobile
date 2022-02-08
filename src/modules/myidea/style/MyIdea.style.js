@@ -277,13 +277,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   backRightBtnRight: {
-    backgroundColor: '#4AC994',
+    backgroundColor: 'red',
     borderTopRightRadius: 5,
     borderBottomEndRadius: 5,
     right: 0,
   },
   backRightBtnRight2: {
-    backgroundColor: 'red',
+    backgroundColor: '#4AC994',
     right: 75,
   },
   backRightBtnRight3: {

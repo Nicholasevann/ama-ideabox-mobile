@@ -32,6 +32,9 @@ import CommentIdea from '../../../config/PostData/Comment';
 import SuccesModal from '../../../components/SuccesModal';
 import getData from '../../../components/GetData';
 import JoinIdea from '../../../config/PostData/JoinIdea';
+import PromoteIdea from '../../../config/PostData/PromoteIdea';
+import WarningModal from '../../../components/WarningModal';
+import FailedModal from '../../../components/FailedModal';
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -54,7 +57,9 @@ const ExploreContent = ({navigation, route}) => {
   const [idComment, setIdComment] = useState(null);
   const [idUser, setIdUser] = useState(null);
   const [join, setJoin] = useState(null);
+  const [promote, setPromote] = useState(null);
   const [textJoin, setTextJoin] = useState('');
+  const [textPromote, setTextPromote] = useState('');
   const [like, setLike] = useState(null);
   const [success, setSuccess] = useState(null);
   const [dataAsync, setDataAsync] = useState(defaultAuthState);
@@ -126,6 +131,9 @@ const ExploreContent = ({navigation, route}) => {
   const handleJoin = () => {
     JoinIdea(idIdeaJoin, idUser, textJoin).then(val => setJoin(val));
   };
+  const handlePromote = () => {
+    PromoteIdea(idIdeaJoin, textPromote).then(val => setPromote(val));
+  };
   // Sugesstion
   const renderSuggestions = ({keyword, onSuggestionPress}) => {
     if (keyword == null) {
@@ -171,7 +179,9 @@ const ExploreContent = ({navigation, route}) => {
   const getDataJoin = data => {
     setJoin(data);
   };
-  console.log(join);
+  const getDataPromote = data => {
+    setPromote(data);
+  };
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -179,9 +189,29 @@ const ExploreContent = ({navigation, route}) => {
           desc={'Your comment have been added!'}
           getData={getDataSuccess}
         />
+      ) : success !== null ? (
+        <FailedModal
+          desc={'Your comment not added!'}
+          getData={getDataSuccess}
+        />
       ) : null}
       {join === 200 ? (
         <SuccesModal desc={'Your have join the idea'} getData={getDataJoin} />
+      ) : join === 406 ? (
+        <WarningModal
+          desc={'You already join for this idea'}
+          getData={getDataJoin}
+        />
+      ) : promote === 201 ? (
+        <SuccesModal
+          desc={'Your have Promote the idea'}
+          getData={getDataPromote}
+        />
+      ) : promote === 400 ? (
+        <WarningModal
+          desc={'You already requested for this idea'}
+          getData={getDataPromote}
+        />
       ) : null}
       <SearchHeader
         onPress={() => navigation.openDrawer()}
@@ -223,7 +253,10 @@ const ExploreContent = ({navigation, route}) => {
                   likedBy={val.totalLike}
                   cover={val.desc[1].value}
                   more={() =>
-                    navigation.navigate('DetailIdeaUser', {data: val})
+                    navigation.navigate('DetailIdeaUser', {
+                      data: val,
+                      item: val,
+                    })
                   }
                   comment={() => {
                     setModalComment(true);
@@ -473,20 +506,22 @@ const ExploreContent = ({navigation, route}) => {
                     harus melengkapi beberapa informasi dibawah agar komunikasi
                     diluar website ideabox berjalan dengan lancar, good luck !
                   </Text>
-                  <Text style={[style.h4, {marginVertical: 10}]}>
+                  {/* <Text style={[style.h4, {marginVertical: 10}]}>
                     Nomor Telepon :
                   </Text>
                   <TextInput
                     style={styles.input}
                     // value={''}
                     // onChangeText={() => { }}
-                  />
+                  /> */}
                   <Text style={[style.h4, {marginVertical: 10}]}>Alasan :</Text>
                   <View style={styles.inputAbout}>
                     <TextInput
                       multiline={true}
-                      // value={''}
-                      // onChangeText={() => { }}
+                      value={textPromote}
+                      onChangeText={val => {
+                        setTextPromote(val);
+                      }}
                     />
                   </View>
                 </View>
@@ -494,7 +529,10 @@ const ExploreContent = ({navigation, route}) => {
                 <View style={styles.buttonWrap}>
                   <TouchableOpacity
                     style={styles.buttonYakin}
-                    onPress={() => setModalPromoteVisible(false)}>
+                    onPress={() => {
+                      setModalPromoteVisible(false);
+                      handlePromote();
+                    }}>
                     <View>
                       <Text style={styles.textYakin}>Yakin</Text>
                     </View>

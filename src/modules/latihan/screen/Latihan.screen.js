@@ -12,6 +12,7 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import SuccesModal from '../../../components/SuccesModal';
 import FailedModal from '../../../components/FailedModal';
 import NotifService from '../../../config/Notification/NotifService';
+import WarningModal from '../../../components/WarningModal';
 
 const Latihan = () => {
   const [registerToken, setRegisterToken] = useState('');
@@ -31,7 +32,7 @@ const Latihan = () => {
 
   return (
     <View style={styles.container}>
-      <FailedModal desc={'Congrats your profile have been updated!'} />
+      <WarningModal desc={'Congrats your profile have been updated!'} />
       <Text style={styles.title}>
         Example app react-native-push-notification
       </Text>
