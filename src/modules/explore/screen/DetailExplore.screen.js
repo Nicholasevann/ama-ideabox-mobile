@@ -26,6 +26,7 @@ const DetailExplore = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
+  console.log(data.user.pictures);
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -34,12 +35,23 @@ const DetailExplore = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.goBack()}
-        profile={() => navigation.navigate('ProfileUser', {data: item})}
-        name={detailIdea.user[0].name}
-        nik={detailIdea.user[0].nik}
-      />
+      {item.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={detailIdea.user[0].name}
+          nik={detailIdea.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.user.pictures}}
+          name={detailIdea.user[0].name}
+          nik={detailIdea.user[0].nik}
+        />
+      )}
 
       {/* content */}
 

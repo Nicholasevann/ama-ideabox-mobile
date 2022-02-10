@@ -6,6 +6,8 @@ import DetailStoryBehind from '../../modules/myidea/screen/DetailStoryBehind.scr
 import DetailLeanCanvas from '../../modules/myidea/screen/DetailLeanCanvas.screen';
 import DetailTeams from '../../modules/myidea/screen/DetailTeams.screen';
 import MyAction from '../../modules/myidea/screen/MyAction.screen';
+import ProfileUser from '../../modules/myidea/screen/ProfileUser.screen';
+import ProfileUserMyIdea from '../../modules/myidea/screen/ProfileUser.screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +44,11 @@ const RoutesMyIdea = () => {
       <Stack.Screen
         name="DetailTeams"
         component={DetailTeams}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProfileUser"
+        component={ProfileUserMyIdea}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

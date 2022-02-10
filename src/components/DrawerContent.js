@@ -45,10 +45,15 @@ const DrawerContent = props => {
           {/* User info */}
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              <Avatar.Image
-                source={require('../assets/image/profilepicture.jpg')}
-                size={50}
-              />
+              {data.pictures === null ? (
+                <Avatar.Image
+                  source={require('../assets/image/profilepicture.jpg')}
+                  size={50}
+                />
+              ) : (
+                <Avatar.Image source={{uri: data.pictures}} size={50} />
+              )}
+
               <View style={{marginLeft: 15, flexDirection: 'column', flex: 1}}>
                 <Title style={styles.title} numberOfLines={2}>
                   {data.name}

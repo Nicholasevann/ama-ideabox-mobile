@@ -2,6 +2,7 @@ import React from 'react';
 import {SafeAreaView, Text, View, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailLeanCanvasDesc from '../../../components/DetailLeanCanvasDesc';
+import Header from '../../../components/Header';
 import SearchHeader from '../../../components/SearchHeader';
 import styles from '../style/MyIdea.style';
 const DetailLeanCanvas = ({navigation, route}) => {
@@ -9,17 +10,29 @@ const DetailLeanCanvas = ({navigation, route}) => {
   const item = route.params.item;
   return (
     <SafeAreaView style={styles.container}>
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.navigate('SubmittedIdea')}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {item.createdBy.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.createdBy.pictures}}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>

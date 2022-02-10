@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View, TouchableOpacity} from 'react-native';
 import CardProfile from '../../../components/CardProfile';
 import DetailIdeaDesc from '../../../components/DetailIdeaDesc';
+import Header from '../../../components/Header';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
@@ -9,6 +10,7 @@ import styles from '../style/MyIdea.style';
 const DetailIdeaUser = ({route, navigation}) => {
   const [detailIdea, setDetailIdea] = useState(null);
   const data = route.params.data;
+  const item = route.params.item;
   useEffect(() => {
     if (detailIdea === null) {
       if (data === null) {
@@ -20,20 +22,31 @@ const DetailIdeaUser = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
-  console.log(detailIdea);
   return (
     <SafeAreaView style={styles.container}>
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.goBack()}
-        name={detailIdea.user[0].name}
-        nik={detailIdea.user[0].nik}
-      />
+      {item.createdBy.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={detailIdea.user[0].name}
+          nik={detailIdea.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.createdBy.pictures}}
+          name={detailIdea.user[0].name}
+          nik={detailIdea.user[0].nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -50,6 +63,7 @@ const DetailIdeaUser = ({route, navigation}) => {
               onPress={() =>
                 navigation.navigate('DetailStoryBehind', {
                   data: detailIdea,
+                  item: item,
                 })
               }>
               <View style={styles.tabBar}>
@@ -61,6 +75,7 @@ const DetailIdeaUser = ({route, navigation}) => {
               onPress={() =>
                 navigation.navigate('DetailLeanCanvas', {
                   data: detailIdea,
+                  item: item,
                 })
               }>
               <View style={styles.tabBar}>
@@ -72,6 +87,7 @@ const DetailIdeaUser = ({route, navigation}) => {
               onPress={() =>
                 navigation.navigate('DetailTeams', {
                   data: detailIdea,
+                  item: item,
                 })
               }>
               <View style={styles.tabBar}>

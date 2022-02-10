@@ -8,23 +8,37 @@ import {
 } from 'react-native';
 import CardDetailTeamDesc from '../../../components/CardDetailTeamsDesc';
 import CardProfile from '../../../components/CardProfile';
+import Header from '../../../components/Header';
 import SearchHeader from '../../../components/SearchHeader';
 import styles from '../style/MyIdea.style';
 const DetailTeams = ({navigation, route}) => {
   const data = route.params.data;
+  const item = route.params.item;
   return (
     <SafeAreaView style={styles.container}>
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.navigate('SubmittedIdea')}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {item.createdBy.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.createdBy.pictures}}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -34,7 +48,7 @@ const DetailTeams = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailIdeaUser', {data: data})
+                navigation.navigate('DetailIdeaUser', {data: data, item: item})
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Idea Description</Text>
@@ -45,6 +59,7 @@ const DetailTeams = ({navigation, route}) => {
               onPress={() =>
                 navigation.navigate('DetailStoryBehind', {
                   data: data,
+                  item: item,
                 })
               }>
               <View style={styles.tabBar}>
@@ -56,6 +71,7 @@ const DetailTeams = ({navigation, route}) => {
               onPress={() =>
                 navigation.navigate('DetailLeanCanvas', {
                   data: data,
+                  item: item,
                 })
               }>
               <View style={styles.tabBar}>

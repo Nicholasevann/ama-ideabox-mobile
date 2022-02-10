@@ -3,6 +3,7 @@ import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
 import {useState} from 'react/cjs/react.development';
 import CardProfile from '../../../components/CardProfile';
 import DetailLeanCanvasDesc from '../../../components/DetailLeanCanvasDesc';
+import Header from '../../../components/Header';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import {GetDetailIdea} from '../../../config/GetData/GetDataIdea';
@@ -11,20 +12,32 @@ import styles from '../style/Explore.style';
 const DetailLeanCanvas = ({route, navigation}) => {
   const data = route.params.data;
   const item = route.params.item;
+  console.log(item);
   return (
     <SafeAreaView style={styles.container}>
-      <SearchHeader
+      <Header
         onPress={() => navigation.openDrawer()}
         notification={() => navigation.navigate('Notification')}
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.goBack()}
-        profile={() => navigation.navigate('ProfileUser', {data: item})}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {item.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.user.pictures}}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -43,7 +56,10 @@ const DetailLeanCanvas = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.wrap}
               onPress={() =>
-                navigation.navigate('DetailStoryBehind', {data: data})
+                navigation.navigate('DetailStoryBehind', {
+                  data: data,
+                  item: item,
+                })
               }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Story Behind</Text>
@@ -56,7 +72,9 @@ const DetailLeanCanvas = ({route, navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.wrap}
-              onPress={() => navigation.navigate('DetailTeams', {data: data})}>
+              onPress={() =>
+                navigation.navigate('DetailTeams', {data: data, item: item})
+              }>
               <View style={styles.tabBar}>
                 <Text style={styles.textNonActive}>Teams</Text>
               </View>

@@ -19,10 +19,7 @@ const CardContent = props => {
       <View style={styles.wrapProfile}>
         <TouchableOpacity onPress={props.onProfile}>
           <View style={styles.profile}>
-            <Image
-              source={require('./../assets/icon/profilepicture.png')}
-              style={styles.imageProfile}
-            />
+            <Image source={props.profileUser} style={styles.imageProfile} />
             <Text style={[styles.textProfile, style.h4medium]}>
               {props.name}
             </Text>
@@ -112,10 +109,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 25,
   },
   imageProfile: {
     width: windowWidth / 11.5,
     height: windowHeight / 22.56,
+    borderRadius: 25,
   },
   textProfile: {
     marginLeft: windowHeight / 84.6,

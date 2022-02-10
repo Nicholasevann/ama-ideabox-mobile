@@ -149,7 +149,7 @@ const MyAction = ({navigation}) => {
                     <CardJoinIdea
                       delete={() => setModalDeleteVisible(true)}
                       title={item.desc[0].value}
-                      name={item.createdBy}
+                      name={item.createdBy.name}
                       createdDate={item.createdDate}
                     />
                   </View>
@@ -168,7 +168,10 @@ const MyAction = ({navigation}) => {
                   <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight2]}
                     onPress={() =>
-                      navigation.navigate('DetailIdeaUser', {data: item})
+                      navigation.navigate('DetailIdeaUser', {
+                        data: item,
+                        item: item,
+                      })
                     }>
                     <Eye />
                   </TouchableOpacity>
