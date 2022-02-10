@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {prefetchConfiguration} from 'react-native-app-auth';
-import styles from '../style/Profile.style';
+import styles from '../style/ProfileUser.style';
 import getData from '../../../components/GetData';
 import {AuthConfig, defaultAuthState} from '../../../config/Auth.cfg';
-import {Back, Cross, Edit, Notif} from '../../../assets/icon';
+import {Back, BackBlue, Cross, Edit, Notif} from '../../../assets/icon';
 import {
   Text,
   View,
@@ -22,9 +22,6 @@ import CardContent from '../../../components/CardContent';
 import style from '../../../config/Style/style.cfg';
 import LoadingScreen from '../../../components/LoadingScreen';
 import GetDataTrackRecord from '../../../config/GetData/GetDataTrackRecord';
-import axios from 'axios';
-import SuccesModal from '../../../components/SuccesModal';
-import FailedModal from '../../../components/FailedModal';
 
 const Tag = props => {
   return (
@@ -34,77 +31,35 @@ const Tag = props => {
   );
 };
 
-const Profile = ({navigation}) => {
+const ProfileUserMyIdea = ({navigation, route}) => {
+  const dataProfile = route.params.data;
   const [data, setData] = useState(defaultAuthState);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalAboutVisible, setModalAboutVisible] = useState(false);
   const [dataTrackRecord, setDataTrackRecord] = useState('');
-  const [successModal, setSuccessModal] = useState(null);
-  const [about, setAbout] = useState('');
   var indexSupport = 0;
   var indexJoin = 0;
   useEffect(() => {
-    if (dataTrackRecord === '' || data === defaultAuthState) {
-      getData().then(jsonValue => setData(jsonValue));
-      if (data === defaultAuthState) {
-        return <LoadingScreen />;
-      }
-      GetDataTrackRecord(data.id).then(response =>
-        setDataTrackRecord(response),
-      );
+    if (dataProfile === null) {
+      return <LoadingScreen />;
     }
-  });
-
-  if (dataTrackRecord === '' || data === defaultAuthState) {
+    GetDataTrackRecord(dataProfile.createdBy.id).then(response =>
+      setDataTrackRecord(response),
+    );
+  }, [dataProfile]);
+  if (dataTrackRecord === '') {
     return <LoadingScreen />;
   }
-  const handlePost = () => {
-    axios({
-      crossDomain: true,
-      method: 'post',
-      url: 'https://dev-users.digitalamoeba.id/trackrecord/editabout',
-      data: {
-        userId: data.id,
-        bio: about,
-      },
-      validateStatus: false,
-    })
-      .then((response, status) => {
-        if (response.status === 200) {
-          console.log('berhasil');
-          setSuccessModal(200);
-        } else {
-          setSuccessModal(-1);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        // need handling error
-      });
-  };
-  const getDataSuccess = data => {
-    setSuccessModal(data);
-  };
-  if (successModal === 200) {
-    GetDataTrackRecord(data.id).then(response => setDataTrackRecord(response));
-  }
+  console.log(dataProfile);
   return (
     <SafeAreaView style={styles.container}>
-      {successModal === 200 ? (
-        <SuccesModal
-          desc={'Congrats your bio have been updated!'}
-          getData={getDataSuccess}
-        />
-      ) : successModal === -1 ? (
-        <FailedModal desc={'Your data failed to update!'} />
-      ) : null}
       <ScrollView>
         {/* header */}
         <View style={styles.head}>
           <View style={styles.Button}>
             <TouchableOpacity
               onPress={() => {
-                navigation.replace('DrawerNavigation');
+                navigation.goBack();
               }}>
               <Back />
             </TouchableOpacity>
@@ -114,41 +69,24 @@ const Profile = ({navigation}) => {
           </View>
         </View>
         <View style={styles.profilePicture}>
-          {data.pictures === null ? (
-            <Image
-              source={require('../../../assets/image/profilepicture.jpg')}
-              style={styles.image}
-            />
-          ) : (
-            <Image source={{uri: data.pictures}} style={styles.image} />
-          )}
+          <Image
+            source={require('../../../assets/image/profilepicture2.jpg')}
+            style={styles.image}
+          />
         </View>
         {/*image*/}
         <View style={styles.imageBackground}>
-          {data.background === null ? (
-            <Image
-              source={require('../../../assets/image/dummyPicture2.png')}
-              style={styles.backgroundImage}
-            />
-          ) : (
-            <Image
-              source={{uri: data.background}}
-              style={styles.backgroundImage}
-            />
-          )}
+          <Image
+            source={require('../../../assets/image/dummyPicture1.png')}
+            style={styles.backgroundImage}
+          />
         </View>
         {/*main content */}
         <View style={styles.mainContainer}>
           <View style={styles.mainContent}>
-            <Text style={styles.h1}>{data.name}</Text>
-            <Text style={styles.h2}>{data.email}</Text>
-            <Text style={styles.h3}>Kota Bandung, Jawa Barat</Text>
+            <Text style={styles.h1}>{dataTrackRecord.user.name}</Text>
+            <Text style={styles.h2}>{dataTrackRecord.user.regional}</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.replace('InputProfile')}>
-            <View style={styles.Button}>
-              <Edit />
-            </View>
-          </TouchableOpacity>
         </View>
 
         <View style={{paddingHorizontal: 15, paddingTop: 10}}>
@@ -184,12 +122,6 @@ const Profile = ({navigation}) => {
           <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
               <Text style={styles.title}>About</Text>
-              <TouchableOpacity onPress={() => setModalAboutVisible(true)}>
-                <Image
-                  source={require('../../../assets/icon/edit.png')}
-                  style={{width: 20, height: 20}}
-                />
-              </TouchableOpacity>
             </View>
             {/* Textbox using const */}
             <View style={styles.textBox}>
@@ -203,7 +135,7 @@ const Profile = ({navigation}) => {
               <Text style={styles.title}>Skill</Text>
             </View>
             {/* Tag */}
-            <View style={styles.tagContainer}>
+            <View style={styles.textBox}>
               {dataTrackRecord.skillSet.map(val => (
                 <Tag title={val.name} />
               ))}
@@ -229,9 +161,7 @@ const Profile = ({navigation}) => {
             </View>
             <View style={styles.achievementContainer}>
               <CardAchievement
-                title={
-                  'Sistem keuangan berbasis web untuk KUKM Sistem keuangan berbasis web untuk KUKM'
-                }
+                title={'Sistem keuangan berbasis web untuk KUKM'}
                 desc={'Top 25 Ideahack'}
               />
               <CardAchievement
@@ -240,7 +170,6 @@ const Profile = ({navigation}) => {
               />
             </View>
           </View> */}
-
           {/* Inovation*/}
           <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
@@ -318,95 +247,8 @@ const Profile = ({navigation}) => {
           </View>
         </View>
       </ScrollView>
-
-      {/* Popup Edit achievment */}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>Achievement</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <Text style={styles.h2}>Nama Inovasi :</Text>
-                <TextInput
-                  style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
-                />
-                <Text style={styles.h2}>Pencapaian :</Text>
-                <TextInput
-                  style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
-                />
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => setModalVisible(false)}>
-                  <Text style={styles.save}>SAVE</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      {/* EndPopup */}
-
-      {/* Popup About*/}
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={modalAboutVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalAboutVisible(!modalAboutVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.centeredcontainer}>
-            <View style={styles.modalView}>
-              <View style={styles.titleContainer}>
-                <Text style={styles.textEdit}>About</Text>
-                <TouchableOpacity onPress={() => setModalAboutVisible(false)}>
-                  <Cross />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.inputContainer}>
-                <View style={styles.inputAbout}>
-                  <TextInput
-                    style={styles.textInputAbout}
-                    multiline={true}
-                    value={about}
-                    onChangeText={val => {
-                      setAbout(val);
-                    }}
-                  />
-                </View>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setModalAboutVisible(false);
-                    handlePost();
-                  }}>
-                  <Text style={styles.save}>SAVE</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      {/* EndPopup */}
     </SafeAreaView>
   );
 };
 
-export default Profile;
+export default ProfileUserMyIdea;

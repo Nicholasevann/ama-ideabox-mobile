@@ -3,64 +3,18 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {ArrowDown, ArrowUp, Trash} from '../assets/icon';
 import style from '../config/Style/style.cfg';
 const CardJoinIdea = props => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => {
-    if (open === false) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-  };
   return (
-    <View>
-      <View style={styles.cardContent}>
-        <View style={{flexDirection: 'row', height: 80}}>
-          <View style={styles.title}>
-            <Text style={style.h5}>{props.title}</Text>
-          </View>
-          <View style={styles.title}>
-            <Text style={style.h5}>{props.name}</Text>
-          </View>
-          {open === true ? (
-            <TouchableOpacity
-              style={styles.status}
-              onPress={() => handleOpen()}>
-              <ArrowUp />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={styles.status}
-              onPress={() => handleOpen()}>
-              <ArrowDown />
-            </TouchableOpacity>
-          )}
+    <View style={styles.cardContent}>
+      <View style={{flexDirection: 'row', height: 80}}>
+        <View style={styles.title}>
+          <Text style={style.h5}>{props.title}</Text>
         </View>
-        {open === true ? (
-          <View style={{width: '100%'}}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.email}>
-                <Text style={[{color: '#085D7A'}]}>Status</Text>
-              </View>
-              <View style={styles.title}>
-                <Text style={[{color: '#085D7A'}]}>Request Date</Text>
-              </View>
-              <View style={styles.title} onPress={() => handleOpen()}>
-                <Text style={[{color: '#085D7A'}]}>Response Date</Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.email}>
-                <Text style={style.h5}>Pending</Text>
-              </View>
-              <View style={styles.title}>
-                <Text style={style.h5}>2021-09-26 00:29:42</Text>
-              </View>
-              <View style={styles.title} onPress={() => handleOpen()}>
-                <Text style={style.h5}>2021-09-26 00:29:42</Text>
-              </View>
-            </View>
-          </View>
-        ) : null}
+        <View style={styles.title}>
+          <Text style={style.h5}>{props.name}</Text>
+        </View>
+        <View style={styles.email}>
+          <Text style={style.h5}>{props.createdDate}</Text>
+        </View>
       </View>
     </View>
   );
@@ -73,13 +27,25 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    padding: 5,
+    paddingHorizontal: 5,
   },
   email: {
     flex: 1,
-    padding: 5,
+    paddingHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
+  },
+  title2: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 5,
+  },
+  email2: {
+    flex: 1,
+    paddingHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   status: {
     flex: 1,

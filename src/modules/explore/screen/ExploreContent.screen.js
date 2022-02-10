@@ -246,6 +246,11 @@ const ExploreContent = ({navigation, route}) => {
                   clickLike={() => {
                     handleLike(val.id);
                   }}
+                  profileUser={
+                    val.user.pictures === ''
+                      ? require('../../../assets/icon/profilepicture.png')
+                      : {uri: val.user.pictures}
+                  }
                   name={val.user.name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}

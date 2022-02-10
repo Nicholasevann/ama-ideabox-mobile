@@ -14,10 +14,7 @@ const CardProfile = props => {
         }}>
         <TouchableOpacity onPress={props.profile} style={{width: '100%'}}>
           <View style={styles.profile}>
-            <Image
-              source={require('../assets/image/profilepicture2.jpg')}
-              style={styles.imageProfileProductive}
-            />
+            <Image source={props.image} style={styles.imageProfileProductive} />
             <View style={styles.content}>
               <Text style={styles.textProfileProductive}>{props.name}</Text>
               <Text style={styles.textLikeProductive}>{props.nik} </Text>

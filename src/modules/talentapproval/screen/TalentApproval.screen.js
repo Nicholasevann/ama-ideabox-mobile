@@ -129,7 +129,7 @@ const TalentApproval = ({navigation}) => {
             <View style={styles.email}>
               <Text
                 style={[style.h5, {textAlign: 'center', fontWeight: 'bold'}]}>
-                Created Date
+                Notes
               </Text>
             </View>
           </View>
@@ -141,7 +141,9 @@ const TalentApproval = ({navigation}) => {
                   <CardTalentApproval
                     title={item.ideas.desc.value}
                     name={item.approvalTo.name}
-                    createdDate={item.createdDate}
+                    date={item.updatedDate}
+                    request={item.request}
+                    notes={item.notes}
                   />
                 </View>
               );

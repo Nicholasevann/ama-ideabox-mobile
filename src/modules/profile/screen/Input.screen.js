@@ -38,13 +38,8 @@ const InputProfile = ({navigation}) => {
     require('../../../assets/image/dummyPicture2.png'),
   );
   const [profile, setProfile] = useState(false);
-  const [imageCover, setImageCover] = useState(
-    'https://www.ilmubahasa.net/wp-content/uploads/2018/10/backgroundkeren1.jpg',
-  );
-  // require('../../../assets/image/coverProfile.png'),
-  const [imageProfile, setImageProfile] = useState(
-    'https://image.flaticon.com/icons/png/512/64/64495.png',
-  );
+  const [imageCover, setImageCover] = useState(null);
+  const [imageProfile, setImageProfile] = useState(null);
   const [dataProfile, setDataProfile] = useState(null);
   const takePhotoFromLibrary = () => {
     ImagePicker.openPicker({
@@ -114,6 +109,8 @@ const InputProfile = ({navigation}) => {
         loker: dataProfile.loker,
         regional: dataProfile.regional,
         teamStructure: dataProfile.teamStructure,
+        pictures: imageProfile,
+        background: imageCover,
       },
       validateStatus: false,
     })
@@ -142,6 +139,10 @@ const InputProfile = ({navigation}) => {
   const handleText = () =>
     pickedDate ? moment(pickedDate).format('YYYY-MM-DD') : dataProfile.tglLahir;
   // pickedDate.toDateString()
+  if (imageCover === null || imageProfile === null) {
+    setImageCover(dataProfile.background);
+    setImageProfile(dataProfile.pictures);
+  }
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (

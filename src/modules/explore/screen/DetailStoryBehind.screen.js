@@ -20,12 +20,23 @@ const DetailStoryBehind = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.goBack()}
-        profile={() => navigation.navigate('ProfileUser', {data: item})}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {item.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={require('../../../assets/image/profilepicture2.jpg')}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.goBack()}
+          profile={() => navigation.navigate('ProfileUser', {data: item})}
+          image={{uri: item.user.pictures}}
+          name={data.user[0].name}
+          nik={data.user[0].nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>

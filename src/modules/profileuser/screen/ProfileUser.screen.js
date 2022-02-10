@@ -50,7 +50,7 @@ const ProfileUser = ({navigation, route}) => {
   if (dataTrackRecord === '') {
     return <LoadingScreen />;
   }
-  console.log(dataTrackRecord);
+  console.log(dataProfile);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
