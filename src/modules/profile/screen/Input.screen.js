@@ -31,13 +31,12 @@ const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
   const [successModal, setSuccessModal] = useState(null);
-  const [failed, setFailed] = useState(false);
   const [update, setUpdate] = useState(defaulthAuthData);
   const [pickedDate, setPickedDate] = useState(null);
   const [imageUri, setImageUri] = useState(
     require('../../../assets/image/dummyPicture2.png'),
   );
-  const [profile, setProfile] = useState(false);
+  const [profile, setProfile] = useState(null);
   const [imageCover, setImageCover] = useState(null);
   const [imageProfile, setImageProfile] = useState(null);
   const [dataProfile, setDataProfile] = useState(null);
@@ -90,7 +89,28 @@ const InputProfile = ({navigation}) => {
   // useEffect(() => {
   //
   // }, [takePhotoFromLibraryProfile()]);
-  console.log(profile);
+  const handlePostProfile = () => {
+    console.log(imageProfile);
+    console.log(dataProfile.id);
+    axios({
+      crossDomain: true,
+      method: 'post',
+      url: 'https://dev-users.digitalamoeba.id/trackrecord/editpicture',
+      data: {
+        userId: dataProfile.id,
+        pictures: imageProfile,
+      },
+      validateStatus: false,
+    })
+      .then((response, status) => {
+        console.log(response);
+        setSuccessModal(response.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+        // need handling error
+      });
+  };
   const handlePost = () => {
     axios({
       crossDomain: true,
@@ -109,8 +129,6 @@ const InputProfile = ({navigation}) => {
         loker: dataProfile.loker,
         regional: dataProfile.regional,
         teamStructure: dataProfile.teamStructure,
-        pictures: imageProfile,
-        background: imageCover,
       },
       validateStatus: false,
     })
@@ -120,8 +138,6 @@ const InputProfile = ({navigation}) => {
           console.log('berhasil');
           setSuccessModal(200);
           storeDataLdap();
-        } else {
-          setSuccessModal(-1);
         }
       })
       .catch(function (error) {
@@ -143,6 +159,10 @@ const InputProfile = ({navigation}) => {
     setImageCover(dataProfile.background);
     setImageProfile(dataProfile.pictures);
   }
+  if (imageProfile !== null && profile === null) {
+    setProfile(imageProfile.substring(imageProfile.lastIndexOf('/') + 1));
+  }
+  // console.log(imageProfile);
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
@@ -150,8 +170,11 @@ const InputProfile = ({navigation}) => {
           desc={'Congrats your profile have been updated!'}
           getData={getDataSuccess}
         />
-      ) : successModal === -1 ? (
-        <FailedModal desc={'Your data failed to update!'} />
+      ) : successModal !== null ? (
+        <FailedModal
+          desc={'Your data failed to update!'}
+          getData={getDataSuccess}
+        />
       ) : null}
       <ScrollView>
         {/* header */}
@@ -315,7 +338,8 @@ const InputProfile = ({navigation}) => {
             />
             <TouchableOpacity
               onPress={() => {
-                handlePost();
+                // handlePost();
+                handlePostProfile();
               }}
               style={styles.button}>
               <Text style={styles.save}>SAVE</Text>

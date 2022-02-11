@@ -114,25 +114,28 @@ const Profile = ({navigation}) => {
           </View>
         </View>
         <View style={styles.profilePicture}>
-          {data.pictures === null ? (
+          {dataTrackRecord.user.pictures === '' ? (
             <Image
               source={require('../../../assets/image/profilepicture.jpg')}
               style={styles.image}
             />
           ) : (
-            <Image source={{uri: data.pictures}} style={styles.image} />
+            <Image
+              source={{uri: dataTrackRecord.user.pictures}}
+              style={styles.image}
+            />
           )}
         </View>
         {/*image*/}
         <View style={styles.imageBackground}>
-          {data.background === null ? (
+          {dataTrackRecord.user.background === '' ? (
             <Image
               source={require('../../../assets/image/dummyPicture2.png')}
               style={styles.backgroundImage}
             />
           ) : (
             <Image
-              source={{uri: data.background}}
+              source={{uri: dataTrackRecord.user.background}}
               style={styles.backgroundImage}
             />
           )}
