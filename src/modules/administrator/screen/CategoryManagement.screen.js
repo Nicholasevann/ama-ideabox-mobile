@@ -20,6 +20,7 @@ import SearchHeader from '../../../components/SearchHeader';
 import SuccesModal from '../../../components/SuccesModal';
 import DeleteCategoryManagement from '../../../config/DeleteData/DeleteCategoryManagement';
 import {GetDataCategoryManagement} from '../../../config/GetData/GetDataAdministrator';
+import GetParentCategory from '../../../config/GetData/GetParentCategory';
 import UpdateCategory from '../../../config/PostData/UpdateCategory';
 import style from '../../../config/Style/style.cfg';
 import styles from '../style/Administrator.style';
@@ -29,6 +30,7 @@ const CategoryManagement = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [dataCategoryManagement, setDataCategoryManagement] = useState(null);
   const [deleteSelected, setDeleteSelected] = useState(null);
+  const [array, setArray] = useState(false);
   const [editSelected, setEditSelected] = useState(null);
   const [success, setSuccess] = useState(null);
   const [update, setUpdate] = useState(null);
@@ -39,22 +41,19 @@ const CategoryManagement = ({navigation}) => {
   const getDataIdea = dataSearch => {
     searchFilter(dataSearch);
   };
-
+  const [dropValue, setDropValue] = useState(null);
   // dropdown1
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Area Inovasi', value: 'area'},
-    {label: 'Category Idea', value: 'category'},
-  ]);
+  const [items, setItems] = useState([]);
   // dropdown2
   const [open1, setOpen1] = useState(false);
-  const [value1, setValue1] = useState(null);
   const [items1, setItems1] = useState([
-    {label: 'CHILD', value: 'child'},
-    {label: 'PARENT', value: 'parent'},
+    {label: 'Idea', value: 'idea'},
+    {label: 'Event', value: 'event'},
+    {label: 'Amoeba', value: 'amoeba'},
   ]);
-
+  const [value1, setValue1] = useState(items1[0].value);
   useEffect(() => {
     if (dataCategoryManagement === null) {
       GetDataCategoryManagement().then(response => {
@@ -69,6 +68,12 @@ const CategoryManagement = ({navigation}) => {
       setFilterData(response);
     });
   }, [success]);
+  useEffect(() => {
+    setArray(false);
+    setItems([]);
+    setDropValue(null);
+  }, [value1]);
+
   if (dataCategoryManagement === null) {
     return <LoadingScreen />;
   }
@@ -100,8 +105,23 @@ const CategoryManagement = ({navigation}) => {
       setFilterData(dataCategoryManagement);
     }
   };
-  console.log(update);
-  console.log(editSelected);
+  if (dropValue === null) {
+    GetParentCategory(value1).then(response => {
+      setDropValue(response);
+    });
+  }
+  if (dropValue !== undefined) {
+    if (array === false) {
+      console.log(dropValue);
+      if (dropValue !== null) {
+        dropValue.map(val => {
+          setItems(res => [...res, {label: val.name, value: val.name}]);
+        });
+        setArray(true);
+      }
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -257,17 +277,6 @@ const CategoryManagement = ({navigation}) => {
                     // value={''}
                     // onChangeText={() => { }}
                   />
-                  <Text style={styles.h2}>Parent Category :</Text>
-                  <DropDownPicker
-                    open={open}
-                    value={value}
-                    items={items}
-                    setOpen={setOpen}
-                    setValue={setValue}
-                    setItems={setItems}
-                    style={styles.input}
-                    placeholder={'Select a parent category'}
-                  />
                   <Text style={styles.h2}>Type Category :</Text>
                   <DropDownPicker
                     open={open1}
@@ -279,6 +288,22 @@ const CategoryManagement = ({navigation}) => {
                     style={styles.input}
                     placeholder={'Select a type category'}
                   />
+                  <Text style={styles.h2}>Parent Category :</Text>
+                  <DropDownPicker
+                    open={open}
+                    value={value}
+                    items={items}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    setItems={setItems}
+                    style={styles.input}
+                    placeholder={
+                      value1 === null
+                        ? 'Insert your type category first!'
+                        : 'Select a parent category'
+                    }
+                  />
+
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
