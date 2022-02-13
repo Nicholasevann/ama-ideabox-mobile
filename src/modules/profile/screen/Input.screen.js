@@ -27,6 +27,7 @@ import SuccesModal from '../../../components/SuccesModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FailedModal from '../../../components/FailedModal';
 import moment from 'moment';
+import DropDownPicker from 'react-native-dropdown-picker';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
@@ -40,13 +41,49 @@ const InputProfile = ({navigation}) => {
   const [imageCover, setImageCover] = useState(null);
   const [imageProfile, setImageProfile] = useState(null);
   const [dataProfile, setDataProfile] = useState(null);
+
+  // dropdown1
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([]);
+  const [array, setArray] = useState(false);
+  // dropdown1
+  const [open2, setOpen2] = useState(false);
+  const [value2, setValue2] = useState(null);
+  const [items2, setItems2] = useState([]);
+  // dropdown1
+  const [open3, setOpen3] = useState(false);
+  const [value3, setValue3] = useState(null);
+  const [items3, setItems3] = useState([]);
+  // dropdown1
+  const [open4, setOpen4] = useState(false);
+  const [value4, setValue4] = useState(null);
+  const [items4, setItems4] = useState([
+    {label: 'Hustler', value: 'Hustler'},
+    {label: 'Hipster', value: 'Hipster'},
+    {label: 'Hacker', value: 'Hacker'},
+  ]);
+
+  useEffect(() => {
+    if (dataProfile === null) {
+      getData().then(jsonValue => setData(jsonValue));
+      prefetchConfiguration({
+        warmAndPrefetchChrome: Platform.OS === 'android',
+        ...AuthConfig,
+      });
+      if (data === defaultAuthState) {
+        return <LoadingScreen />;
+      }
+      GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
+    }
+  });
+
   const takePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       width: 640,
       height: 360,
       cropping: true,
     }).then(image => {
-      console.log(image);
       setImageCover(image.path);
     });
   };
@@ -70,41 +107,51 @@ const InputProfile = ({navigation}) => {
       console.log('failed to store data');
     }
   };
-  useEffect(() => {
-    if (dataProfile === null) {
-      getData().then(jsonValue => setData(jsonValue));
-      prefetchConfiguration({
-        warmAndPrefetchChrome: Platform.OS === 'android',
-        ...AuthConfig,
+
+  const handlePostCover = () => {
+    var formData = new FormData();
+    var img = {
+      uri: imageCover,
+      name: 'photo.jpeg',
+      type: 'image/jpeg',
+    };
+    formData.append('userId', dataProfile.id);
+    formData.append('background', img);
+    axios({
+      crossDomain: true,
+      method: 'post',
+      url: 'https://dev-users.digitalamoeba.id/trackrecord/editbackground',
+      data: formData,
+      validateStatus: false,
+    })
+      .then((response, status) => {
+        console.log('image background status', response.status);
+        // setSuccessModal(response.status);
+      })
+      .catch(function (error) {
+        console.log(error);
+        // need handling error
       });
-      if (data === defaultAuthState) {
-        return <LoadingScreen />;
-      }
-      GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
-    }
-  });
-  // if (takePhotoFromLibraryProfile()) {
-  //   setProfile(true);
-  // }
-  // useEffect(() => {
-  //
-  // }, [takePhotoFromLibraryProfile()]);
+  };
   const handlePostProfile = () => {
-    console.log(imageProfile);
-    console.log(dataProfile.id);
+    var formData = new FormData();
+    var img = {
+      uri: imageProfile,
+      name: 'photo.jpeg',
+      type: 'image/jpeg',
+    };
+    formData.append('userId', dataProfile.id);
+    formData.append('pictures', img);
     axios({
       crossDomain: true,
       method: 'post',
       url: 'https://dev-users.digitalamoeba.id/trackrecord/editpicture',
-      data: {
-        userId: dataProfile.id,
-        pictures: imageProfile,
-      },
+      data: formData,
       validateStatus: false,
     })
       .then((response, status) => {
-        console.log(response);
-        setSuccessModal(response.status);
+        console.log('foto Profile status :', response.status);
+        // setSuccessModal(response.status);
       })
       .catch(function (error) {
         console.log(error);
@@ -133,9 +180,8 @@ const InputProfile = ({navigation}) => {
       validateStatus: false,
     })
       .then((response, status) => {
-        console.log(response.status);
         if (response.status === 200) {
-          console.log('berhasil');
+          console.log('berhasil upload');
           setSuccessModal(200);
           storeDataLdap();
         }
@@ -151,18 +197,21 @@ const InputProfile = ({navigation}) => {
   const getDataSuccess = data => {
     setSuccessModal(data);
   };
-  // console.log(dataProfile);
+
+  //calender
   const handleText = () =>
     pickedDate ? moment(pickedDate).format('YYYY-MM-DD') : dataProfile.tglLahir;
   // pickedDate.toDateString()
+
   if (imageCover === null || imageProfile === null) {
     setImageCover(dataProfile.background);
     setImageProfile(dataProfile.pictures);
   }
-  if (imageProfile !== null && profile === null) {
-    setProfile(imageProfile.substring(imageProfile.lastIndexOf('/') + 1));
-  }
-  // console.log(imageProfile);
+  //name image
+  // if (imageProfile !== null && profile === null) {
+  //   setProfile(imageProfile.substring(imageProfile.lastIndexOf('/') + 1));
+  // }
+
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
@@ -286,32 +335,6 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h1}>DETAIL</Text>
-            {/* <Text style={styles.h2}>Nama Atasan</Text>
-            
-            <Text style={styles.h2}>NIK Atasan</Text> */}
-
-            <Text style={styles.h2}>CFU / FU</Text>
-            <TextInput
-              style={styles.input}
-              value={dataProfile.anakPerusahaan}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, anakPerusahaan: val})
-              }
-            />
-            <Text style={styles.h2}>Category Unit</Text>
-            <TextInput
-              style={styles.input}
-              value={dataProfile.loker}
-              onChangeText={val => setDataProfile({...dataProfile, loker: val})}
-            />
-            <Text style={styles.h2}>Unit</Text>
-            <TextInput
-              style={styles.input}
-              value={dataProfile.regional}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, regional: val})
-              }
-            />
             <Text style={styles.h2}>Directorate</Text>
             <TextInput
               style={styles.input}
@@ -329,17 +352,74 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h2}>Skill</Text>
-            <TextInput
-              style={styles.input}
-              value={dataProfile.teamStructure}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, teamStructure: val})
-              }
-            />
+            <View key={'Skill'}>
+              <DropDownPicker
+                key={'Skill'}
+                itemKey={'itemSkill'}
+                open={open4}
+                value={value4}
+                items={items4}
+                setOpen={setOpen4}
+                setValue={setValue4}
+                setItems={setItems4}
+                style={styles.input}
+                placeholder="Choose Skill"
+                maxHeight={100}
+                containerStyle={{zIndex: 6000}}
+                listItemContainerStyle={{height: 40}}
+              />
+            </View>
+            <Text style={[styles.h2, {marginBottom: 5}]}>CFU / FU</Text>
+            <View>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                style={styles.input}
+                placeholder="Choose CFU/FU"
+                maxHeight={100}
+                listItemContainerStyle={{height: 35}}
+              />
+            </View>
+            <Text style={styles.h2}>Category Unit</Text>
+            <View>
+              <DropDownPicker
+                open={open2}
+                value={value2}
+                items={items2}
+                setOpen={setOpen2}
+                setValue={setValue2}
+                setItems={setItems2}
+                style={styles.input}
+                placeholder="Choose Category Unit"
+                maxHeight={100}
+                listItemContainerStyle={{height: 35}}
+              />
+            </View>
+            <Text style={styles.h2}>Unit</Text>
+            <View>
+              <DropDownPicker
+                open={open3}
+                value={value3}
+                items={items3}
+                setOpen={setOpen3}
+                setValue={setValue3}
+                setItems={setItems3}
+                style={styles.input}
+                placeholder="Choose Unit"
+                maxHeight={100}
+                listItemContainerStyle={{height: 35}}
+              />
+            </View>
+
             <TouchableOpacity
               onPress={() => {
-                // handlePost();
+                handlePost();
                 handlePostProfile();
+                handlePostCover();
               }}
               style={styles.button}>
               <Text style={styles.save}>SAVE</Text>

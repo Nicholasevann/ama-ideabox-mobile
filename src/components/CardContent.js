@@ -1,19 +1,53 @@
-import React, {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {Comment, Like, More, Share} from '../assets/icon';
+import {GetDataIdea} from '../config/GetData/GetDataIdea';
+import LikeIdea from '../config/PostData/Like';
 import style from '../config/Style/style.cfg';
 import {windowHeight, windowWidth} from './WindowDimensions';
 
 const CardContent = props => {
   const [liked, setLiked] = useState(false);
+  const [changeData, setChangeData] = useState(false);
+  const [imageLiked, setImageLiked] = useState(
+    require('../assets/icon/loveFalse.png'),
+  );
+  const [change, setChange] = useState(false);
 
-  const clicked = () => {
-    if (liked === true) {
-      setLiked(false);
-    } else {
+  useEffect(() => {
+    const checkLike = props.like.filter(
+      user => user.createdBy.id === props.dataAsync.id,
+    );
+    if (checkLike.length > 0) {
       setLiked(true);
+      setChange(true);
+    } else {
+      setLiked(false);
+      setChange(true);
     }
+  }, [props.like]);
+  useEffect(() => {
+    setChangeData(true);
+    props.changeData(changeData);
+  }, [liked]);
+  const handleLike = () => {
+    LikeIdea(props.id, props.dataAsync.id).then(val => {
+      setLiked(!liked);
+      setChange(true);
+    });
   };
+
+  if (change === true) {
+    if (liked === true) {
+      setImageLiked(require('../assets/icon/loveTrue.png'));
+      setChange(false);
+    } else {
+      setImageLiked(require('../assets/icon/loveFalse.png'));
+      setChange(false);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapProfile}>
@@ -39,9 +73,13 @@ const CardContent = props => {
       <View style={styles.rowIcon}>
         <View style={styles.iconContentContainer}>
           <TouchableOpacity
-            onPress={props.clickLike}
+            // onPress={() => {
+            //   props.clickLike;
+            //   handleLike();
+            // }}
+            onPress={handleLike}
             style={styles.iconContent}>
-            <Image source={props.like} style={styles.icon} />
+            <Image source={imageLiked} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={props.comment}>
             <View style={styles.iconContent}>

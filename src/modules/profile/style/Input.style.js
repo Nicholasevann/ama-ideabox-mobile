@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
     width: windowWidth,
   },
   input: {
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
     borderBottomWidth: 1,
     borderBottomColor: '#B9B9B9',
     marginBottom: 10,
