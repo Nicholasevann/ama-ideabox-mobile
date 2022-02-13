@@ -60,7 +60,7 @@ const ExploreContent = ({navigation, route}) => {
   const [promote, setPromote] = useState(null);
   const [textJoin, setTextJoin] = useState('');
   const [textPromote, setTextPromote] = useState('');
-  const [like, setLike] = useState(null);
+  const [like, setLike] = useState(false);
   const [success, setSuccess] = useState(null);
   const [dataAsync, setDataAsync] = useState(defaultAuthState);
   const [imageLike, setImageLike] = useState(
@@ -71,6 +71,7 @@ const ExploreContent = ({navigation, route}) => {
   const getDataIdea = dataSearch => {
     setHasil(dataSearch);
   };
+  const [change, setChange] = useState(false);
 
   useEffect(() => {
     // setData(getDataIdea());
@@ -116,10 +117,11 @@ const ExploreContent = ({navigation, route}) => {
       alert(error.message);
     }
   };
-  const handleLike = id => {
-    LikeIdea(id, dataAsync.id).then(val => setLike(val));
-    setIdLike(id);
-  };
+  // const handleLike = id => {
+  //   LikeIdea(id, dataAsync.id).then(val => setLike(val));
+  //   setIdLike(id);
+  //   setChange(false);
+  // };
   const handleComment = text => {
     CommentIdea(idComment, text, 0, dataAsync.id).then(val => setSuccess(val));
   };
@@ -182,6 +184,13 @@ const ExploreContent = ({navigation, route}) => {
   const getDataPromote = data => {
     setPromote(data);
   };
+  const getDataChange = data => {
+    setChange(data);
+  };
+  if (change === true) {
+    GetDataIdea().then(response => setData(response));
+    setChange(false);
+  }
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -231,30 +240,22 @@ const ExploreContent = ({navigation, route}) => {
             }
           })
           .map((val, index) => {
-            if (like === 'Like Idea sucessfully') {
-              if (imageLike !== require('../../../assets/icon/loveTrue.png')) {
-                setImageLike(require('../../../assets/icon/loveTrue.png'));
-              }
-            } else if (like === 'Unlike Idea sucessfully') {
-              if (imageLike !== require('../../../assets/icon/loveFalse.png')) {
-                setImageLike(require('../../../assets/icon/loveFalse.png'));
-              }
-            }
             return (
               <View key={index}>
                 <CardContent
-                  clickLike={() => {
-                    handleLike(val.id);
-                  }}
+                  changeData={getDataChange}
+                  id={val.id}
+                  dataAsync={dataAsync}
                   profileUser={
                     val.user.pictures === ''
                       ? require('../../../assets/icon/profilepicture.png')
                       : {uri: val.user.pictures}
                   }
+                  liked={imageLike}
                   name={val.user.name}
                   title={val.desc[0].value}
                   desc={val.desc[2].value}
-                  like={imageLike}
+                  like={val.like}
                   likedBy={val.totalLike}
                   cover={val.desc[1].value}
                   more={() =>
