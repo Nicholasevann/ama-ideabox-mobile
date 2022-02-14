@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'black',
     height: 40,
+    borderRadius: 0,
+    paddingLeft: 5,
   },
   button: {
     alignItems: 'center',
@@ -115,6 +117,17 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     opacity: 0.5,
   },
+
+  //dropdown
+  labelStyle: {
+    color: '#000',
+    fontSize: 16,
+  },
+  fontLabelStyle: {fontSize: 16},
+  listContainer: {
+    height: 45,
+  },
+  placeholder: {fontSize: 16},
 });
 
 export default styles;
