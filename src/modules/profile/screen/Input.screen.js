@@ -28,6 +28,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import FailedModal from '../../../components/FailedModal';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {
+  GetDataCfu,
+  GetDataCategoryUnit,
+  GetDataUnit,
+} from '../../../config/GetData/GetDataCfu';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
@@ -41,12 +46,27 @@ const InputProfile = ({navigation}) => {
   const [imageCover, setImageCover] = useState(null);
   const [imageProfile, setImageProfile] = useState(null);
   const [dataProfile, setDataProfile] = useState(null);
-
+  const [dataCfu, setDataCfu] = useState(null);
+  const [dataCategoryUnit, setDataCategoryUnit] = useState(null);
+  const [dataUnit, setDataUnit] = useState(null);
+  const [array, setArray] = useState(false);
+  const [array1, setArray1] = useState(false);
+  const [array2, setArray2] = useState(false);
+  const [change, setChange] = useState(false);
+  const [change2, setChange2] = useState(false);
+  // dropdown 1
+  const [open1, setOpen1] = useState(false);
+  const [value1, setValue1] = useState(null);
+  const [items1, setItems1] = useState([
+    {label: 'Hustler', value: 'Hustler'},
+    {label: 'Hipster', value: 'Hipster'},
+    {label: 'Hacker', value: 'Hacker'},
+  ]);
   // dropdown1
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
-  const [array, setArray] = useState(false);
+
   // dropdown1
   const [open2, setOpen2] = useState(false);
   const [value2, setValue2] = useState(null);
@@ -55,17 +75,9 @@ const InputProfile = ({navigation}) => {
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
   const [items3, setItems3] = useState([]);
-  // dropdown1
-  const [open4, setOpen4] = useState(false);
-  const [value4, setValue4] = useState(null);
-  const [items4, setItems4] = useState([
-    {label: 'Hustler', value: 'Hustler'},
-    {label: 'Hipster', value: 'Hipster'},
-    {label: 'Hacker', value: 'Hacker'},
-  ]);
 
   useEffect(() => {
-    if (dataProfile === null) {
+    if (dataProfile === null || dataCfu === null) {
       getData().then(jsonValue => setData(jsonValue));
       prefetchConfiguration({
         warmAndPrefetchChrome: Platform.OS === 'android',
@@ -75,9 +87,19 @@ const InputProfile = ({navigation}) => {
         return <LoadingScreen />;
       }
       GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
+      GetDataCfu().then(res => setDataCfu(res));
     }
   });
+  useEffect(() => {
+    setChange(true);
+    setItems2([]);
+    setChange2(true);
+  }, [value]);
 
+  // useEffect(() => {
+  //   GetDataCategoryUnit(value).then(res => setDataCategoryUnit(res));
+  //   console.log(dataCategoryUnit);
+  // }, [value]);
   const takePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       width: 640,
@@ -191,7 +213,7 @@ const InputProfile = ({navigation}) => {
         // need handling error
       });
   };
-  if (dataProfile === null) {
+  if (dataProfile === null || dataCfu === null) {
     return <LoadingScreen />;
   }
   const getDataSuccess = data => {
@@ -211,9 +233,43 @@ const InputProfile = ({navigation}) => {
   // if (imageProfile !== null && profile === null) {
   //   setProfile(imageProfile.substring(imageProfile.lastIndexOf('/') + 1));
   // }
-
+  // const placeholder1 =
+  if (dataCfu !== undefined) {
+    if (array === false) {
+      if (dataCfu !== null) {
+        dataCfu.map(val => {
+          setItems(res => [...res, {label: val.name, value: val.id}]);
+        });
+        setArray(true);
+      }
+    }
+  }
+  if (value !== null) {
+    if (change === true) {
+      GetDataCategoryUnit(value).then(res => setDataCategoryUnit(res));
+      setChange(false);
+    }
+  }
+  // if (change2 === true) {
+  //   if (dataCategoryUnit !== null) {
+  //     dataCategoryUnit.map(val => {
+  //       setItems2(res => [...res, {label: val.cfufuId, value: val.cfufuId}]);
+  //     });
+  //   }
+  //   setChange2(false);
+  // }
+  console.log(dataCategoryUnit);
   return (
     <SafeAreaView style={styles.container}>
+      {change2 === true && dataCategoryUnit !== null
+        ? dataCategoryUnit.map(val => {
+            setItems2(res => [
+              ...res,
+              {label: val.cfufuId, value: val.cfufuId},
+            ]);
+            setChange2(false);
+          })
+        : null}
       {successModal === 200 ? (
         <SuccesModal
           desc={'Congrats your profile have been updated!'}
@@ -352,26 +408,28 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h2}>Skill</Text>
-            <View key={'Skill'}>
+            <View>
               <DropDownPicker
-                key={'Skill'}
-                itemKey={'itemSkill'}
-                open={open4}
-                value={value4}
-                items={items4}
-                setOpen={setOpen4}
-                setValue={setValue4}
-                setItems={setItems4}
+                open={open1}
+                value={value1}
+                items={items1}
+                setOpen={setOpen1}
+                setValue={setValue1}
+                setItems={setItems1}
                 style={styles.input}
-                placeholder="Choose Skill"
-                maxHeight={100}
-                containerStyle={{zIndex: 6000}}
-                listItemContainerStyle={{height: 40}}
+                placeholder="Choose your skill!"
+                labelStyle={styles.fontLabelStyle}
+                listItemLabelStyle={styles.labelStyle}
+                listItemContainerStyle={styles.listContainer}
+                placeholderStyle={styles.placeholder}
+                containerStyle={{width: '100%'}}
+                zIndex={6100}
               />
             </View>
             <Text style={[styles.h2, {marginBottom: 5}]}>CFU / FU</Text>
             <View>
               <DropDownPicker
+                listMode="SCROLLVIEW"
                 open={open}
                 value={value}
                 items={items}
@@ -379,14 +437,22 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue}
                 setItems={setItems}
                 style={styles.input}
-                placeholder="Choose CFU/FU"
-                maxHeight={100}
-                listItemContainerStyle={{height: 35}}
+                placeholder="Choose your CFU/FU!"
+                labelStyle={styles.fontLabelStyle}
+                listItemLabelStyle={styles.labelStyle}
+                listItemContainerStyle={styles.listContainer}
+                placeholderStyle={styles.placeholder}
+                zIndex={6050}
+                maxHeight={150}
+                scrollViewProps={true}
               />
             </View>
+
             <Text style={styles.h2}>Category Unit</Text>
             <View>
               <DropDownPicker
+                listMode="SCROLLVIEW"
+                dropDownDirection="BOTTOM"
                 open={open2}
                 value={value2}
                 items={items2}
@@ -394,9 +460,14 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue2}
                 setItems={setItems2}
                 style={styles.input}
-                placeholder="Choose Category Unit"
-                maxHeight={100}
-                listItemContainerStyle={{height: 35}}
+                placeholder="Choose your Category Unit"
+                labelStyle={styles.fontLabelStyle}
+                listItemLabelStyle={styles.labelStyle}
+                listItemContainerStyle={styles.listContainer}
+                placeholderStyle={styles.placeholder}
+                zIndex={6050}
+                maxHeight={150}
+                scrollViewProps={true}
               />
             </View>
             <Text style={styles.h2}>Unit</Text>
@@ -409,9 +480,12 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue3}
                 setItems={setItems3}
                 style={styles.input}
-                placeholder="Choose Unit"
-                maxHeight={100}
-                listItemContainerStyle={{height: 35}}
+                placeholder="All Event"
+                labelStyle={styles.fontLabelStyle}
+                listItemLabelStyle={styles.labelStyle}
+                listItemContainerStyle={styles.listContainer}
+                placeholderStyle={styles.placeholder}
+                containerStyle={{width: '100%'}}
               />
             </View>
 

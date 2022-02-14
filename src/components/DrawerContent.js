@@ -11,12 +11,20 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import getData from './GetData';
 import LoadingScreen from './LoadingScreen';
+import GetDataProfile from '../config/GetData/GetDataProfile';
 
 const DrawerContent = props => {
   const [data, setData] = useState('');
+  const [dataProfile, setDataProfile] = useState('');
   useEffect(() => {
-    getData().then(jsonValue => setData(jsonValue));
-  }, []);
+    if (data === '' || dataProfile === '') {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === '') {
+        return <LoadingScreen />;
+      }
+      GetDataProfile(data.id).then(res => setDataProfile(res));
+    }
+  });
   const removeData = async key => {
     try {
       await AsyncStorage.removeItem(key);
@@ -35,6 +43,9 @@ const DrawerContent = props => {
       props.navigation.replace('Login', {checked: false});
     }
   };
+  if (data === '' || dataProfile === '') {
+    return <LoadingScreen />;
+  }
   const {state, descriptors, navigation} = props;
   let lastGroupName = '';
   let newGroup = true;
@@ -45,13 +56,13 @@ const DrawerContent = props => {
           {/* User info */}
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              {data.pictures === null ? (
+              {dataProfile.pictures === '' ? (
                 <Avatar.Image
                   source={require('../assets/image/profilepicture.jpg')}
                   size={50}
                 />
               ) : (
-                <Avatar.Image source={{uri: data.pictures}} size={50} />
+                <Avatar.Image source={{uri: dataProfile.pictures}} size={50} />
               )}
 
               <View style={{marginLeft: 15, flexDirection: 'column', flex: 1}}>

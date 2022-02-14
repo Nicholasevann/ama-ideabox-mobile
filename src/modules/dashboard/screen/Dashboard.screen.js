@@ -340,8 +340,8 @@ const Dashboard = ({navigation}) => {
                   labelStyle={styles.fontLabelStyle}
                   listItemLabelStyle={styles.labelStyle}
                   listItemContainerStyle={styles.listContainer}
-                  maxHeight={180}
                   placeholderStyle={styles.placeholder}
+                  maxHeight={180}
                 />
               </View>
             </View>
