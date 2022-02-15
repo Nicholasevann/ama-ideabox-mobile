@@ -125,7 +125,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
@@ -152,7 +152,7 @@ const DrawerNavigation = () => {
           headerShown: false,
           drawerIcon: () => <HomeDrawer />,
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

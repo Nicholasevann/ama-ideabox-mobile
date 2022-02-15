@@ -14,11 +14,23 @@ const DetailLeanCanvas = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.navigate('TalentApproval')}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {data.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: data})}
+          image={require('../../../assets/icon/profilepicture.png')}
+          name={data.user.name}
+          nik={data.user.nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: data})}
+          image={{uri: data.user.pictures}}
+          name={data.user.name}
+          nik={data.user.nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -60,13 +72,7 @@ const DetailLeanCanvas = ({navigation, route}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailLeanCanvasDesc
-            customer={data.lc[0].value}
-            problem={data.lc[1].value}
-            existing={data.lc[2].value}
-            unique={data.lc[3].value}
-            proposed={data.lc[4].value}
-          />
+          <DetailLeanCanvasDesc data={data.lc} />
         </View>
       </View>
     </SafeAreaView>

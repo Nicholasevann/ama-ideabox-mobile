@@ -5,10 +5,7 @@ const CardComment = props => {
   return (
     <View>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          source={require('../assets/image/profilepicture.jpg')}
-          style={styles.imageContent}
-        />
+        <Image source={props.image} style={styles.imageContent} />
         <View style={{marginTop: 5, marginLeft: 10}}>
           <Text style={{fontWeight: '700'}}>{props.name}</Text>
           <TouchableOpacity onPress={props.reply}>

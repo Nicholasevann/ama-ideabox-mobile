@@ -8,10 +8,7 @@ const CardReplyComment = props => {
         marginLeft: 30,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Image
-          source={require('../assets/image/profilepicture.jpg')}
-          style={styles.imageContent}
-        />
+        <Image source={props.image} style={styles.imageContent} />
         <Text style={{fontWeight: '700', marginLeft: 10}}>{props.name}</Text>
       </View>
       <Text style={{marginLeft: 10, marginTop: 10}}>{props.desc}</Text>

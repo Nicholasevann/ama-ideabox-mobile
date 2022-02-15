@@ -13,7 +13,9 @@ const CardIdeaManagement = props => {
         <Text style={style.h5}>{props.title}</Text>
       </View>
       <View style={styles.email}>
-        <Text style={style.h5}>{props.create}</Text>
+        <Text style={[style.h5, {textTransform: 'capitalize'}]}>
+          {props.create}
+        </Text>
       </View>
     </View>
   );

@@ -39,17 +39,17 @@ const DetailExplore = ({route, navigation}) => {
         <CardProfile
           onPress={() => navigation.goBack()}
           profile={() => navigation.navigate('ProfileUser', {data: item})}
-          image={require('../../../assets/image/profilepicture2.jpg')}
-          name={detailIdea.user[0].name}
-          nik={detailIdea.user[0].nik}
+          image={require('../../../assets/icon/profilepicture.png')}
+          name={detailIdea.user.name}
+          nik={detailIdea.user.nik}
         />
       ) : (
         <CardProfile
           onPress={() => navigation.goBack()}
           profile={() => navigation.navigate('ProfileUser', {data: item})}
           image={{uri: item.user.pictures}}
-          name={detailIdea.user[0].name}
-          nik={detailIdea.user[0].nik}
+          name={detailIdea.user.name}
+          nik={detailIdea.user.nik}
         />
       )}
 
@@ -108,7 +108,7 @@ const DetailExplore = ({route, navigation}) => {
           <View style={styles.content}>
             <DetailIdeaDesc
               title={detailIdea.desc[0].value}
-              perusahaan={'telkom'}
+              cfufu={detailIdea.CFUFU[0].name}
               desc={detailIdea.desc[2].value}
               image={data.desc[1].value}
             />

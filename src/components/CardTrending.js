@@ -6,15 +6,13 @@ const CardTopTrending = props => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image source={{uri: props.image}} style={styles.imageProfile} />
+        <Image source={props.image} style={styles.imageProfile} />
         <View style={styles.content}>
           <Text style={[styles.textProfile, style.h4medium]}>{props.name}</Text>
           <Text style={[styles.titleContent, style.h4]} numberOfLines={2}>
             {props.title}
           </Text>
-          <Text style={[styles.textLike, style.h5]}>
-            Like by Pak Fraz and 100 peoples
-          </Text>
+          <Text style={[styles.textLike, style.h5]}>{props.desc}</Text>
         </View>
       </View>
     </View>
@@ -25,10 +23,7 @@ const CardProductiveTrending = props => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image
-          source={{uri: props.image}}
-          style={styles.imageProfileProductive}
-        />
+        <Image source={props.image} style={styles.imageProfileProductive} />
         <View style={styles.content}>
           <Text style={[styles.textProfileProductive, style.h4]}>
             {props.name}
@@ -53,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     flex: 1,
-    minHeight: 120,
+    minHeight: 110,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -68,7 +63,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   imageProfile: {
-    marginLeft: 5,
     width: windowWidth / 10,
     height: windowHeight / 21,
     borderRadius: 1000 / 2,

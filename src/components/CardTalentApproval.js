@@ -37,15 +37,15 @@ const CardTalentApproval = props => {
         )}
       </View>
       {open === true ? (
-        <View style={{width: '100%'}}>
+        <View style={{width: '100%', paddingBottom: 15}}>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.title}>
               <Text style={[{color: '#085D7A'}]}>Notes</Text>
             </View>
-            <View style={styles.email2}>
+            <View style={styles.email}>
               <Text style={[{color: '#085D7A'}]}>Request</Text>
             </View>
-            <View style={styles.title2} onPress={() => handleOpen()}>
+            <View style={styles.title} onPress={() => handleOpen()}>
               <Text style={[{color: '#085D7A'}]}>Request Date</Text>
             </View>
           </View>
@@ -53,12 +53,12 @@ const CardTalentApproval = props => {
             <View style={styles.title}>
               <Text style={style.h5}>{props.notes}</Text>
             </View>
-            <View style={styles.email2}>
+            <View style={styles.email}>
               <Text style={[style.h5, {textTransform: 'capitalize'}]}>
                 {props.request}
               </Text>
             </View>
-            <View style={styles.title2} onPress={() => handleOpen()}>
+            <View style={styles.title} onPress={() => handleOpen()}>
               <Text style={style.h5}>{props.date}</Text>
             </View>
           </View>

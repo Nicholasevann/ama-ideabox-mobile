@@ -154,7 +154,10 @@ const TalentApproval = ({navigation}) => {
                   <View style={styles.rowBack}>
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('DetailIdeaUser', {data: item})
+                        navigation.navigate('DetailIdeaUser', {
+                          data: item,
+                          item: item,
+                        })
                       }
                       style={[styles.backRightBtn, styles.backRightBtnRight3]}>
                       <Eye />

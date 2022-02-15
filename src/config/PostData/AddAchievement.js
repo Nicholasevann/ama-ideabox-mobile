@@ -1,16 +1,14 @@
 import axios from 'axios';
 
-const UpdateCategory = (id, parentId, name, createdBy, type) => {
+const AddAchievement = (userId, ideaId, pencapaian) => {
   return axios({
     crossDomain: true,
-    method: 'put',
-    url: 'https://dev-ideas.digitalamoeba.id/categorymanagement/update',
+    method: 'post',
+    url: 'https://dev-users.digitalamoeba.id/trackrecord/createachievement',
     data: {
-      id: id,
-      parentId: parentId,
-      name: name,
-      createdBy: createdBy,
-      type: type,
+      userId: userId,
+      ideaId: ideaId,
+      pencapaian: pencapaian,
     },
     validateStatus: false,
   })
@@ -24,4 +22,4 @@ const UpdateCategory = (id, parentId, name, createdBy, type) => {
     });
 };
 
-export default UpdateCategory;
+export default AddAchievement;

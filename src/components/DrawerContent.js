@@ -65,7 +65,13 @@ const DrawerContent = props => {
                 <Avatar.Image source={{uri: dataProfile.pictures}} size={50} />
               )}
 
-              <View style={{marginLeft: 15, flexDirection: 'column', flex: 1}}>
+              <View
+                style={{
+                  marginLeft: 15,
+                  flexDirection: 'column',
+                  flex: 1,
+                  marginRight: 10,
+                }}>
                 <Title style={styles.title} numberOfLines={2}>
                   {data.name}
                 </Title>

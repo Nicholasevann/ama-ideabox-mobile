@@ -25,17 +25,17 @@ const DetailLeanCanvas = ({route, navigation}) => {
         <CardProfile
           onPress={() => navigation.goBack()}
           profile={() => navigation.navigate('ProfileUser', {data: item})}
-          image={require('../../../assets/image/profilepicture2.jpg')}
-          name={data.user[0].name}
-          nik={data.user[0].nik}
+          image={require('../../../assets/icon/profilepicture.png')}
+          name={data.user.name}
+          nik={data.user.nik}
         />
       ) : (
         <CardProfile
           onPress={() => navigation.goBack()}
           profile={() => navigation.navigate('ProfileUser', {data: item})}
           image={{uri: item.user.pictures}}
-          name={data.user[0].name}
-          nik={data.user[0].nik}
+          name={data.user.name}
+          nik={data.user.nik}
         />
       )}
 
@@ -84,13 +84,7 @@ const DetailLeanCanvas = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailLeanCanvasDesc
-            customer={data.lc[0].value}
-            problem={data.lc[1].value}
-            existing={data.lc[2].value}
-            unique={data.lc[3].value}
-            proposed={data.lc[4].value}
-          />
+          <DetailLeanCanvasDesc data={data.lc} />
         </View>
       </View>
     </SafeAreaView>

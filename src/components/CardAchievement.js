@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const CardAchievement = props => {
   return (
     <View style={styles.container}>
       <View style={styles.pictureContainer}>
         <Image
-          source={require('../assets/image/dummyPictureAchievement1.png')}
+          source={require('../assets/image/achievment.png')}
           style={{height: '100%', aspectRatio: 1}}
         />
       </View>
@@ -16,6 +16,20 @@ const CardAchievement = props => {
         </Text>
         <Text style={styles.desc}>{props.desc}</Text>
       </View>
+      <TouchableOpacity
+        onPress={props.delete}
+        style={{
+          width: 30,
+          height: 30,
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
+        }}>
+        <Image
+          source={require('../assets/icon/trashblue.png')}
+          style={{flex: 1, width: 30, height: 30}}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -38,7 +52,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
     flex: 2,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
   },
   title: {
     color: '#085D7A',

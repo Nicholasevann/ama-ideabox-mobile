@@ -38,10 +38,8 @@ const GetDataUnit = categoryid => {
     },
     validateStatus: false,
   })
-    .then(function ({status, data}) {
-      if (status === 200) {
-        return data.data;
-      }
+    .then(response => {
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);

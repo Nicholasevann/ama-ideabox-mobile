@@ -70,14 +70,22 @@ const ProfileUserMyIdea = ({navigation, route}) => {
         </View>
         <View style={styles.profilePicture}>
           <Image
-            source={require('../../../assets/image/profilepicture2.jpg')}
+            source={
+              dataTrackRecord.user.pictures === ''
+                ? require('../../../assets/icon/profilepicture.png')
+                : {uri: dataTrackRecord.user.pictures}
+            }
             style={styles.image}
           />
         </View>
         {/*image*/}
         <View style={styles.imageBackground}>
           <Image
-            source={require('../../../assets/image/dummyPicture1.png')}
+            source={
+              dataTrackRecord.user.background === ''
+                ? require('../../../assets/image/coverProfile.png')
+                : {uri: dataTrackRecord.user.background}
+            }
             style={styles.backgroundImage}
           />
         </View>
@@ -86,6 +94,7 @@ const ProfileUserMyIdea = ({navigation, route}) => {
           <View style={styles.mainContent}>
             <Text style={styles.h1}>{dataTrackRecord.user.name}</Text>
             <Text style={styles.h2}>{dataTrackRecord.user.regional}</Text>
+            <Text style={styles.h2}>{dataTrackRecord.user.loker}</Text>
           </View>
         </View>
 
@@ -195,7 +204,12 @@ const ProfileUserMyIdea = ({navigation, route}) => {
                       height: 200,
                       borderWidth: 1,
                       borderRadius: 10,
-                    }}></View>
+                    }}>
+                    <Image
+                      style={{flex: 1, resizeMode: 'cover', borderRadius: 10}}
+                      source={{uri: val.desc[1].value}}
+                    />
+                  </View>
                   <View>
                     <Text style={[style.h4, {marginVertical: 10}]}>
                       {val.desc[0].value}

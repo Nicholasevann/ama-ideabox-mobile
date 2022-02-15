@@ -10,7 +10,9 @@ const CardJoinIdea = props => {
           <Text style={style.h5}>{props.title}</Text>
         </View>
         <View style={styles.title}>
-          <Text style={style.h5}>{props.name}</Text>
+          <Text style={[style.h5, {textTransform: 'capitalize'}]}>
+            {props.name}
+          </Text>
         </View>
         <View style={styles.email}>
           <Text style={style.h5}>{props.createdDate}</Text>

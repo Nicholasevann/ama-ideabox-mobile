@@ -15,6 +15,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {Cross, EditCategory, Eye, Trash} from '../../../assets/icon';
 import CardCategoryManagement from '../../../components/CardCategoryManagement';
+import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import SuccesModal from '../../../components/SuccesModal';
@@ -34,8 +35,7 @@ const CategoryManagement = ({navigation}) => {
   const [editSelected, setEditSelected] = useState(null);
   const [success, setSuccess] = useState(null);
   const [update, setUpdate] = useState(null);
-  const data = require('../data/dataCategoryManagement.json');
-
+  const [data, setData] = useState(null);
   // search
   const [filterData, setFilterData] = useState([]);
   const getDataIdea = dataSearch => {
@@ -54,8 +54,13 @@ const CategoryManagement = ({navigation}) => {
     {label: 'Amoeba', value: 'amoeba'},
   ]);
   const [value1, setValue1] = useState(items1[0].value);
+  const [textCategory, setTextCategory] = useState('');
+  const [status, setStatus] = useState('');
   useEffect(() => {
-    if (dataCategoryManagement === null) {
+    if (dataCategoryManagement === null || data === null) {
+      getData().then(res => {
+        setData(res);
+      });
       GetDataCategoryManagement().then(response => {
         setDataCategoryManagement(response);
         setFilterData(response);
@@ -74,14 +79,16 @@ const CategoryManagement = ({navigation}) => {
     setDropValue(null);
   }, [value1]);
 
-  if (dataCategoryManagement === null) {
+  if (dataCategoryManagement === null || data === null) {
     return <LoadingScreen />;
   }
   const handleDelete = () => {
     DeleteCategoryManagement(deleteSelected).then(val => setSuccess(val));
   };
   const handleUpdate = () => {
-    UpdateCategory().then(val => setUpdate(val));
+    UpdateCategory(editSelected, value, textCategory, data.id, value1).then(
+      val => setUpdate(val),
+    );
   };
   const getDataSuccess = data => {
     setSuccess(data);
@@ -112,16 +119,14 @@ const CategoryManagement = ({navigation}) => {
   }
   if (dropValue !== undefined) {
     if (array === false) {
-      console.log(dropValue);
       if (dropValue !== null) {
         dropValue.map(val => {
-          setItems(res => [...res, {label: val.name, value: val.name}]);
+          setItems(res => [...res, {label: val.name, value: val.id}]);
         });
         setArray(true);
       }
     }
   }
-
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -274,11 +279,15 @@ const CategoryManagement = ({navigation}) => {
                   <Text style={styles.h2}>Category Name :</Text>
                   <TextInput
                     style={styles.input}
-                    // value={''}
-                    // onChangeText={() => { }}
+                    value={textCategory}
+                    onChangeText={val => {
+                      setTextCategory(val);
+                    }}
                   />
                   <Text style={styles.h2}>Type Category :</Text>
                   <DropDownPicker
+                    listMode="SCROLLVIEW"
+                    dropDownDirection="BOTTOM"
                     open={open1}
                     value={value1}
                     items={items1}
@@ -286,13 +295,17 @@ const CategoryManagement = ({navigation}) => {
                     setValue={setValue1}
                     setItems={setItems1}
                     style={styles.input}
+                    maxHeight={100}
                     placeholder={'Select a type category'}
                   />
                   <Text style={styles.h2}>Parent Category :</Text>
                   <DropDownPicker
+                    listMode="SCROLLVIEW"
+                    dropDownDirection="BOTTOM"
                     open={open}
                     value={value}
                     items={items}
+                    maxHeight={100}
                     setOpen={setOpen}
                     setValue={setValue}
                     setItems={setItems}
@@ -388,15 +401,18 @@ const CategoryManagement = ({navigation}) => {
             data={filterData}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
+              if (item.activeFlag === '1') {
+                setStatus('Active');
+              } else {
+                setStatus('Non-Active');
+              }
               return (
                 <View>
-                  {item.activeFlag === '1' ? (
-                    <CardCategoryManagement
-                      id={index + 1}
-                      title={item.name}
-                      status={item.activeFlag}
-                    />
-                  ) : null}
+                  <CardCategoryManagement
+                    id={index + 1}
+                    title={item.name}
+                    status={status}
+                  />
                 </View>
               );
             }}

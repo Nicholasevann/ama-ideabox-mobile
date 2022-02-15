@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -8,13 +8,48 @@ import {
 } from 'react-native';
 import {Back} from '../../../assets/icon';
 import DetailCategory from '../../../components/DetailCategory';
+import Header from '../../../components/Header';
+import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
+import GetParentCategory from '../../../config/GetData/GetParentCategory';
 
 const DetailCategoryUserManagement = ({navigation, route}) => {
   const data = route.params.data;
+  const [status, setStatus] = useState('');
+  const [value, setValue] = useState(null);
+  const [parent, setParent] = useState('');
+  useEffect(() => {
+    if (value === null) {
+      GetParentCategory(data.type).then(response => {
+        setValue(response);
+      });
+    }
+  });
+  if (status === '') {
+    if (data.activeFlag === '1') {
+      setStatus('Acttive');
+    } else {
+      setStatus('Non-Active');
+    }
+  }
+  if (value === null) {
+    return <LoadingScreen />;
+  }
+  if (parent === '') {
+    value.filter(res => {
+      if (res.id === data.parentId) {
+        setParent(res);
+      } else {
+        setParent('None');
+      }
+    });
+  }
   return (
     <View style={styles.container}>
-      <SearchHeader />
+      <Header
+        onPress={() => navigation.openDrawer()}
+        notification={() => navigation.navigate('Notification')}
+      />
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <TouchableOpacity
@@ -30,11 +65,11 @@ const DetailCategoryUserManagement = ({navigation, route}) => {
             <DetailCategory
               name={data.name}
               type={data.type}
-              parent={data.parent}
-              status={'-'}
-              createdBy={data.createdBy}
+              parent={parent}
+              status={status}
+              createdBy={data.createdBy.name}
               createdDate={data.createdDate}
-              updatedBy={data.updatedBy}
+              updatedBy={data.updatedBy.name}
               updatedDate={data.updatedDate}
             />
           </View>
