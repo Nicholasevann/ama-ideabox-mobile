@@ -14,7 +14,7 @@ import Drawer from './drawer.svg';
 import Search from './search.svg';
 import Like from './like.svg';
 import Comment from './comment.svg';
-import Share from './share.svg';
+import ShareIcon from './share.svg';
 import Trend from './trend.svg';
 import EventActive from './eventactive.svg';
 import TrendActive from './trendactive.svg';
@@ -65,7 +65,7 @@ export {
   Search,
   Like,
   Comment,
-  Share,
+  ShareIcon,
   Trend,
   EventActive,
   TrendActive,

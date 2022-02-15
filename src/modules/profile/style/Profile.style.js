@@ -229,13 +229,14 @@ const styles = StyleSheet.create({
   },
   input: {
     zIndex: 3,
+    paddingLeft: 5,
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: '#FFFFFF',
     borderColor: '#085D7A',
     marginBottom: 10,
     color: 'black',
-    height: 35,
+    height: 50,
     fontSize: 12,
   },
   inputAbout: {
@@ -251,6 +252,7 @@ const styles = StyleSheet.create({
   },
   textInputAbout: {
     width: '100%',
+    color: 'black',
   },
   textEdit: {
     fontSize: 20,

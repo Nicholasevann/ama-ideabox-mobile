@@ -20,11 +20,23 @@ const DetailTeams = ({navigation, route}) => {
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.navigate('TalentApproval')}
-        name={data.user[0].name}
-        nik={data.user[0].nik}
-      />
+      {data.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: data})}
+          image={require('../../../assets/icon/profilepicture.png')}
+          name={data.user.name}
+          nik={data.user.nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: data})}
+          image={{uri: data.user.pictures}}
+          name={data.user.name}
+          nik={data.user.nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>

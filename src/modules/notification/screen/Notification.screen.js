@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Back} from '../../../assets/icon';
 import CardNotification from '../../../components/CardNotification';
+import style from '../../../config/Style/style.cfg';
 
 const Notification = ({navigation}) => {
   return (
@@ -14,9 +15,16 @@ const Notification = ({navigation}) => {
         </View>
         <Text style={styles.notif}>Notification</Text>
       </View>
-      <CardNotification />
-      <CardNotification />
-      <CardNotification />
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Image
+          source={require('../../../assets/image/notification.png')}
+          style={{width: 200, height: 300}}
+        />
+        <Text style={[style.h4, {color: '#085D7A'}]}>
+          We are ready Soon! See you!
+        </Text>
+      </View>
+      {/* <CardNotification /> */}
     </View>
   );
 };
@@ -33,7 +41,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flexDirection: 'row',
-    height: 50,
+    height: 65,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -50,6 +58,6 @@ const styles = StyleSheet.create({
   notif: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginLeft: 120,
+    marginLeft: 10,
   },
 });

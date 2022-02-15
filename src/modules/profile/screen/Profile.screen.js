@@ -25,6 +25,9 @@ import GetDataTrackRecord from '../../../config/GetData/GetDataTrackRecord';
 import axios from 'axios';
 import SuccesModal from '../../../components/SuccesModal';
 import FailedModal from '../../../components/FailedModal';
+import DropDownPicker from 'react-native-dropdown-picker';
+import AddAchievement from '../../../config/PostData/AddAchievement';
+import DeleteAchievement from '../../../config/DeleteData/DeleteAchievement';
 
 const Tag = props => {
   return (
@@ -41,6 +44,12 @@ const Profile = ({navigation}) => {
   const [dataTrackRecord, setDataTrackRecord] = useState('');
   const [successModal, setSuccessModal] = useState(null);
   const [about, setAbout] = useState('');
+  const [achiev, setAchiev] = useState('');
+  // dropdown
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([]);
+  const [array, setArray] = useState(false);
   var indexSupport = 0;
   var indexJoin = 0;
   useEffect(() => {
@@ -85,17 +94,31 @@ const Profile = ({navigation}) => {
   const getDataSuccess = data => {
     setSuccessModal(data);
   };
-  if (successModal === 200) {
+  const handleAchiev = () => {
+    AddAchievement(data.id, value, achiev).then(res => setSuccessModal(res));
+  };
+  const handleDelete = idAchieve => {
+    DeleteAchievement(idAchieve, data.id).then(res => {
+      setSuccessModal(res);
+    });
+  };
+  if (array === false) {
+    dataTrackRecord.ideas.map(val => {
+      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
+    });
+    setArray(true);
+  }
+  if (successModal === 200 || successModal === 201) {
     GetDataTrackRecord(data.id).then(response => setDataTrackRecord(response));
   }
   return (
     <SafeAreaView style={styles.container}>
-      {successModal === 200 ? (
+      {successModal === 200 || successModal === 201 ? (
         <SuccesModal
-          desc={'Congrats your bio have been updated!'}
+          desc={'Congrats your track record have been updated!'}
           getData={getDataSuccess}
         />
-      ) : successModal === -1 ? (
+      ) : successModal !== null ? (
         <FailedModal desc={'Your data failed to update!'} />
       ) : null}
       <ScrollView>
@@ -110,7 +133,12 @@ const Profile = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.Button}>
-            <Notif />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.replace('Notification');
+              }}>
+              <Notif />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.profilePicture}>
@@ -144,8 +172,8 @@ const Profile = ({navigation}) => {
         <View style={styles.mainContainer}>
           <View style={styles.mainContent}>
             <Text style={styles.h1}>{data.name}</Text>
-            <Text style={styles.h2}>{data.email}</Text>
-            <Text style={styles.h3}>Kota Bandung, Jawa Barat</Text>
+            <Text style={styles.h2}>{dataTrackRecord.user.regional}</Text>
+            <Text style={styles.h3}>{dataTrackRecord.user.loker}</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.replace('InputProfile')}>
             <View style={styles.Button}>
@@ -214,35 +242,28 @@ const Profile = ({navigation}) => {
           </View>
 
           {/* Achievement */}
-          {/* <View style={styles.cardContainer}>
+          <View style={styles.cardContainer}>
             <View style={styles.aboutTitleContainer}>
               <Text style={styles.title}>Achievement</Text>
               <View style={{flexDirection: 'row'}}>
-                <Image
-                  source={require('../../../assets/icon/add.png')}
-                  style={{width: 20, height: 20, marginRight: 10}}
-                />
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                   <Image
-                    source={require('../../../assets/icon/edit.png')}
+                    source={require('../../../assets/icon/add.png')}
                     style={{width: 20, height: 20}}
                   />
                 </TouchableOpacity>
               </View>
             </View>
             <View style={styles.achievementContainer}>
-              <CardAchievement
-                title={
-                  'Sistem keuangan berbasis web untuk KUKM Sistem keuangan berbasis web untuk KUKM'
-                }
-                desc={'Top 25 Ideahack'}
-              />
-              <CardAchievement
-                title={'Indonesia Menerapkan IoT'}
-                desc={'Juara Harapan 2'}
-              />
+              {dataTrackRecord.achievement.map(val => (
+                <CardAchievement
+                  title={val.ideaId.title.value}
+                  desc={val.pencapaian}
+                  delete={() => handleDelete(val.id)}
+                />
+              ))}
             </View>
-          </View> */}
+          </View>
 
           {/* Inovation*/}
           <View style={styles.cardContainer}>
@@ -269,7 +290,12 @@ const Profile = ({navigation}) => {
                       height: 200,
                       borderWidth: 1,
                       borderRadius: 10,
-                    }}></View>
+                    }}>
+                    <Image
+                      style={{flex: 1, resizeMode: 'cover', borderRadius: 10}}
+                      source={{uri: val.desc[1].value}}
+                    />
+                  </View>
                   <View>
                     <Text style={[style.h4, {marginVertical: 10}]}>
                       {val.desc[0].value}
@@ -342,20 +368,32 @@ const Profile = ({navigation}) => {
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.h2}>Nama Inovasi :</Text>
-                <TextInput
+                <DropDownPicker
+                  open={open}
+                  value={value}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setValue}
+                  setItems={setItems}
                   style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
+                  placeholder="Pilih ide"
+                  maxHeight={120}
+                  listItemContainerStyle={{height: 40}}
                 />
                 <Text style={styles.h2}>Pencapaian :</Text>
                 <TextInput
                   style={styles.input}
-                  // value={''}
-                  // onChangeText={() => { }}
+                  value={achiev}
+                  onChangeText={val => {
+                    setAchiev(val);
+                  }}
                 />
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => setModalVisible(false)}>
+                  onPress={() => {
+                    setModalVisible(false);
+                    handleAchiev();
+                  }}>
                   <Text style={styles.save}>SAVE</Text>
                 </TouchableOpacity>
               </View>

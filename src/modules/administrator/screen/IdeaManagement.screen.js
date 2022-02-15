@@ -157,13 +157,13 @@ const IdeaManagement = ({navigation}) => {
           </View>
           <SwipeListView
             data={filterData}
-            renderItem={({item}) => {
+            renderItem={({item, index}) => {
               // console.log(item)
               return (
                 <View>
                   <CardIdeaManagement
                     // delete={() => setModalDeleteVisible(true)}
-                    id={item.id}
+                    id={index + 1}
                     title={item.desc[0].value}
                     create={item.createdBy}
                   />

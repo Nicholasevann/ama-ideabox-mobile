@@ -8,33 +8,91 @@ const DetailLeanCanvasDesc = props => {
         <Text style={styles.h2}>
           CUSTOMER, siapa yang ingin kamu solusikan?*
         </Text>
-        <Text style={styles.textnoedit}>{props.customer}</Text>
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'customer') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
         <Text style={styles.h2}>
           PROBLEM, apa problem mereka yang ingin disolusikan?*
         </Text>
-        <Text style={styles.textnoedit}>{props.problem}</Text>
-        {/* <Text style={styles.h2}>
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'problem') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
+        <Text style={styles.h2}>
           EARLY ADOPTER, siapa saja dari target di atas yg bisa kamu gapai
           duluan dalam 3 bln ke depan?*
         </Text>
-        <Text style={styles.textnoedit}>
-          laporan keuangan yang berintegritas untuk kuartal 3 2021
-        </Text> */}
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'earlyAdopter') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
         <Text style={styles.h2}>
           EXISTING SOLUTION, per hari ini, bagaimana biasanya mereka
           mensolusikan probem-problem itu?*
         </Text>
-        <Text style={styles.textnoedit}>{props.existing}</Text>
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'existingSolution') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
         <Text style={styles.h2}>
           UNIQUE VALUE, apa yang bikin kamu berbeda dan keren, jadi mereka mau
           pindah ke kamu?*
         </Text>
-        <Text style={styles.textnoedit}>{props.unique}</Text>
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'uniqueValue') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
         <Text style={styles.h2}>
           PROPOSED SOLUTION, so, jadi apa yang akan/sedang kamu buat agar mereka
           bisa cinta banget sama kamu?*
         </Text>
-        <Text style={styles.textnoedit}>{props.proposed}</Text>
+        <View style={styles.inputContainer}>
+          {props.data.map(res => {
+            if (res.field === 'proposedSolution') {
+              return (
+                <View>
+                  <Text style={styles.textnoedit}>{res.value}</Text>
+                </View>
+              );
+            }
+          })}
+        </View>
       </View>
     </ScrollView>
   );
@@ -51,18 +109,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
   },
-  textnoedit: {
+  inputContainer: {
     borderWidth: 1,
     borderRadius: 5,
     backgroundColor: '#DBDBDB',
     borderColor: '#085D7A',
-    marginBottom: 10,
-    marginTop: 10,
+    marginVertical: 10,
+    padding: 5,
+  },
+  textnoedit: {
     color: 'black',
-    height: 20,
+
     fontSize: 12,
-    paddingLeft: 7,
-    paddingTop: 2,
   },
   h2: {
     fontSize: 14,

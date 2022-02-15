@@ -229,6 +229,7 @@ const EventContent = ({navigation}) => {
                   <View key={key}>
                     <CardEventContent
                       title={val.name}
+                      textButton={'Join'}
                       desc={val.description}
                       image={val.image}
                       join={() => {

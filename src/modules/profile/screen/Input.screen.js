@@ -33,6 +33,7 @@ import {
   GetDataCategoryUnit,
   GetDataUnit,
 } from '../../../config/GetData/GetDataCfu';
+import GetDataSkill from '../../../config/GetData/GetDataSkill';
 const InputProfile = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
   const [success, setSuccess] = useState(false);
@@ -47,11 +48,13 @@ const InputProfile = ({navigation}) => {
   const [imageProfile, setImageProfile] = useState(null);
   const [dataProfile, setDataProfile] = useState(null);
   const [dataCfu, setDataCfu] = useState(null);
+  const [dataSkill, setDataSkill] = useState(null);
   const [dataCategoryUnit, setDataCategoryUnit] = useState(null);
   const [dataUnit, setDataUnit] = useState(null);
   const [array, setArray] = useState(false);
-  const [array1, setArray1] = useState(false);
+  const [array3, setArray3] = useState(false);
   const [array2, setArray2] = useState(false);
+  const [array4, setArray4] = useState(false);
   const [change, setChange] = useState(false);
   const [change2, setChange2] = useState(false);
   // dropdown 1
@@ -75,9 +78,13 @@ const InputProfile = ({navigation}) => {
   const [open3, setOpen3] = useState(false);
   const [value3, setValue3] = useState(null);
   const [items3, setItems3] = useState([]);
+  // dropdown1
+  const [open4, setOpen4] = useState(false);
+  const [value4, setValue4] = useState(null);
+  const [items4, setItems4] = useState([]);
 
   useEffect(() => {
-    if (dataProfile === null || dataCfu === null) {
+    if (dataProfile === null || dataCfu === null || dataSkill === null) {
       getData().then(jsonValue => setData(jsonValue));
       prefetchConfiguration({
         warmAndPrefetchChrome: Platform.OS === 'android',
@@ -88,14 +95,19 @@ const InputProfile = ({navigation}) => {
       }
       GetDataProfile(data.id).then(jsonValue => setDataProfile(jsonValue));
       GetDataCfu().then(res => setDataCfu(res));
+      GetDataSkill().then(res => setDataSkill(res));
     }
   });
   useEffect(() => {
-    setChange(true);
+    setArray2(false);
     setItems2([]);
-    setChange2(true);
+    setDataCategoryUnit(null);
   }, [value]);
-
+  useEffect(() => {
+    setArray3(false);
+    setItems3([]);
+    setDataUnit(null);
+  }, [value2]);
   // useEffect(() => {
   //   GetDataCategoryUnit(value).then(res => setDataCategoryUnit(res));
   //   console.log(dataCategoryUnit);
@@ -184,9 +196,9 @@ const InputProfile = ({navigation}) => {
     axios({
       crossDomain: true,
       method: 'post',
-      url: 'https://dev-users.digitalamoeba.id/profile/update/',
+      url: 'https://dev-users.digitalamoeba.id/trackrecord/editprofile',
       data: {
-        id: dataProfile.id,
+        userId: dataProfile.id,
         name: dataProfile.name,
         nik: dataProfile.nik,
         email: dataProfile.email,
@@ -197,43 +209,49 @@ const InputProfile = ({navigation}) => {
         anakPerusahaan: dataProfile.anakPerusahaan,
         loker: dataProfile.loker,
         regional: dataProfile.regional,
-        teamStructure: dataProfile.teamStructure,
+        categoryUnitId: value3,
+        teamStructure: value1,
+        skillSetId: value4,
       },
       validateStatus: false,
     })
       .then((response, status) => {
-        if (response.status === 200) {
-          console.log('berhasil upload');
-          setSuccessModal(200);
-          storeDataLdap();
-        }
+        console.log(response);
+        setSuccessModal(response.status);
+        storeDataLdap();
       })
       .catch(function (error) {
         console.log(error);
         // need handling error
       });
   };
-  if (dataProfile === null || dataCfu === null) {
+  if (dataProfile === null || dataCfu === null || dataSkill === null) {
     return <LoadingScreen />;
   }
   const getDataSuccess = data => {
     setSuccessModal(data);
   };
-
+  console.log(value3, value1, value4);
   //calender
   const handleText = () =>
     pickedDate ? moment(pickedDate).format('YYYY-MM-DD') : dataProfile.tglLahir;
-  // pickedDate.toDateString()
 
   if (imageCover === null || imageProfile === null) {
     setImageCover(dataProfile.background);
     setImageProfile(dataProfile.pictures);
   }
-  //name image
-  // if (imageProfile !== null && profile === null) {
-  //   setProfile(imageProfile.substring(imageProfile.lastIndexOf('/') + 1));
-  // }
-  // const placeholder1 =
+  //skill
+  if (dataSkill !== undefined) {
+    if (array4 === false) {
+      if (dataSkill !== null) {
+        dataSkill.map(val => {
+          setItems4(res => [...res, {label: val.name, value: val.id}]);
+        });
+        setArray4(true);
+      }
+    }
+  }
+  //cfu/fu
   if (dataCfu !== undefined) {
     if (array === false) {
       if (dataCfu !== null) {
@@ -244,32 +262,44 @@ const InputProfile = ({navigation}) => {
       }
     }
   }
+  //category unit
   if (value !== null) {
-    if (change === true) {
-      GetDataCategoryUnit(value).then(res => setDataCategoryUnit(res));
-      setChange(false);
+    if (dataCategoryUnit === null) {
+      GetDataCategoryUnit(value).then(response => {
+        setDataCategoryUnit(response);
+      });
     }
   }
-  // if (change2 === true) {
-  //   if (dataCategoryUnit !== null) {
-  //     dataCategoryUnit.map(val => {
-  //       setItems2(res => [...res, {label: val.cfufuId, value: val.cfufuId}]);
-  //     });
-  //   }
-  //   setChange2(false);
-  // }
-  console.log(dataCategoryUnit);
+  if (dataCategoryUnit !== undefined) {
+    if (array2 === false) {
+      if (dataCategoryUnit !== null) {
+        dataCategoryUnit.map(val => {
+          setItems2(res => [...res, {label: val.name, value: val.id}]);
+        });
+        setArray2(true);
+      }
+    }
+  }
+  //unit
+  if (value2 !== null) {
+    if (dataUnit === null) {
+      GetDataUnit(value2).then(response => {
+        setDataUnit(response);
+      });
+    }
+  }
+  if (dataUnit !== undefined) {
+    if (array3 === false) {
+      if (dataUnit !== null) {
+        dataUnit.map(val => {
+          setItems3(res => [...res, {label: val.name, value: val.id}]);
+        });
+        setArray3(true);
+      }
+    }
+  }
   return (
     <SafeAreaView style={styles.container}>
-      {change2 === true && dataCategoryUnit !== null
-        ? dataCategoryUnit.map(val => {
-            setItems2(res => [
-              ...res,
-              {label: val.cfufuId, value: val.cfufuId},
-            ]);
-            setChange2(false);
-          })
-        : null}
       {successModal === 200 ? (
         <SuccesModal
           desc={'Congrats your profile have been updated!'}
@@ -290,7 +320,12 @@ const InputProfile = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.Button}>
-            <Notif />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.replace('Notification');
+              }}>
+              <Notif />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.mainContainer}>
@@ -322,6 +357,9 @@ const InputProfile = ({navigation}) => {
           </View>
           <View style={styles.contentContainer}>
             <Text style={styles.h1}>PROFILE DATA</Text>
+            <Text style={[styles.h2, {fontStyle: 'italic'}]}>
+              Fill all data is required!
+            </Text>
             <Text style={styles.h2}>Name</Text>
             <TextInput
               style={styles.input}
@@ -341,7 +379,7 @@ const InputProfile = ({navigation}) => {
               value={dataProfile.email}
               onChangeText={val => setDataProfile({...dataProfile, email: val})}
             />
-            <Text style={styles.h2}>No. HP</Text>
+            <Text style={styles.h2}>No. HP (Min 8 number)</Text>
             <TextInput
               style={styles.input}
               value={dataProfile.noTelp}
@@ -370,9 +408,7 @@ const InputProfile = ({navigation}) => {
             <TextInput
               style={styles.input}
               value={dataProfile.loker}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, tglLahir: val})
-              }
+              onChangeText={val => setDataProfile({...dataProfile, loker: val})}
             />
             <Text style={styles.h2}>Name Office Supervisor :</Text>
             <TextInput
@@ -391,25 +427,19 @@ const InputProfile = ({navigation}) => {
               }
             />
             <Text style={styles.h1}>DETAIL</Text>
-            <Text style={styles.h2}>Directorate</Text>
+            <Text style={styles.h2}>Regional</Text>
             <TextInput
               style={styles.input}
-              value={dataProfile.teamStructure}
+              value={dataProfile.regional}
               onChangeText={val =>
-                setDataProfile({...dataProfile, teamStructure: val})
+                setDataProfile({...dataProfile, regional: val})
               }
             />
             <Text style={styles.h2}>Team Structure</Text>
-            <TextInput
-              style={styles.input}
-              value={dataProfile.teamStructure}
-              onChangeText={val =>
-                setDataProfile({...dataProfile, teamStructure: val})
-              }
-            />
-            <Text style={styles.h2}>Skill</Text>
             <View>
               <DropDownPicker
+                listMode="SCROLLVIEW"
+                dropDownDirection="BOTTOM"
                 open={open1}
                 value={value1}
                 items={items1}
@@ -417,19 +447,44 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue1}
                 setItems={setItems1}
                 style={styles.input}
+                placeholder="Choose your team structure!"
+                labelStyle={styles.fontLabelStyle}
+                listItemLabelStyle={styles.labelStyle}
+                listItemContainerStyle={styles.listContainer}
+                placeholderStyle={styles.placeholder}
+                zIndex={7100}
+                maxHeight={120}
+              />
+            </View>
+            <Text style={styles.h2}>Skill</Text>
+            <View>
+              <DropDownPicker
+                multiple={true}
+                min={0}
+                max={dataSkill.count}
+                listMode="SCROLLVIEW"
+                dropDownDirection="BOTTOM"
+                open={open4}
+                value={value4}
+                items={items4}
+                setOpen={setOpen4}
+                setValue={setValue4}
+                setItems={setItems4}
+                style={styles.input}
                 placeholder="Choose your skill!"
                 labelStyle={styles.fontLabelStyle}
                 listItemLabelStyle={styles.labelStyle}
                 listItemContainerStyle={styles.listContainer}
                 placeholderStyle={styles.placeholder}
-                containerStyle={{width: '100%'}}
-                zIndex={6100}
+                zIndex={7000}
+                maxHeight={120}
               />
             </View>
             <Text style={[styles.h2, {marginBottom: 5}]}>CFU / FU</Text>
             <View>
               <DropDownPicker
                 listMode="SCROLLVIEW"
+                dropDownDirection="BOTTOM"
                 open={open}
                 value={value}
                 items={items}
@@ -442,8 +497,8 @@ const InputProfile = ({navigation}) => {
                 listItemLabelStyle={styles.labelStyle}
                 listItemContainerStyle={styles.listContainer}
                 placeholderStyle={styles.placeholder}
-                zIndex={6050}
-                maxHeight={150}
+                zIndex={6500}
+                maxHeight={120}
                 scrollViewProps={true}
               />
             </View>
@@ -460,19 +515,21 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue2}
                 setItems={setItems2}
                 style={styles.input}
-                placeholder="Choose your Category Unit"
+                placeholder="Choose your Category Unit! (Fill CFU/FU first)"
                 labelStyle={styles.fontLabelStyle}
                 listItemLabelStyle={styles.labelStyle}
                 listItemContainerStyle={styles.listContainer}
                 placeholderStyle={styles.placeholder}
-                zIndex={6050}
-                maxHeight={150}
+                zIndex={6200}
+                maxHeight={120}
                 scrollViewProps={true}
               />
             </View>
             <Text style={styles.h2}>Unit</Text>
             <View>
               <DropDownPicker
+                listMode="SCROLLVIEW"
+                dropDownDirection="BOTTOM"
                 open={open3}
                 value={value3}
                 items={items3}
@@ -480,12 +537,14 @@ const InputProfile = ({navigation}) => {
                 setValue={setValue3}
                 setItems={setItems3}
                 style={styles.input}
-                placeholder="All Event"
+                placeholder="Choose your Unit! (Fill Cat. Unit first)"
                 labelStyle={styles.fontLabelStyle}
                 listItemLabelStyle={styles.labelStyle}
                 listItemContainerStyle={styles.listContainer}
                 placeholderStyle={styles.placeholder}
                 containerStyle={{width: '100%'}}
+                maxHeight={80}
+                scrollViewProps={true}
               />
             </View>
 

@@ -5,6 +5,7 @@ import DetailStoryBehind from '../../modules/talentapproval/screen/DetailStoryBe
 import DetailLeanCanvas from '../../modules/talentapproval/screen/DetailLeanCanvas.screen';
 import DetailTeams from '../../modules/talentapproval/screen/DetailTeams.screen';
 import TalentApproval from '../../modules/talentapproval/screen/TalentApproval.screen';
+import ProfileUser from '../../modules/profileuser/screen/ProfileUser.screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,11 @@ const RoutesTalentApproval = () => {
       <Stack.Screen
         name="DetailTeams"
         component={DetailTeams}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProfileUser"
+        component={ProfileUser}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

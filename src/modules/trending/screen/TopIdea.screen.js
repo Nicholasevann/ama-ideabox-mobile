@@ -41,7 +41,7 @@ const TopIdea = ({navigation}) => {
     } else if (selectedId === 3) {
       setPlaceholder('Search an Idea ... ');
     } else if (selectedId === 4) {
-      setPlaceholder('Search a Idea ... ');
+      setPlaceholder('Search an Idea ... ');
     }
   }, [selectedId]);
   const ref = useRef(null);
@@ -103,13 +103,17 @@ const TopIdea = ({navigation}) => {
                 }
               })
               .map((top, key) => {
-                // console.log(top.title);
                 return (
                   <View key={key}>
                     <CardTopTrending
                       title={top.ideas.desc[0].value}
                       name={top.ideas.user.name}
-                      image={top.image}
+                      image={
+                        top.ideas.user.pictures === ''
+                          ? require('../../../assets/icon/profilepicture.png')
+                          : {uri: top.ideas.user.pictures}
+                      }
+                      desc={'Total comment & like : ' + top.total}
                     />
                   </View>
                 );
@@ -156,7 +160,12 @@ const TopIdea = ({navigation}) => {
                     <CardTopTrending
                       title={top.ideas.desc[0].value}
                       name={top.ideas.user.name}
-                      image={top.image}
+                      image={
+                        top.ideas.user.pictures === ''
+                          ? require('../../../assets/icon/profilepicture.png')
+                          : {uri: top.ideas.user.pictures}
+                      }
+                      desc={'Total like : ' + top.ideas.like.count}
                     />
                   </View>
                 );
@@ -181,7 +190,12 @@ const TopIdea = ({navigation}) => {
                     <CardTopTrending
                       title={top.ideas.desc[0].value}
                       name={top.ideas.user.name}
-                      image={top.image}
+                      image={
+                        top.ideas.user.pictures === ''
+                          ? require('../../../assets/icon/profilepicture.png')
+                          : {uri: top.ideas.user.pictures}
+                      }
+                      desc={'Total comment : ' + top.comment}
                     />
                   </View>
                 );

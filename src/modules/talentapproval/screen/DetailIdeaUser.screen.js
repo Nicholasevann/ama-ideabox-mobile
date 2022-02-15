@@ -20,7 +20,7 @@ const DetailIdeaUser = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
-  console.log(detailIdea);
+  console.log(detailIdea.user.userId);
   return (
     <SafeAreaView style={styles.container}>
       <SearchHeader
@@ -29,11 +29,23 @@ const DetailIdeaUser = ({route, navigation}) => {
       />
 
       {/* Profile */}
-      <CardProfile
-        onPress={() => navigation.navigate('TalentApproval')}
-        name={detailIdea.user[0].name}
-        nik={detailIdea.user[0].nik}
-      />
+      {detailIdea.user.pictures === '' ? (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: detailIdea})}
+          image={require('../../../assets/icon/profilepicture.png')}
+          name={detailIdea.user.name}
+          nik={detailIdea.user.nik}
+        />
+      ) : (
+        <CardProfile
+          onPress={() => navigation.navigate('TalentApproval')}
+          profile={() => navigation.navigate('ProfileUser', {data: detailIdea})}
+          image={{uri: detailIdea.user.pictures}}
+          name={detailIdea.user.name}
+          nik={detailIdea.user.nik}
+        />
+      )}
 
       {/* content */}
       <View style={styles.contentContainer}>
@@ -79,8 +91,9 @@ const DetailIdeaUser = ({route, navigation}) => {
         <View style={styles.content}>
           <DetailIdeaDesc
             title={detailIdea.desc[0].value}
-            perusahaan={detailIdea.CFUFU[0].name}
+            cfufu={detailIdea.CFUFU[0].name}
             desc={detailIdea.desc[2].value}
+            image={detailIdea.desc[1].value}
           />
         </View>
       </View>

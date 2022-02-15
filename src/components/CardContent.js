@@ -1,7 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
-import {Comment, Like, More, Share} from '../assets/icon';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Share,
+} from 'react-native';
+import {Comment, Like, More} from '../assets/icon';
 import {GetDataIdea} from '../config/GetData/GetDataIdea';
 import LikeIdea from '../config/PostData/Like';
 import style from '../config/Style/style.cfg';
@@ -37,7 +44,29 @@ const CardContent = props => {
       setChange(true);
     });
   };
-
+  const onShare = async (id, desc, title) => {
+    try {
+      const result = await Share.share({
+        message:
+          title +
+          '\n\n' +
+          desc +
+          '\n\n https://dev-ideabox.digitalamoeba.id/ideabox/ideas/' +
+          id,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   if (change === true) {
     if (liked === true) {
       setImageLiked(require('../assets/icon/loveTrue.png'));
@@ -47,7 +76,6 @@ const CardContent = props => {
       setChange(false);
     }
   }
-
   return (
     <View style={styles.container}>
       <View style={styles.wrapProfile}>
@@ -59,9 +87,11 @@ const CardContent = props => {
             </Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={props.morePromote}>
-          <More />
-        </TouchableOpacity>
+        {props.createdId !== props.dataAsync.id ? (
+          <TouchableOpacity onPress={props.morePromote}>
+            <More />
+          </TouchableOpacity>
+        ) : null}
       </View>
       <View style={styles.contentContainer}>
         <Image
@@ -72,13 +102,7 @@ const CardContent = props => {
       </View>
       <View style={styles.rowIcon}>
         <View style={styles.iconContentContainer}>
-          <TouchableOpacity
-            // onPress={() => {
-            //   props.clickLike;
-            //   handleLike();
-            // }}
-            onPress={handleLike}
-            style={styles.iconContent}>
+          <TouchableOpacity onPress={handleLike} style={styles.iconContent}>
             <Image source={imageLiked} style={styles.icon} />
           </TouchableOpacity>
           <TouchableOpacity onPress={props.comment}>
@@ -89,7 +113,8 @@ const CardContent = props => {
               />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={props.share}>
+          <TouchableOpacity
+            onPress={() => onShare(props.id, props.desc, props.title)}>
             <View style={styles.iconContent}>
               <Image
                 source={require('../assets/icon/share.png')}
@@ -102,7 +127,7 @@ const CardContent = props => {
           <Text style={[style.h4, styles.moreDescContent]}>More Detail</Text>
         </TouchableOpacity>
       </View>
-      {props.likedBy === [] ? null : (
+      {props.likedBy === '0' ? null : (
         <View style={styles.rowLike}>
           <Image
             source={require('../assets/icon/loveTrue.png')}
@@ -150,8 +175,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   imageProfile: {
-    width: windowWidth / 11.5,
-    height: windowHeight / 22.56,
+    width: windowWidth / 10.5,
+    height: windowHeight / 21.56,
     borderRadius: 25,
   },
   textProfile: {

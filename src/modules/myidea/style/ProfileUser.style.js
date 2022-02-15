@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     position: 'absolute',
     zIndex: 3,
-    top: 160,
+    top: 200,
     left: 25,
   },
   image: {
@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     width: '100%',
-    height: 170,
-    resizeMode: 'contain',
+    height: 200,
   },
   backgroundImage: {
     flex: 1,

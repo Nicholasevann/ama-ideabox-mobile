@@ -36,9 +36,6 @@ import PromoteIdea from '../../../config/PostData/PromoteIdea';
 import WarningModal from '../../../components/WarningModal';
 import FailedModal from '../../../components/FailedModal';
 
-const wait = timeout => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-};
 const ExploreContent = ({navigation, route}) => {
   const [isLoading, setLoading] = useState(true);
   const [idLike, setIdLike] = useState(null);
@@ -98,25 +95,7 @@ const ExploreContent = ({navigation, route}) => {
     {id: '4', name: 'Mike'},
     {id: '5', name: 'Grey'},
   ];
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+
   // const handleLike = id => {
   //   LikeIdea(id, dataAsync.id).then(val => setLike(val));
   //   setIdLike(id);
@@ -191,6 +170,24 @@ const ExploreContent = ({navigation, route}) => {
     GetDataIdea().then(response => setData(response));
     setChange(false);
   }
+  // const onShare = async id => {
+  //   try {
+  //     const result = await Share.share({
+  //       message: 'https://dev-ideabox.digitalamoeba.id/ideabox/ideas/' + {id},
+  //     });
+  //     if (result.action === Share.sharedAction) {
+  //       if (result.activityType) {
+  //         // shared with activity type of result.activityType
+  //       } else {
+  //         // shared
+  //       }
+  //     } else if (result.action === Share.dismissedAction) {
+  //       // dismissed
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -244,6 +241,7 @@ const ExploreContent = ({navigation, route}) => {
               <View key={index}>
                 <CardContent
                   changeData={getDataChange}
+                  createdId={val.user.userId}
                   id={val.id}
                   dataAsync={dataAsync}
                   profileUser={
@@ -257,7 +255,7 @@ const ExploreContent = ({navigation, route}) => {
                   desc={val.desc[2].value}
                   like={val.like}
                   likedBy={val.totalLike}
-                  cover={val.desc[1].value}
+                  cover={{uri: val.desc[1].value}}
                   more={() =>
                     navigation.navigate('DetailIdeaUser', {
                       data: val,
@@ -270,7 +268,6 @@ const ExploreContent = ({navigation, route}) => {
                     setIdComment(val.id);
                     setIdUser(dataAsync.id);
                   }}
-                  share={() => onShare()}
                   join={() => setModalJoinVisible(true)}
                   promote={() => setModalPromoteVisible(true)}
                   morePromote={() => {
@@ -310,6 +307,11 @@ const ExploreContent = ({navigation, route}) => {
                 return (
                   <View>
                     <CardComment
+                      image={
+                        val.createdBy.pictures === ''
+                          ? require('../../../assets/icon/profilepicture.png')
+                          : {uri: val.createdBy.pictures}
+                      }
                       desc={val.comment}
                       name={val.createdBy.name}
                       reply={() => {
@@ -323,6 +325,11 @@ const ExploreContent = ({navigation, route}) => {
                           <CardReplyComment
                             desc={val.comment}
                             name={val.createdBy.name}
+                            image={
+                              val.createdBy.pictures === ''
+                                ? require('../../../assets/icon/profilepicture.png')
+                                : {uri: val.createdBy.pictures}
+                            }
                           />
                         </View>
                       );
@@ -452,6 +459,7 @@ const ExploreContent = ({navigation, route}) => {
                     onChangeText={val => {
                       setTextJoin(val);
                     }}
+                    style={{color: 'black'}}
                   />
                 </View>
               </View>
@@ -528,6 +536,7 @@ const ExploreContent = ({navigation, route}) => {
                       onChangeText={val => {
                         setTextPromote(val);
                       }}
+                      style={{color: 'black'}}
                     />
                   </View>
                 </View>
