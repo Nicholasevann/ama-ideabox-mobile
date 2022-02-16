@@ -102,6 +102,7 @@ const Profile = ({navigation}) => {
       setSuccessModal(res);
     });
   };
+
   if (array === false) {
     dataTrackRecord.ideas.map(val => {
       setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
@@ -119,7 +120,10 @@ const Profile = ({navigation}) => {
           getData={getDataSuccess}
         />
       ) : successModal !== null ? (
-        <FailedModal desc={'Your data failed to update!'} />
+        <FailedModal
+          desc={'Your data failed to update!'}
+          getData={getDataSuccess}
+        />
       ) : null}
       <ScrollView>
         {/* header */}

@@ -231,7 +231,6 @@ const InputProfile = ({navigation}) => {
   const getDataSuccess = data => {
     setSuccessModal(data);
   };
-  console.log(value3, value1, value4);
   //calender
   const handleText = () =>
     pickedDate ? moment(pickedDate).format('YYYY-MM-DD') : dataProfile.tglLahir;

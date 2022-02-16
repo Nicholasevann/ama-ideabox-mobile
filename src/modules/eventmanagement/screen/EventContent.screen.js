@@ -77,7 +77,7 @@ const EventContentManagement = ({navigation}) => {
     return <LoadingScreen />;
   }
   const selectedData = stateDataEvent.filter(
-    x => x.category[0].id === stateDataCategory[selectedId - 17].id,
+    x => x.categoryEvent.id === stateDataCategory[selectedId - 17].id,
   );
   return (
     <SafeAreaView style={styles.container}>

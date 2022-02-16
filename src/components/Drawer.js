@@ -125,7 +125,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      {/* <Drawer.Screen
+      <Drawer.Screen
         name="Dashboard"
         component={Dashboard}
         options={{
@@ -135,7 +135,7 @@ const DrawerNavigation = () => {
           activeTintColor: '#085D7A',
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Latihan"
         component={Latihan}
         options={{
@@ -143,7 +143,7 @@ const DrawerNavigation = () => {
           headerShown: false,
           drawerIcon: () => <HomeDrawer />,
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="EventManagement"
         component={EventManagement}
@@ -152,7 +152,7 @@ const DrawerNavigation = () => {
           headerShown: false,
           drawerIcon: () => <HomeDrawer />,
         }}
-      /> */}
+      />
     </Drawer.Navigator>
   );
 };

@@ -222,7 +222,7 @@ const IdeaManagement = ({navigation}) => {
                 </TouchableOpacity>
               </View>
               <View style={styles.inputContainer}>
-                <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                <Text style={styles.h2}>Anda ingin menghapus idea ini?</Text>
                 <View style={styles.rowDelete}>
                   <TouchableOpacity
                     style={styles.buttondelete}

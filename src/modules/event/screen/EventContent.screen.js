@@ -78,12 +78,14 @@ const EventContent = ({navigation}) => {
     return <LoadingScreen />;
   }
   const selectedData = stateDataEvent.filter(
-    x => x.category[0].id === stateDataCategory[selectedId - 17].id,
+    x => x.categoryEvent.id === stateDataCategory[selectedId - 17].id,
   );
   if (array === false) {
-    stateDataSubmitted.ideas.map(val => {
-      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
-    });
+    if (stateDataSubmitted.ideas !== undefined) {
+      stateDataSubmitted.ideas.map(val => {
+        setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
+      });
+    }
     setArray(true);
   }
   const handleJoin = () => {
