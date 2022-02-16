@@ -165,7 +165,7 @@ const TopIdea = ({navigation}) => {
                           ? require('../../../assets/icon/profilepicture.png')
                           : {uri: top.ideas.user.pictures}
                       }
-                      desc={'Total like : ' + top.ideas.like.count}
+                      desc={'Total like : ' + top.id}
                     />
                   </View>
                 );
