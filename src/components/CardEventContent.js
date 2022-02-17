@@ -15,14 +15,17 @@ const CardEventContent = props => {
           <TouchableOpacity onPress={props.detail}>
             <Text style={styles.detail}>Detail Event</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.textButton}>Open</Text>
+          <TouchableOpacity
+            style={[styles.button, {backgroundColor: props.background}]}>
+            <Text style={styles.textButton}>{props.status}</Text>
           </TouchableOpacity>
         </View>
       </View>
-      <TouchableOpacity onPress={props.join} style={styles.buttonJoin}>
-        <Text style={styles.textJoin}>{props.textButton}</Text>
-      </TouchableOpacity>
+      {props.buttonStatus === true ? (
+        <TouchableOpacity onPress={props.join} style={styles.buttonJoin}>
+          <Text style={styles.textJoin}>{props.textButton}</Text>
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
@@ -80,7 +83,6 @@ const styles = StyleSheet.create({
   button: {
     width: 70,
     height: 30,
-    backgroundColor: '#34A68A',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,

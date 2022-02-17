@@ -23,7 +23,7 @@ export default CardCategoryManagement;
 
 const styles = StyleSheet.create({
   title: {
-    flex: 1,
+    flex: 1.2,
     padding: 5,
     justifyContent: 'center',
     alignItems: 'center',

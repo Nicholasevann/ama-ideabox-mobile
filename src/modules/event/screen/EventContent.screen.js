@@ -30,6 +30,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import getData from '../../../components/GetData';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
+import moment from 'moment';
 
 const EventContent = ({navigation}) => {
   const [hasil, setHasil] = useState('');
@@ -94,6 +95,7 @@ const EventContent = ({navigation}) => {
   const getDataSuccess = data => {
     setSuccess(data);
   };
+
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -197,12 +199,28 @@ const EventContent = ({navigation}) => {
                 }
               })
               .map((val, key) => {
+                console.log(moment().unix());
                 return (
                   <View key={key}>
                     <CardEventContent
                       title={val.name}
                       desc={val.description}
                       image={val.image}
+                      buttonStatus={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? false
+                          : true
+                      }
+                      background={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? 'red'
+                          : '#34A68A'
+                      }
+                      status={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? 'Closed'
+                          : 'Open'
+                      }
                       textButton={'Join'}
                       join={() => {
                         setEventId(val.id);
