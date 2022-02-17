@@ -19,6 +19,7 @@ import getData from '../../../components/GetData';
 import LoadingScreen from '../../../components/LoadingScreen';
 import SearchHeader from '../../../components/SearchHeader';
 import SuccesModal from '../../../components/SuccesModal';
+import FailedModal from '../../../components/FailedModal';
 import DeleteCategoryManagement from '../../../config/DeleteData/DeleteCategoryManagement';
 import {GetDataCategoryManagement} from '../../../config/GetData/GetDataAdministrator';
 import GetParentCategory from '../../../config/GetData/GetParentCategory';
@@ -73,6 +74,12 @@ const CategoryManagement = ({navigation}) => {
       setFilterData(response);
     });
   }, [success]);
+  useEffect(() => {
+    GetDataCategoryManagement().then(response => {
+      setDataCategoryManagement(response);
+      setFilterData(response);
+    });
+  }, [update]);
   useEffect(() => {
     setArray(false);
     setItems([]);
@@ -131,12 +138,22 @@ const CategoryManagement = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
         <SuccesModal
-          desc={'Your data idea management have been deleted!'}
+          desc={'Your data category management have been non active!'}
           getData={getDataSuccess}
         />
       ) : update === 200 ? (
         <SuccesModal
-          desc={'Your data idea management have been updated!'}
+          desc={'Your data category management have been updated!'}
+          getData={getDataUpdate}
+        />
+      ) : success !== null ? (
+        <FailedModal
+          desc={'Your data category management cannot update!'}
+          getData={getDataSuccess}
+        />
+      ) : update !== null ? (
+        <FailedModal
+          desc={'Your data category management cannot update!'}
           getData={getDataUpdate}
         />
       ) : null}
@@ -362,12 +379,12 @@ const CategoryManagement = ({navigation}) => {
                         handleDelete();
                         setModalDeleteVisible(false);
                       }}>
-                      <Text style={styles.save}>Hapus</Text>
+                      <Text style={styles.save}>Ya</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.buttoncancel}
                       onPress={() => setModalDeleteVisible(false)}>
-                      <Text style={styles.save}>Batal</Text>
+                      <Text style={styles.save}>Tidak</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -403,17 +420,12 @@ const CategoryManagement = ({navigation}) => {
             data={filterData}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item, index}) => {
-              if (item.activeFlag === '1') {
-                setStatus('Active');
-              } else {
-                setStatus('Non-Active');
-              }
               return (
                 <View>
                   <CardCategoryManagement
                     id={index + 1}
                     title={item.name}
-                    status={status}
+                    status={item.activeFlag === '1' ? 'Active' : 'Non-Active'}
                   />
                 </View>
               );

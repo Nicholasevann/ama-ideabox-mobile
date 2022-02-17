@@ -3,7 +3,7 @@ import axios from 'axios';
 const DeleteAchievement = (id, userId) => {
   return axios({
     crossDomain: true,
-    method: 'delete',
+    method: 'post',
     url: 'https://dev-users.digitalamoeba.id/trackrecord/deleteachievement',
     data: {
       achievementId: id,

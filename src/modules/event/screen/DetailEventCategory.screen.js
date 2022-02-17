@@ -22,6 +22,7 @@ import {GetDataSubmittedIdea} from '../../../config/GetData/GetDataMyIdea';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
 import Header from '../../../components/Header';
+import moment from 'moment';
 const DetailEventCategory = ({navigation, route}) => {
   const data = route.params.data;
 
@@ -184,18 +185,23 @@ const DetailEventCategory = ({navigation, route}) => {
                 <BackBlue />
               </TouchableOpacity>
             </View>
-            <Text style={styles.date}>Tanggal Acara : {data.date}</Text>
+            <Text style={styles.date}>
+              Tanggal Acara : {moment(data.startDate).format('DD-MM-YYYY')} -{' '}
+              {moment(data.endDate).format('DD-MM-YYYY')}
+            </Text>
             <Text style={style.h5}>{data.description}</Text>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => {
-            setModalVisible(true);
-          }}>
-          <View style={styles.buttonJoin}>
-            <Text style={styles.save}>Join Now</Text>
-          </View>
-        </TouchableOpacity>
+        {moment(data.endDate).unix() < moment().unix() ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(true);
+            }}>
+            <View style={styles.buttonJoin}>
+              <Text style={styles.save}>Join Now</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
