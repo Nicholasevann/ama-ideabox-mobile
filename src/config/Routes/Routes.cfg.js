@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../../modules/login/screen/Login.screen';
 import DrawerNavigation from '../../components/Drawer';
 import SplashScreen from '../../modules/splash/screen/Splash.screen';
@@ -15,57 +15,57 @@ const Stack = createNativeStackNavigator();
 
 const Routes = () => {
   return (
-    <Stack.Navigator initialRouteName="SplashScreen">
+    <Stack.Navigator initialRouteName="DrawerNavigation">
       <Stack.Screen
         name="TopIdea"
         component={TopIdea}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SplashScreen"
         component={SplashScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Main"
         component={Main}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="DrawerNavigation"
         component={DrawerNavigation}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
-      <Stack.Screen name="Faq" component={Faq} options={{headerShown: false}} />
+      <Stack.Screen name="Faq" component={Faq} options={{ headerShown: false }} />
       <Stack.Screen
         name="RouteProfile"
         component={RoutesProfile}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Notification"
         component={Notification}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Search"
         component={SearchScreen}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PrivacyPolicy"
         component={privacyPolicy}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="TermCondi"
         component={TermCondi}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
