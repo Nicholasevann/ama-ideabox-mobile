@@ -6,6 +6,19 @@ const InovatorSay = props => {
     <View style={styles.inovatorContainer}>
       <Image source={props.image} style={styles.imageInovator} />
       <Text style={[style.h5, styles.descInovator]}>{props.desc}</Text>
+      <Text
+        style={[
+          style.h5,
+          {
+            fontStyle: 'italic',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            marginTop: 10,
+            lineHeight: 15,
+          },
+        ]}>
+        {props.name}
+      </Text>
     </View>
   );
 };
@@ -23,10 +36,10 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   descInovator: {
     textAlign: 'center',
-    marginTop: 10,
+    marginTop: 5,
   },
 });

@@ -230,21 +230,12 @@ const HomeContent = ({navigation}) => {
           activeDotColor="#085D7A"
           dot={<View style={styles.dotColor} />}>
           <InovatorSay
-            image={require('../../../assets/image/profilepicture.jpg')}
+            image={require('../../../assets/image/homeinovator.jpeg')}
             desc={
-              '“ Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!! Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!! ”'
+              '“ Innovation is what keep us alive. Step out of your comfort zone, create values to the world, and you will realize it is all worth it. ”'
             }
-          />
-          <InovatorSay
-            image={require('../../../assets/image/profilepicture2.jpg')}
-            desc={
-              '“ Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!! Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!!  ”'
-            }
-          />
-          <InovatorSay
-            image={require('../../../assets/image/profilepicture2.jpg')}
-            desc={
-              '“ Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!! Lets Transform to be The Extraordinary You and Become the AMAzing Innovator!!! ”'
+            name={
+              'Pingkan Prisilia Istra Langi \n CEO Diarium Indonesia & Worki'
             }
           />
         </Swiper>

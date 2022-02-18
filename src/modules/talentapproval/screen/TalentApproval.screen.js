@@ -66,8 +66,8 @@ const TalentApproval = ({navigation}) => {
   const searchFilter = text => {
     if (text) {
       const newData = dataTalentApproval.filter(item => {
-        const itemData = item.ideas.desc.value
-          ? item.ideas.desc.value.toUpperCase()
+        const itemData = item.ideas.title.value
+          ? item.ideas.title.value.toUpperCase()
           : ''.toUpperCase();
 
         const textData = text.toUpperCase();
@@ -139,7 +139,7 @@ const TalentApproval = ({navigation}) => {
               return (
                 <View>
                   <CardTalentApproval
-                    title={item.ideas.desc.value}
+                    title={item.ideas.title.value}
                     name={item.approvalTo.name}
                     date={item.updatedDate}
                     request={item.request}
