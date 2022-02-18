@@ -45,12 +45,6 @@ const SubmittedIdea = ({navigation}) => {
       });
     }
   });
-  // useEffect(() => {
-  //   GetDataSubmittedIdea(data.id).then(response => {
-  //     setSubmittedIdea(response);
-  //     setFilterData(response);
-  //   });
-  // }, [success]);
   if (submittedIdea === null || data === defaultAuthState) {
     return <LoadingScreen />;
   }
@@ -226,7 +220,7 @@ const SubmittedIdea = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.h2}>Anda ingin menghapus user ini?</Text>
+                  <Text style={styles.h2}>Anda ingin menghapus idea ini?</Text>
                   <View style={styles.rowDelete}>
                     <TouchableOpacity
                       style={styles.buttondelete}
