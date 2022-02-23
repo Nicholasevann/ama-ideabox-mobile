@@ -257,6 +257,21 @@ const EventContent = ({navigation}) => {
                       textButton={'Join'}
                       desc={val.description}
                       image={val.image}
+                      buttonStatus={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? false
+                          : true
+                      }
+                      background={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? 'red'
+                          : '#34A68A'
+                      }
+                      status={
+                        moment(val.endDate).unix() < moment().unix()
+                          ? 'Closed'
+                          : 'Open'
+                      }
                       join={() => {
                         setEventId(val.id);
                         setCreatedBy(val.createdBy);

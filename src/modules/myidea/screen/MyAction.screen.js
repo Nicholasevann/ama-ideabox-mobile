@@ -26,7 +26,7 @@ const MyAction = ({navigation}) => {
   const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
   const [sharingIdea, setSharingIdea] = useState(null);
   const [data, setData] = useState(defaultAuthState);
-  const [idIdea, setIdIdea] = useState(null);
+  const [idApproval, setIdApproval] = useState(null);
   const [success, setSuccess] = useState(null);
   // search
   const [filterData, setFilterData] = useState([]);
@@ -45,6 +45,12 @@ const MyAction = ({navigation}) => {
       });
     }
   });
+  useEffect(() => {
+    GetDataSharingIdea(data.id).then(response => {
+      setSharingIdea(response);
+      setFilterData(response.ideas);
+    });
+  }, [success]);
   if (sharingIdea === null) {
     return <LoadingScreen />;
   }
@@ -52,7 +58,7 @@ const MyAction = ({navigation}) => {
     setSuccess(data);
   };
   const handleLeft = () => {
-    LeftSharingIdea(data.id, idIdea).then(response => setSuccess(response));
+    LeftSharingIdea(data.id, idApproval).then(response => setSuccess(response));
     // LeftSharingIdea(3, 96).then(response => setSuccess(response));
   };
   const searchFilter = text => {
@@ -70,12 +76,6 @@ const MyAction = ({navigation}) => {
       setFilterData(sharingIdea.ideas);
     }
   };
-  if (success === 200) {
-    GetDataSharingIdea(data.id).then(response => {
-      setSharingIdea(response);
-      setFilterData(response.ideas);
-    });
-  }
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -147,7 +147,6 @@ const MyAction = ({navigation}) => {
                 return (
                   <View>
                     <CardJoinIdea
-                      delete={() => setModalDeleteVisible(true)}
                       title={item.desc[0].value}
                       name={item.createdBy.name}
                       createdDate={item.createdDate}
@@ -160,7 +159,7 @@ const MyAction = ({navigation}) => {
                   <TouchableOpacity
                     onPress={() => {
                       setModalDeleteVisible(true);
-                      setIdIdea(item.id);
+                      setIdApproval(item.approval.id);
                     }}
                     style={[styles.backRightBtn, styles.backRightBtnRight]}>
                     <Left />

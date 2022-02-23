@@ -34,20 +34,27 @@ const SubmittedIdea = ({navigation}) => {
     searchFilter(dataSearch);
   };
   useEffect(() => {
-    if (submittedIdea === null || data === defaultAuthState) {
+    if (submittedIdea === null) {
       getData().then(jsonValue => setData(jsonValue));
       if (data === defaultAuthState) {
         return <LoadingScreen />;
       }
       GetDataSubmittedIdea(data.id).then(response => {
         setSubmittedIdea(response);
-        setFilterData(response.ideas);
+        setFilterData(response);
       });
     }
   });
-  if (submittedIdea === null || data === defaultAuthState) {
+  useEffect(() => {
+    GetDataSubmittedIdea(data.id).then(response => {
+      setSubmittedIdea(response);
+      setFilterData(response);
+    });
+  }, [success]);
+  if (submittedIdea === null) {
     return <LoadingScreen />;
   }
+  console.log(filterData);
   const getDataSuccess = data => {
     setSuccess(data);
   };
@@ -69,12 +76,6 @@ const SubmittedIdea = ({navigation}) => {
       setFilterData(submittedIdea.ideas);
     }
   };
-  if (success === 200) {
-    GetDataSubmittedIdea(data.id).then(response => {
-      setSubmittedIdea(response);
-      setFilterData(response);
-    });
-  }
   return (
     <SafeAreaView style={styles.container}>
       {success === 200 ? (
@@ -139,13 +140,12 @@ const SubmittedIdea = ({navigation}) => {
               </View>
             </View>
             <SwipeListView
-              data={filterData}
-              renderItem={({item}) => {
+              data={filterData.ideas}
+              renderItem={({item, index}) => {
                 // console.log(item)
                 return (
                   <View>
                     <CardSubmittedIdea
-                      delete={() => setModalDeleteVisible(true)}
                       title={item.desc[0].value}
                       name={item.createdBy.name}
                       createdDate={item.createdDate}
