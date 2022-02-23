@@ -116,40 +116,40 @@ const ExploreContent = ({navigation, route}) => {
     PromoteIdea(idIdeaJoin, textPromote).then(val => setPromote(val));
   };
   // Sugesstion
-  const renderSuggestions = ({keyword, onSuggestionPress}) => {
-    if (keyword == null) {
-      return null;
-    }
-    return (
-      <View style={{position: 'relative', flex: 1}}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{
-            height: 200,
-            backgroundColor: '#FFFFFF',
-            width: windowWidth - 22,
-            borderColor: '#085D7A',
-            top: -1,
-            borderBottomWidth: 0.5,
-          }}>
-          {suggestions
-            .filter(one =>
-              one.name
-                .toLocaleLowerCase()
-                .includes(keyword.toLocaleLowerCase()),
-            )
-            .map(one => (
-              <Pressable
-                key={one.id}
-                onPress={() => onSuggestionPress(one)}
-                style={{padding: 12}}>
-                <Text>{one.name}</Text>
-              </Pressable>
-            ))}
-        </ScrollView>
-      </View>
-    );
-  };
+  // const renderSuggestions = ({keyword, onSuggestionPress}) => {
+  //   if (keyword == null) {
+  //     return null;
+  //   }
+  //   return (
+  //     <View style={{position: 'relative', flex: 1}}>
+  //       <ScrollView
+  //         showsVerticalScrollIndicator={false}
+  //         style={{
+  //           height: 200,
+  //           backgroundColor: '#FFFFFF',
+  //           width: windowWidth - 22,
+  //           borderColor: '#085D7A',
+  //           top: -1,
+  //           borderBottomWidth: 0.5,
+  //         }}>
+  //         {suggestions
+  //           .filter(one =>
+  //             one.name
+  //               .toLocaleLowerCase()
+  //               .includes(keyword.toLocaleLowerCase()),
+  //           )
+  //           .map(one => (
+  //             <Pressable
+  //               key={one.id}
+  //               onPress={() => onSuggestionPress(one)}
+  //               style={{padding: 12}}>
+  //               <Text>{one.name}</Text>
+  //             </Pressable>
+  //           ))}
+  //       </ScrollView>
+  //     </View>
+  //   );
+  // };
   // End Sugesstion
   if (data === null) {
     return <LoadingScreen />;
@@ -371,13 +371,13 @@ const ExploreContent = ({navigation, route}) => {
                     <MentionInput
                       value={comment}
                       onChange={setComment}
-                      partTypes={[
-                        {
-                          trigger: '@', // Should be a single character like '@' or '#'
-                          renderSuggestions: renderSuggestions,
-                          textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
-                        },
-                      ]}
+                      // partTypes={[
+                      //   {
+                      //     trigger: '@', // Should be a single character like '@' or '#'
+                      //     renderSuggestions: renderSuggestions,
+                      //     textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
+                      //   },
+                      // ]}
                       style={styles.textInput}
                       multiline={true}
                       placeholder="Masukkan Komentar..."
@@ -396,13 +396,13 @@ const ExploreContent = ({navigation, route}) => {
                     <MentionInput
                       value={replyComment}
                       onChange={setReplyComment}
-                      partTypes={[
-                        {
-                          trigger: '@', // Should be a single character like '@' or '#'
-                          renderSuggestions: renderSuggestions,
-                          textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
-                        },
-                      ]}
+                      // partTypes={[
+                      //   {
+                      //     trigger: '@', // Should be a single character like '@' or '#'
+                      //     renderSuggestions: renderSuggestions,
+                      //     textStyle: {fontWeight: 'bold', color: 'blue'}, // The mention style in the input
+                      //   },
+                      // ]}
                       style={styles.textInput}
                       multiline={true}
                       placeholder="Masukkan Komentar..."
@@ -590,16 +590,19 @@ const ExploreContent = ({navigation, route}) => {
               </View>
               <View style={styles.contentModal}>
                 <View style={styles.rowPromote}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalBottom(false);
-                      setModalPromoteVisible(true);
-                    }}>
-                    <View style={styles.wrapPromote}>
-                      <Promote />
-                      <Text style={styles.textPromote}>Promote</Text>
-                    </View>
-                  </TouchableOpacity>
+                  {dataAsync.role === 'Senior Leader' ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalBottom(false);
+                        setModalPromoteVisible(true);
+                      }}>
+                      <View style={styles.wrapPromote}>
+                        <Promote />
+                        <Text style={styles.textPromote}>Promote</Text>
+                      </View>
+                    </TouchableOpacity>
+                  ) : null}
+
                   <TouchableOpacity
                     onPress={() => {
                       setModalBottom(false);

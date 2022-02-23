@@ -213,7 +213,7 @@ const SubmittedIdea = ({navigation}) => {
             <View style={styles.centeredcontainer}>
               <View style={styles.modalView}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.textEdit}>Delete User</Text>
+                  <Text style={styles.textEdit}>Delete Idea</Text>
                   <TouchableOpacity
                     onPress={() => setModalDeleteVisible(false)}>
                     <Cross />

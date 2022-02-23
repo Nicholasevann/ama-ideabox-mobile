@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from './DrawerContent';
 import TabNavigation from './Tabs';
@@ -18,15 +18,36 @@ import getData from './GetData';
 import RoutesTalentApproval from '../config/Routes/RoutesTalentApproval';
 import TalentApproval from '../modules/talentapproval/screen/TalentApproval.screen';
 import EventManagement from '../modules/eventmanagement/screen/Event.route';
+import LoadingScreen from './LoadingScreen';
+import GetDataProfile from '../config/GetData/GetDataProfile';
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   const [data, setData] = useState('');
+  const [dataProfile, setDataProfile] = useState('');
   useEffect(() => {
-    getData().then(jsonValue => setData(jsonValue));
-  }, []);
+    if (data === '' || dataProfile === '') {
+      getData().then(jsonValue => setData(jsonValue));
+      if (data === '') {
+        return <LoadingScreen />;
+      }
+      GetDataProfile(data.id).then(res => setDataProfile(res));
+    }
+  });
+  if (data === '' || dataProfile === '') {
+    return <LoadingScreen />;
+  }
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Navigator
+      drawerContent={props => (
+        <DrawerContent
+          {...props}
+          nama={data.name}
+          email={data.email}
+          profile={{uri: dataProfile.pictures}}
+          profileIf={dataProfile.pictures}
+        />
+      )}>
       <Drawer.Screen
         name="TabNavigation"
         component={TabNavigation}
@@ -80,29 +101,57 @@ const DrawerNavigation = () => {
           groupName: 'Administrator',
         }}
       /> */}
+      {dataProfile.roleId === 5 || dataProfile.roleId === 6 ? (
+        <Drawer.Screen
+          name="CategoryManagement"
+          component={RoutesCategoryManagement}
+          options={{
+            drawerLabel: 'Category Management',
+            headerShown: false,
+            drawerLabelStyle: {marginLeft: 60, fontSize: 14},
+            activeTintColor: '#085D7A',
+            groupName: 'Administrator',
+          }}
+        />
+      ) : (
+        <Drawer.Screen
+          name="CategoryManagement"
+          component={RoutesCategoryManagement}
+          options={{
+            drawerLabel: 'Category Management',
+            headerShown: false,
+            drawerLabelStyle: {marginLeft: 60, fontSize: 14},
+            activeTintColor: '#085D7A',
+            groupName: 'Administrator',
+          }}
+        />
+      )}
+      {dataProfile.roleId === 5 || dataProfile.roleId === 6 ? (
+        <Drawer.Screen
+          name="IdeaManagement"
+          component={IdeaManagement}
+          options={{
+            drawerLabel: 'Idea Management',
+            headerShown: false,
+            drawerLabelStyle: {marginLeft: 60, fontSize: 14},
+            activeTintColor: '#085D7A',
+            groupName: 'Administrator',
+          }}
+        />
+      ) : (
+        <Drawer.Screen
+          name="IdeaManagement"
+          component={IdeaManagement}
+          options={{
+            drawerLabel: 'Idea Management',
+            headerShown: false,
+            drawerLabelStyle: {marginLeft: 60, fontSize: 14},
+            activeTintColor: '#085D7A',
+            groupName: 'Administrator',
+          }}
+        />
+      )}
 
-      <Drawer.Screen
-        name="CategoryManagement"
-        component={RoutesCategoryManagement}
-        options={{
-          drawerLabel: 'Category Management',
-          headerShown: false,
-          drawerLabelStyle: {marginLeft: 60, fontSize: 14},
-          activeTintColor: '#085D7A',
-          groupName: 'Administrator',
-        }}
-      />
-      <Drawer.Screen
-        name="IdeaManagement"
-        component={IdeaManagement}
-        options={{
-          drawerLabel: 'Idea Management',
-          headerShown: false,
-          drawerLabelStyle: {marginLeft: 60, fontSize: 14},
-          activeTintColor: '#085D7A',
-          groupName: 'Administrator',
-        }}
-      />
       {/* <Drawer.Screen
         name="RoleManagement"
         component={RoleManagement}

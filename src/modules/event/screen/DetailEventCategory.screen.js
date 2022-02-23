@@ -23,6 +23,7 @@ import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
 import Header from '../../../components/Header';
 import moment from 'moment';
+import FailedModal from '../../../components/FailedModal';
 const DetailEventCategory = ({navigation, route}) => {
   const data = route.params.data;
 
@@ -42,7 +43,7 @@ const DetailEventCategory = ({navigation, route}) => {
       if (dataAsync === defaultAuthState) {
         return <LoadingScreen />;
       }
-      GetDataSubmittedIdea(data.id).then(response =>
+      GetDataSubmittedIdea(dataAsync.id).then(response =>
         setStateDataSubmitted(response),
       );
     }
@@ -52,9 +53,11 @@ const DetailEventCategory = ({navigation, route}) => {
   }
 
   if (array === false) {
-    stateDataSubmitted.ideas.map(val => {
-      setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
-    });
+    if (stateDataSubmitted.ideas !== undefined) {
+      stateDataSubmitted.ideas.map(val => {
+        setItems(res => [...res, {label: val.desc[0].value, value: val.id}]);
+      });
+    }
     setArray(true);
   }
   const handleJoin = () => {
@@ -70,6 +73,11 @@ const DetailEventCategory = ({navigation, route}) => {
       {success === 200 ? (
         <SuccesModal
           desc={'Congrats you have been join event!'}
+          getData={getDataSuccess}
+        />
+      ) : success !== null ? (
+        <FailedModal
+          desc={'You cannot join this event!'}
           getData={getDataSuccess}
         />
       ) : null}

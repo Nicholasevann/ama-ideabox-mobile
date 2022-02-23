@@ -362,7 +362,7 @@ const CategoryManagement = ({navigation}) => {
             <View style={styles.centeredcontainer}>
               <View style={styles.modalView}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.textEdit}>Delete User</Text>
+                  <Text style={styles.textEdit}>Non-Active Category</Text>
                   <TouchableOpacity
                     onPress={() => setModalDeleteVisible(false)}>
                     <Cross />

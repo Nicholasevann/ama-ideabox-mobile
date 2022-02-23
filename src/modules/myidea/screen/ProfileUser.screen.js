@@ -185,51 +185,74 @@ const ProfileUserMyIdea = ({navigation, route}) => {
               <Text style={styles.title}>Innovation</Text>
             </View>
             <View style={styles.textInnovation}>
-              {dataTrackRecord.ideas.map((val, index) => (
-                <View>
-                  {index === 0 ? null : (
-                    <View
-                      style={{
-                        height: 1,
-                        width: '100%',
-                        backgroundColor: 'grey',
-                        marginVertical: 15,
-                      }}
-                    />
-                  )}
-
-                  <View
-                    style={{
-                      width: '100%',
-                      height: 200,
-                      borderWidth: 1,
-                      borderRadius: 10,
-                    }}>
-                    <Image
-                      style={{flex: 1, resizeMode: 'cover', borderRadius: 10}}
-                      source={{uri: val.desc[1].value}}
-                    />
-                  </View>
+              {dataTrackRecord.ideas.map((val, index) => {
+                var numberJoin = 0;
+                var numberPromote = 0;
+                return (
                   <View>
-                    <Text style={[style.h4, {marginVertical: 10}]}>
-                      {val.desc[0].value}
-                    </Text>
-                    <Text style={[style.h5]}>{val.desc[2].value}</Text>
-                    <Text style={[style.h4, {marginVertical: 10}]}>Team:</Text>
+                    {index === 0 ? null : (
+                      <View
+                        style={{
+                          height: 1,
+                          width: '100%',
+                          backgroundColor: 'grey',
+                          marginVertical: 15,
+                        }}
+                      />
+                    )}
+
                     <View
                       style={{
-                        flexDirection: 'row',
                         width: '100%',
-                        flexWrap: 'wrap',
+                        height: 200,
+                        borderWidth: 1,
+                        borderRadius: 10,
                       }}>
+                      <Image
+                        style={{flex: 1, resizeMode: 'cover', borderRadius: 10}}
+                        source={{uri: val.desc[1].value}}
+                      />
+                    </View>
+                    <View>
+                      <Text style={[style.h4, {marginVertical: 10}]}>
+                        {val.desc[0].value}
+                      </Text>
+                      <Text style={[style.h5]}>{val.desc[2].value}</Text>
+                      <Text style={[style.h4, {marginVertical: 10}]}>
+                        Team:
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          width: '100%',
+                          flexWrap: 'wrap',
+                        }}>
+                        {val.approvalTeam.map(data => {
+                          if (data.request === 'join') {
+                            numberJoin = numberJoin + 1;
+                            return (
+                              <View style={{marginRight: 10}}>
+                                <Text style={[style.h5]}>
+                                  {' '}
+                                  {numberJoin}. {data.approvalTo.name}
+                                </Text>
+                              </View>
+                            );
+                          }
+                          return null;
+                        })}
+                      </View>
+                      <Text style={[style.h4, {marginVertical: 10}]}>
+                        Support:
+                      </Text>
                       {val.approvalTeam.map(data => {
-                        if (data.request === 'join') {
-                          indexJoin = indexJoin + 1;
+                        if (data.request === 'support') {
+                          numberPromote = numberPromote + 1;
                           return (
                             <View style={{marginRight: 10}}>
                               <Text style={[style.h5]}>
                                 {' '}
-                                {indexJoin}. {data.approvalTo.name}
+                                {numberPromote}. {data.approvalTo.name}
                               </Text>
                             </View>
                           );
@@ -237,26 +260,9 @@ const ProfileUserMyIdea = ({navigation, route}) => {
                         return null;
                       })}
                     </View>
-                    <Text style={[style.h4, {marginVertical: 10}]}>
-                      Support:
-                    </Text>
-                    {val.approvalTeam.map(data => {
-                      if (data.request === 'support') {
-                        indexSupport = indexSupport + 1;
-                        return (
-                          <View style={{marginRight: 10}}>
-                            <Text style={[style.h5]}>
-                              {' '}
-                              {indexSupport}. {data.approvalTo.name}
-                            </Text>
-                          </View>
-                        );
-                      }
-                      return null;
-                    })}
                   </View>
-                </View>
-              ))}
+                );
+              })}
             </View>
           </View>
         </View>

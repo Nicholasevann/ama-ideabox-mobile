@@ -61,9 +61,9 @@ const InputProfile = ({navigation}) => {
   const [open1, setOpen1] = useState(false);
   const [value1, setValue1] = useState(null);
   const [items1, setItems1] = useState([
-    {label: 'Hustler', value: 'Hustler'},
-    {label: 'Hipster', value: 'Hipster'},
-    {label: 'Hacker', value: 'Hacker'},
+    {label: 'Hustler', value: 'HUSTLER'},
+    {label: 'Hipster', value: 'HIPSTER'},
+    {label: 'Hacker', value: 'HACKER'},
   ]);
   // dropdown1
   const [open, setOpen] = useState(false);
@@ -297,6 +297,9 @@ const InputProfile = ({navigation}) => {
       }
     }
   }
+  if (dataProfile.teamStructure !== '' && value1 === null) {
+    setValue1(dataProfile.teamStructure);
+  }
   return (
     <SafeAreaView style={styles.container}>
       {successModal === 200 ? (
@@ -356,9 +359,9 @@ const InputProfile = ({navigation}) => {
           </View>
           <View style={styles.contentContainer}>
             <Text style={styles.h1}>PROFILE DATA</Text>
-            <Text style={[styles.h2, {fontStyle: 'italic'}]}>
+            {/* <Text style={[styles.h2, {fontStyle: 'italic'}]}>
               Fill all data is required!
-            </Text>
+            </Text> */}
             <Text style={styles.h2}>Name</Text>
             <TextInput
               style={styles.input}

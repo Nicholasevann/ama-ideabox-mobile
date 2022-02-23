@@ -14,21 +14,9 @@ import LoadingScreen from './LoadingScreen';
 import GetDataProfile from '../config/GetData/GetDataProfile';
 
 const DrawerContent = props => {
-  const [data, setData] = useState('');
-  const [dataProfile, setDataProfile] = useState('');
-  useEffect(() => {
-    if (data === '' || dataProfile === '') {
-      getData().then(jsonValue => setData(jsonValue));
-      if (data === '') {
-        return <LoadingScreen />;
-      }
-      GetDataProfile(data.id).then(res => setDataProfile(res));
-    }
-  });
   const removeData = async key => {
     try {
       await AsyncStorage.removeItem(key);
-      setData({name: ''});
       return true;
     } catch (exception) {
       return false;
@@ -36,16 +24,9 @@ const DrawerContent = props => {
   };
   const LogoutHandle = () => {
     removeData('authState');
-    // props.navigation.navigate('Login', {checked: false});
-    if (data.name === '') {
-      return <LoadingScreen />;
-    } else {
-      props.navigation.replace('Login', {checked: false});
-    }
+    props.navigation.replace('Login', {checked: false});
   };
-  if (data === '' || dataProfile === '') {
-    return <LoadingScreen />;
-  }
+
   const {state, descriptors, navigation} = props;
   let lastGroupName = '';
   let newGroup = true;
@@ -56,13 +37,13 @@ const DrawerContent = props => {
           {/* User info */}
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              {dataProfile.pictures === '' ? (
+              {props.profileIf === '' ? (
                 <Avatar.Image
                   source={require('../assets/image/profilepicture.jpg')}
                   size={50}
                 />
               ) : (
-                <Avatar.Image source={{uri: dataProfile.pictures}} size={50} />
+                <Avatar.Image source={props.profile} size={50} />
               )}
 
               <View
@@ -73,9 +54,9 @@ const DrawerContent = props => {
                   marginRight: 10,
                 }}>
                 <Title style={styles.title} numberOfLines={2}>
-                  {data.name}
+                  {props.nama}
                 </Title>
-                <Caption style={styles.caption}>{data.email}</Caption>
+                <Caption style={styles.caption}>{props.email}</Caption>
                 <View style={{flexDirection: 'row'}}>
                   <TouchableOpacity
                     onPress={() => props.navigation.navigate('RouteProfile')}>

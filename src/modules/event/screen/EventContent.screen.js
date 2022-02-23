@@ -30,6 +30,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import getData from '../../../components/GetData';
 import JoinEvent from '../../../config/PostData/JoinEvent';
 import SuccesModal from '../../../components/SuccesModal';
+import FailedModal from '../../../components/FailedModal';
 import moment from 'moment';
 
 const EventContent = ({navigation}) => {
@@ -101,6 +102,11 @@ const EventContent = ({navigation}) => {
       {success === 200 ? (
         <SuccesModal
           desc={'Congrats you have been join event!'}
+          getData={getDataSuccess}
+        />
+      ) : success !== null ? (
+        <FailedModal
+          desc={'You cannot join this event!'}
           getData={getDataSuccess}
         />
       ) : null}
@@ -199,7 +205,6 @@ const EventContent = ({navigation}) => {
                 }
               })
               .map((val, key) => {
-                console.log(moment().unix());
                 return (
                   <View key={key}>
                     <CardEventContent

@@ -26,7 +26,6 @@ const DetailExplore = ({route, navigation}) => {
   if (detailIdea === null) {
     return <LoadingScreen />;
   }
-  console.log(data.user.pictures);
   return (
     <SafeAreaView style={styles.container}>
       <Header

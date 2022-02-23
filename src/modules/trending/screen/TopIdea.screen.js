@@ -53,7 +53,6 @@ const TopIdea = ({navigation}) => {
   ) {
     return <LoadingScreen />;
   }
-  console.log(dataTrending);
   return (
     <SafeAreaView style={styles.container}>
       {/* header */}

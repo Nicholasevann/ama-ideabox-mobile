@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -14,13 +14,13 @@ import styles from '../style/Home.style';
 import Swiper from 'react-native-swiper';
 import InovatorSay from '../../../components/InovatorSay';
 import CardCategoryHome from '../../../components/CardCategoryHome';
-import { Logo } from '../../../assets/image';
+import {Logo} from '../../../assets/image';
 import Header from '../../../components/Header';
 import Carousel from 'react-native-snap-carousel';
-import { WhiteDotHome } from '../../../assets/icon';
+import {WhiteDotHome} from '../../../assets/icon';
 import getData from '../../../components/GetData';
 
-const HomeContent = ({ navigation }) => {
+const HomeContent = ({navigation}) => {
   const image = [
     'https://images.unsplash.com/photo-1552664730-d307ca884978?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8d29yayUyMGV2ZW50fGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80',
     'https://cdn1-production-images-kly.akamaized.net/d6Feui5j5wCSj1C6uq2bC_js-i0=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3170497/original/064866700_1593932946-Telkom_1.jpg',
@@ -33,7 +33,6 @@ const HomeContent = ({ navigation }) => {
   useEffect(() => {
     getData().then(jsonValue => setData(jsonValue));
   }, []);
-  console.log(data.id);
   return (
     <SafeAreaView style={styles.container}>
       {/* header */}
@@ -42,18 +41,18 @@ const HomeContent = ({ navigation }) => {
         notification={() => navigation.navigate('Notification')}
       />
       <ScrollView>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
           <Carousel
             layout={'default'}
-            ref={() => { }}
+            ref={() => {}}
             data={image}
             sliderWidth={300}
             itemWidth={300}
-            renderItem={({ item, key }) => {
+            renderItem={({item, key}) => {
               return (
                 <View key={key}>
                   <Image
-                    source={{ uri: item }}
+                    source={{uri: item}}
                     style={{
                       borderRadius: 5,
                       height: 200,
@@ -70,11 +69,11 @@ const HomeContent = ({ navigation }) => {
           />
         </View>
         <View style={styles.desc}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
               <Text style={[style.h4medium, styles.title]}>
                 Welcome back,{'\n'}
-                <Text style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>
+                <Text style={{fontWeight: 'bold', textTransform: 'capitalize'}}>
                   {data.name}
                 </Text>
                 {'\n'}
@@ -85,42 +84,42 @@ const HomeContent = ({ navigation }) => {
             </View>
             <Image
               source={require('../../../assets/icon/whitedothome.png')}
-              style={{ width: 55, height: 55 }}
+              style={{width: 55, height: 55}}
             />
             <Image
               source={require('../../../assets/icon/whitedothome.png')}
-              style={{ width: 55, height: 55 }}
+              style={{width: 55, height: 55}}
             />
           </View>
 
-          <View style={{ alignItems: 'center', marginBottom: 10 }}>
+          <View style={{alignItems: 'center', marginBottom: 10}}>
             <Image
               source={require('../../../assets/icon/icon1home.png')}
-              style={{ position: 'absolute', left: 0 }}
+              style={{position: 'absolute', left: 0}}
             />
             <Image
               source={require('../../../assets/icon/icon2home.png')}
-              style={{ position: 'absolute', left: 15, width: 60 }}
+              style={{position: 'absolute', left: 15, width: 60}}
             />
             <Image
               source={require('../../../assets/icon/icon3home.png')}
-              style={{ position: 'absolute', left: 0, top: 20 }}
+              style={{position: 'absolute', left: 0, top: 20}}
             />
             <Image
               source={require('../../../assets/icon/icon4home.png')}
-              style={{ position: 'absolute', left: 20, top: 100 }}
+              style={{position: 'absolute', left: 20, top: 100}}
             />
             <Image
               source={require('../../../assets/icon/icon1home.png')}
-              style={{ position: 'absolute', top: 150, right: 0 }}
+              style={{position: 'absolute', top: 150, right: 0}}
             />
             <Image
               source={require('../../../assets/icon/icon2home.png')}
-              style={{ position: 'absolute', top: 150, right: 15, width: 60 }}
+              style={{position: 'absolute', top: 150, right: 15, width: 60}}
             />
             <Image
               source={require('../../../assets/icon/icon5home.png')}
-              style={{ position: 'absolute', width: 175, height: 175 }}
+              style={{position: 'absolute', width: 175, height: 175}}
             />
             <Image
               source={require('../../../assets/image/imageHome.png')}
@@ -128,7 +127,7 @@ const HomeContent = ({ navigation }) => {
             />
           </View>
           <View style={styles.wrap}>
-            <Text style={[style.h3, styles.title, { marginTop: 10 }]}>
+            <Text style={[style.h3, styles.title, {marginTop: 10}]}>
               Apa Itu IDEABOX?
             </Text>
             <Text style={[style.h4normal, styles.descContent]}>
@@ -144,7 +143,7 @@ const HomeContent = ({ navigation }) => {
             </Text>
             <Image
               source={require('../../../assets/icon/linehome.png')}
-              style={{ width: '100%', marginTop: 10, marginBottom: 20 }}
+              style={{width: '100%', marginTop: 10, marginBottom: 20}}
             />
           </View>
         </View>
@@ -172,7 +171,7 @@ const HomeContent = ({ navigation }) => {
         </View> */}
         <View style={styles.horizontalCard}>
           <TouchableOpacity
-            style={[styles.cardContainer, { backgroundColor: '#F9CC2C' }]}
+            style={[styles.cardContainer, {backgroundColor: '#F9CC2C'}]}
             onPress={() => {
               setVisible(true);
             }}>
@@ -187,7 +186,7 @@ const HomeContent = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.cardContainer, { backgroundColor: '#E15C30' }]}
+            style={[styles.cardContainer, {backgroundColor: '#E15C30'}]}
             onPress={() => {
               setVisible2(true);
             }}>
@@ -202,7 +201,7 @@ const HomeContent = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.cardContainer, { backgroundColor: '#A9E34B' }]}
+            style={[styles.cardContainer, {backgroundColor: '#A9E34B'}]}
             onPress={() => {
               setVisible3(true);
             }}>
@@ -222,7 +221,7 @@ const HomeContent = ({ navigation }) => {
           WHAT THE INNOVATORS SAY
         </Text>
         <Swiper
-          height={250}
+          height={280}
           showsButtons={true}
           autoplayTimeout={5}
           loop
@@ -243,16 +242,14 @@ const HomeContent = ({ navigation }) => {
             desc={
               '“ Ideabox merupakan sebuah tempat dimana sejarah yang merubah indonesia dimulai ”'
             }
-            name={
-              'Pathya Madhyastha Budhiputra \n CEO - SPRINTHINK'
-            }
+            name={'Pathya Madhyastha Budhiputra \n CEO - SPRINTHINK'}
           />
         </Swiper>
         <View style={styles.descBottom}>
           <View style={styles.row}>
             <Image
               source={require('../../../assets/icon/Logo.png')}
-              style={{ width: 125, resizeMode: 'cover', height: 30 }}
+              style={{width: 125, resizeMode: 'cover', height: 30}}
             />
             <View>
               <Text style={[style.h6, styles.descContentBottom]}>
@@ -264,7 +261,7 @@ const HomeContent = ({ navigation }) => {
               <Text style={[style.h6, styles.descContentBottom]}> 40152</Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <Image source={require('../../../assets/icon/copyright.png')} />
             <Text style={[style.h6, styles.descCopyright]}>
               2021 by AMA CORPU
@@ -286,7 +283,7 @@ const HomeContent = ({ navigation }) => {
                 <View style={styles.inputContainer}>
                   <Image
                     source={require('../../../assets/image/hipsterguy.png')}
-                    style={{ width: '100%', height: 170, resizeMode: 'cover' }}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
                   />
                   <View
                     style={{
@@ -297,7 +294,7 @@ const HomeContent = ({ navigation }) => {
                     }}>
                     <Text style={[style.h2]}>The Hipster Guy</Text>
                     <Text
-                      style={[style.h4, { textAlign: 'center', marginTop: 15 }]}>
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
                       (Marketing & Business) Sell & Communicate the product.
                     </Text>
                   </View>
@@ -311,7 +308,7 @@ const HomeContent = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <Text style={[style.h4, { color: '#FFFFFF' }]}>Close</Text>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -332,7 +329,7 @@ const HomeContent = ({ navigation }) => {
                 <View style={styles.inputContainer}>
                   <Image
                     source={require('../../../assets/image/hustlerguy.png')}
-                    style={{ width: '100%', height: 170, resizeMode: 'cover' }}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
                   />
                   <View
                     style={{
@@ -343,7 +340,7 @@ const HomeContent = ({ navigation }) => {
                     }}>
                     <Text style={[style.h2]}>The Hustler Guy</Text>
                     <Text
-                      style={[style.h4, { textAlign: 'center', marginTop: 15 }]}>
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
                       (Marketing & Business) Sell & Communicate the product.
                     </Text>
                   </View>
@@ -357,7 +354,7 @@ const HomeContent = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <Text style={[style.h4, { color: '#FFFFFF' }]}>Close</Text>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -378,7 +375,7 @@ const HomeContent = ({ navigation }) => {
                 <View style={styles.inputContainer}>
                   <Image
                     source={require('../../../assets/image/hackerguy.png')}
-                    style={{ width: '100%', height: 170, resizeMode: 'cover' }}
+                    style={{width: '100%', height: 170, resizeMode: 'cover'}}
                   />
                   <View
                     style={{
@@ -389,7 +386,7 @@ const HomeContent = ({ navigation }) => {
                     }}>
                     <Text style={[style.h2]}>The Hacker Guy</Text>
                     <Text
-                      style={[style.h4, { textAlign: 'center', marginTop: 15 }]}>
+                      style={[style.h4, {textAlign: 'center', marginTop: 15}]}>
                       (Engineer & Developer) Build the product.
                     </Text>
                   </View>
@@ -403,7 +400,7 @@ const HomeContent = ({ navigation }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <Text style={[style.h4, { color: '#FFFFFF' }]}>Close</Text>
+                  <Text style={[style.h4, {color: '#FFFFFF'}]}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>

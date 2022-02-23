@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const UpdateCategory = (id, parentId, name, createdBy, type) => {
+const UpdateCategory = (id, parentId, name, updatedBy, type) => {
   return axios({
     crossDomain: true,
     method: 'put',
@@ -9,7 +9,7 @@ const UpdateCategory = (id, parentId, name, createdBy, type) => {
       id: id,
       parentId: parentId,
       name: name,
-      createdBy: createdBy,
+      updatedBy: updatedBy,
       type: type,
     },
     validateStatus: false,
