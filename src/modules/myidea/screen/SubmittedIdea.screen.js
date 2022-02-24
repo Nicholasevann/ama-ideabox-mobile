@@ -41,14 +41,14 @@ const SubmittedIdea = ({navigation}) => {
       }
       GetDataSubmittedIdea(data.id).then(response => {
         setSubmittedIdea(response);
-        setFilterData(response);
+        setFilterData(response.ideas);
       });
     }
   });
   useEffect(() => {
     GetDataSubmittedIdea(data.id).then(response => {
       setSubmittedIdea(response);
-      setFilterData(response);
+      setFilterData(response.ideas);
     });
   }, [success]);
   if (submittedIdea === null) {
@@ -140,7 +140,7 @@ const SubmittedIdea = ({navigation}) => {
               </View>
             </View>
             <SwipeListView
-              data={filterData.ideas}
+              data={filterData}
               renderItem={({item, index}) => {
                 // console.log(item)
                 return (
