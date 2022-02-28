@@ -89,12 +89,21 @@ const DetailIdeaUser = ({route, navigation}) => {
 
         {/* Content */}
         <View style={styles.content}>
-          <DetailIdeaDesc
-            title={detailIdea.desc[0].value}
-            cfufu={detailIdea.CFUFU[0].name}
-            desc={detailIdea.desc[2].value}
-            image={detailIdea.desc[1].value}
-          />
+          {detailIdea.CFUFU[0] === undefined ? (
+            <DetailIdeaDesc
+              title={detailIdea.desc[0].value}
+              cfufu={'-'}
+              desc={detailIdea.desc[2].value}
+              image={data.desc[1].value}
+            />
+          ) : (
+            <DetailIdeaDesc
+              title={detailIdea.desc[0].value}
+              cfufu={detailIdea.CFUFU[0].name}
+              desc={detailIdea.desc[2].value}
+              image={data.desc[1].value}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

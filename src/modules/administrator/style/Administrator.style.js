@@ -188,7 +188,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'black',
     height: 35,
-    fontSize: 12,
+    fontSize: 14,
+    paddingLeft: 10,
   },
   h2: {
     fontSize: 14,
